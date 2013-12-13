@@ -36,3 +36,15 @@ Examples
 
 }
 ```
+
+
+Usage
+----------------
+
+```
+python prep.py -ps models.json
+```
+
+p is for parsing
+s is for starting project
+then a list of json files to parse
