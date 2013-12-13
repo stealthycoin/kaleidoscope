@@ -53,4 +53,4 @@ then a list of json files to parse
 Grammar
 ---------------
 
-![Grammar for defining a site](https://github.com/stealthycoin/kaleidoscope/blob/master/grammar.png "Grammar")
+![Grammar for defining a site](https://github.com/stealthycoin/kaleidoscope/blob/master/grammar.png?raw=true "Grammar")
