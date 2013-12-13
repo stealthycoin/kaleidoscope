@@ -9,6 +9,7 @@ Examples
 {
   website : {
     name : "Example Site 1",
+    boilerplate: "bs",
   },
   
   models: {
@@ -30,6 +31,8 @@ Examples
     user -> post
   
   }
+  
+  
 
 }
 ```
