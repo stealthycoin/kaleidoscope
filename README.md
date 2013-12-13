@@ -5,7 +5,7 @@ Examples
 ---------------
 
 
-
+```
 {
   website : {
     name : "Example Site 1",
@@ -32,3 +32,4 @@ Examples
   }
 
 }
+```
