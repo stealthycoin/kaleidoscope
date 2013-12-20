@@ -7,24 +7,24 @@
 
 class Node {
  public:
-  virtual ~Node();
+  virtual ~Node() {}
 };
 
 class StringNode : public Node {
  public:
-  StringNode(std::string initial) { value = initial;}
+  StringNode(std::string &value) : value(value) {}
   std::string value;
 };
 
 class NumberNode : public Node {
  public:
-  NumberNode(double initial) { value = initial;}
+  NumberNode(double value) : value(value) {}
   double value;
 };
 
 class EntryNode : public Node {
  public:
-  EntryNode(std::string is, Node *iv) {key = is; value = iv;}
+  EntryNode(std::string &key, Node *value) : key(key), value(value) {}
   std::string key;
   Node *value;
   
@@ -32,8 +32,8 @@ class EntryNode : public Node {
 
 class ObjectNode : public Node {
  public:
-  ObjectNode(std::vector<EntryNode> *initial) { entries = initial; }
-  std::vector<EntryNode> *entries;
+  ObjectNode(std::vector<EntryNode*> &entries) : entries(entries) {}
+  std::vector<EntryNode*> entries;
 };
 
 
