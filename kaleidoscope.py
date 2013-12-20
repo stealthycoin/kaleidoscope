@@ -27,9 +27,10 @@ def setup(properties):
         sys.exit(2)
 
     try:
+        print properties
         call([path+"/venv/bin/django-admin.py", "startproject", properties["website"]["name"]])
     except:
-        print "Error creating django prject"
+        print "Error creating django project"
         sys.exit(3)
         
     
@@ -66,7 +67,15 @@ def main():
 
     #read the json files
     if "-p" in flags:
-        properties = readJSONFiles(args)
+        try:
+            os.system("./parser < " + filename)
+            from dictionary import d
+            properties = d
+        except:
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            print(exec_type)
+            print(exec_value)
+            print(exec_traceback)
 
     #create base project
     if "-s" in flags:
