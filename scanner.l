@@ -22,10 +22,10 @@ TOK_STRINGCON     (\"([^\\"\n]|\\[\\'"0nt])*\")
 {TOK_STRINGCON}       printf("Str: %s\n", yytext); SAVE_TOKEN; return TOK_STRING;
 
 
-"}"                   printf("Curls2\n");  return TOKEN(TOK_RIGHTCURLY);
-"{"                   printf("Curls1\n"); return TOKEN(TOK_LEFTCURLY);
-","                   printf("Comma\n"); return TOKEN(TOK_COMMA);
-":"                   printf("Colon\n"); return TOKEN(TOK_COLON);
+"}"                   return TOKEN(TOK_RIGHTCURLY);
+"{"                   return TOKEN(TOK_LEFTCURLY);
+","                   return TOKEN(TOK_COMMA);
+":"                   return TOKEN(TOK_COLON);
 .                     printf("Unknown token\n"); yyterminate();
 
 %%
