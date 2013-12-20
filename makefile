@@ -7,4 +7,4 @@ tokens.cpp : scanner.l
 	flex -o tokens.cpp scanner.l
 
 clean:
-	rm parser tokens.cpp parser.cpp
+	rm parser tokens.cpp parser.cpp parser.hpp
