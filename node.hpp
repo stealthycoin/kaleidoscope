@@ -42,7 +42,7 @@ class EntryNode : public Node {
 
   std::string show() const {
     std::stringstream ss;
-    ss << key << " : " << value->show();
+    ss << "\"" << key << "\"" << ":" << value->show();
     return ss.str();
   }
 };
@@ -54,9 +54,12 @@ class ObjectNode : public Node {
 
   std::string show() const {
     std::stringstream ss;
+    bool first = true;
     ss << "{";
     for (unsigned int i = 0 ; i < entries.size() ; i++) {
-      ss << entries[i]->show() << " ";
+      if (first) first = false;
+      else ss << ", ";
+      ss << entries[i]->show();
     }
     ss << "}";
     return ss.str();
