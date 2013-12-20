@@ -37,15 +37,14 @@ ObjectNode *root;
 start             : object              { root = $1; }
                   ;
 
-object            : '{' entries '}'     { $$ = new ObjectNode(*$2); }
+object            : TOK_LEFTCURLY entries TOK_RIGHTCURLY     { $$ = new ObjectNode(*$2); }
                   ;
 
-entries           : { $$ = NULL; } 
-                  | entry               { $$ = new std::vector<EntryNode*>(); $$->push_back($1); }
-                  | entry ',' entries   { $3->push_back($1); $$ = $3; }
+entries           : entry               { $$ = new std::vector<EntryNode*>(); $$->push_back($1); }
+                  | entry TOK_COMMA entries   { $3->push_back($1); $$ = $3; }
 		  ;
 
-entry             : TOK_KEY ':' value   { $$ = new EntryNode(*$1, $3); }
+entry             : TOK_KEY TOK_COLON value   { $$ = new EntryNode(*$1, $3); }
                   ; 
 
 value             : object              { $$ = $1; }       
