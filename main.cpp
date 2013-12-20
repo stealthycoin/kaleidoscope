@@ -6,6 +6,6 @@ extern ObjectNode *root;
 
 int main() {
   yyparse();
-  std::cout << root << std::endl;
+  std::cout << *root << std::endl;
   
 }
