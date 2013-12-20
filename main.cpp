@@ -1,5 +1,5 @@
 #include <iostream>
-#include "node.h"
+#include "node.hpp"
 
 extern int yyparse();
 extern ObjectNode *root;
