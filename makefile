@@ -1,4 +1,3 @@
-TESTS="basic stupid"
 
 main: main.cpp parser.cpp tokens.cpp
 	g++ -std=c++11 -o parser *.cpp
@@ -18,4 +17,4 @@ spotless: clean
 .PHONY: test
 test:
 	cd ./tests/basic/ ;\
-	python ../../kaleidoscope.py -ps -f basic.ks ;\
+	python ../../kaleidoscope.py -ps -f basic.ks
