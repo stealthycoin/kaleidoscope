@@ -13,9 +13,9 @@ clean:
 
 .PHONY: spotless
 spotless: clean
-	-rm parser tokens.cpp parser.cpp parser.hpp
+	-rm parser tokens.cpp parser.cpp parser.hpp *~ *.pyc
 
-.PHONY: clean
+.PHONY: test
 test:
 	cd ./tests/basic/ ;\
 	python ../../kaleidoscope.py -ps -f basic.ks ;\
