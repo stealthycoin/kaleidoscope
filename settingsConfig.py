@@ -2,6 +2,10 @@ import re
 
 def handleApps(settings,properties):
     """Adds south and whatever otehr apps nessissary"""
+
+    lines = settings.split("\n") #use this later by splicing an array of new apps into the array of lines at the correct line (one after installed apps = )
+
+    #add south
     settings = settings.replace("INSTALLED_APPS = (", "INSTALLED_APPS = (\n    'south',")
     return settings
 
