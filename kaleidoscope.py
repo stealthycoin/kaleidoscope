@@ -3,8 +3,12 @@ import sys
 import getopt
 import json
 from subprocess import call
+import settingsConfig
 
-path = os.path.dirname(os.path.realpath(__file__))
+
+path = os.getcwd()
+sys.path.append(path)
+#os.path.dirname(os.path.realpath(__file__))
 
 def setup(properties):
     """
@@ -21,18 +25,24 @@ def setup(properties):
         sys.exit(1)
             
     try:
+        call(["cp", "../../req.pip", "./"])
         call([path+"/venv/bin/pip", "install", "-r", path+"/req.pip"])
     except:
         print "Error installing django or south"
         sys.exit(2)
 
     try:
-        print properties
+        print "Building project"
         call([path+"/venv/bin/django-admin.py", "startproject", properties["website"]["name"]])
     except:
         print "Error creating django project"
         sys.exit(3)
-        
+
+    try:
+        call(["git", "init", path])
+    except:
+        print "Failed to initialize git"
+        sys.exit(4)
     
 def readJSONFiles(files):
     """
@@ -52,6 +62,23 @@ def readJSONFiles(files):
 
     return dictionary
 
+
+def parse(filename):
+    properties = {}
+    try:
+        os.system("../../parser < " + filename)
+        from dictionary import d
+        print d
+        properties = d
+    except:
+        exc_type,exc_value,exc_traceback = sys.exc_info()
+        print(exc_type)
+        print(exc_value)
+        print(exc_traceback)
+        sys.exit(1)
+    return properties
+
+
 def main():
     opts, args = getopt.getopt(sys.argv[1:], "spf:")
     
@@ -67,19 +94,15 @@ def main():
 
     #read the json files
     if "-p" in flags:
-        try:
-            os.system("./parser < " + filename)
-            from dictionary import d
-            properties = d
-        except:
-            exc_type, exc_value, exc_traceback = sys.exc_info()
-            print(exec_type)
-            print(exec_value)
-            print(exec_traceback)
+        properties = parse(filename)
 
     #create base project
     if "-s" in flags:
         setup(properties)
+
+    #after the project is built time to start changing properties in the settings
+    settingsConfig.handleSettings(path+"/"+properties["website"]["name"]+"/"+properties["website"]["name"]+"/settings.py", properties)
+
 
 if __name__ == "__main__":
     main()
