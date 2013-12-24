@@ -18,8 +18,6 @@ def configureApp(path, app, properties):
         
         
     
-    
-
 def createApps(path, properties):
     """Generates all the apps required by the project"""
     
@@ -34,7 +32,7 @@ def createApps(path, properties):
 
     properties["apps"]["main"] = { "templatechain" : "default" }
 
-    #create apps 
+    #create apps and configure them after creation
     try:
         for app in iter(properties["apps"]):
             try:

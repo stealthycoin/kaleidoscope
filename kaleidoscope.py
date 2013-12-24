@@ -43,25 +43,6 @@ def setup(properties):
         print "Failed to initialize git"
         sys.exit(4)
     
-def readJSONFiles(files):
-    """
-    Parse whatever format we decide to go with here and return whatever we need to store it
-    """
-    files = [path+"/"+f for f in files]
-    
-    dictionary = {}
-
-    for f in files:
-        with open(f) as r:
-            raw = "".join(r.readlines())
-            raw = raw.replace("\n", "")
-            d = json.loads(raw)
-            for k in d.keys():
-                dictionary[k] = d[k]
-
-    return dictionary
-
-
 def parse(filename):
     properties = {}
     try:
@@ -75,11 +56,6 @@ def parse(filename):
         print(exc_traceback)
         sys.exit(1)
     return properties
-
-
-def copyTemplate(name, properties):
-    """Copy the templates into the apps"""
-    pass
 
 def main():
     opts, args = getopt.getopt(sys.argv[1:], "spf:t:")
@@ -108,9 +84,6 @@ def main():
     
     #configure apps
     appsConfig.createApps(path,properties)    
-
-    #copy in the template chain (this has to happen after app creation because the templates go in main)
-    copyTemplate(templatechain, properties)
 
     #add urls for all pages
     addURLs(properties)
