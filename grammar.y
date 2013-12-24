@@ -38,6 +38,7 @@ start             : object              { root = $1; }
                   ;
 
 object            : TOK_LEFTCURLY entries TOK_RIGHTCURLY     { $$ = new ObjectNode(*$2); }
+                  | TOK_LEFTCURLY TOK_RIGHTCURLY             { $$ = new ObjectNode(); }
                   ;
 
 entries           : entry               { $$ = new std::vector<EntryNode*>(); $$->push_back($1); }

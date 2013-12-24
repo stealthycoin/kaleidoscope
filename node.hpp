@@ -49,6 +49,7 @@ class EntryNode : public Node {
 
 class ObjectNode : public Node {
  public:
+  ObjectNode() { entries = std::vector<EntryNode*>(0); }
   ObjectNode(std::vector<EntryNode*> &entries) : entries(entries) {}
   std::vector<EntryNode*> entries;
 
