@@ -3,12 +3,11 @@ import sys
 import getopt
 import json
 from subprocess import call
-import settingsConfig
+import settingsConfig, appsConfig
 
 
 path = os.getcwd()
-sys.path.append(path)
-#os.path.dirname(os.path.realpath(__file__))
+sys.path.append(path) #this is so we can include the compiled ks dictionary
 
 def setup(properties):
     """
@@ -68,7 +67,6 @@ def parse(filename):
     try:
         os.system("../../parser < " + filename)
         from dictionary import d
-        print d
         properties = d
     except:
         exc_type,exc_value,exc_traceback = sys.exc_info()
@@ -79,26 +77,43 @@ def parse(filename):
     return properties
 
 
+def copyTemplate(name, properties):
+    """Copy the templates into the apps"""
+    pass
+
 def main():
-    opts, args = getopt.getopt(sys.argv[1:], "spf:")
+    opts, args = getopt.getopt(sys.argv[1:], "spf:t:")
     
     filename = "infile"
+    templatechain = "default"
     flags = [o for o,a in opts]
 
     for o, a in opts:
         if o in ("-f",):
             filename = a
+        if o in ("-t",):
+            templatechain = a
 
             
     properties = {}
 
     #read the json files
     if "-p" in flags:
-        properties = parse(filename)
+        properties = parse(path + "/" + filename)
 
     #create base project
     if "-s" in flags:
         setup(properties)
+
+    
+    #configure apps
+    appsConfig.createApps(path,properties)    
+
+    #copy in the template chain (this has to happen after app creation because the templates go in main)
+    copyTemplate(templatechain, properties)
+
+    #add urls for all pages
+    addURLs(properties)
 
     #after the project is built time to start changing properties in the settings
     settingsConfig.handleSettings(path+"/"+properties["website"]["name"]+"/"+properties["website"]["name"]+"/settings.py", properties)
