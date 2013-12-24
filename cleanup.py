@@ -1,6 +1,6 @@
 import sys,os,shutil
 
-tests = ["basic"]
+tests = ["basic", "apps"]
 
 for test in tests:
     path = "./tests/"+test+"/"
