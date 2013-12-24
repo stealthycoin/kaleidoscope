@@ -9,8 +9,14 @@ def handleApps(settings,properties):
             break
         i += 1
 
-    apps = ["    'south',"]
+    apps = ["    'south',", "    'main',"] #always include south
     
+    try:
+        for app in iter(properties["apps"]):
+            apps.append("    '"+app+"',")
+    except KeyError:
+        pass #no apps, we will get an error about this in the appsConfig
+
     result = lines[0:i] + apps + lines[i:] 
     return '\n'.join(result)
 
@@ -57,7 +63,6 @@ def handleSettings(settings_file, properties):
 
     f.close()
 
-    
     #rewrite changes
     f = open(settings_file, "w")
     f.write(contents)
