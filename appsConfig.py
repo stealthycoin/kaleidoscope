@@ -11,7 +11,7 @@ def configureApp(path, app, properties):
     print "Generating: " + templates
     try:
         call(["mkdir", templates])
-        call(["cp", "-r", "../../resources/templatechains/"+properties["apps"][app]["templatechain"], templates])
+        call(["cp", "-a", "../../resources/templatechains/"+properties["apps"][app]["templatechain"]+"/.", templates])
     except:
         print "Failed to generate templates"
     
