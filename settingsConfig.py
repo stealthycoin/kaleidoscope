@@ -1,5 +1,17 @@
 import re
 
+def handleTemplates(settings,properties):
+    """Generates the template names"""
+
+    settings += "\n"
+
+    apps = properties["apps"]
+    result = "\n#Template directories\nTEMPLATE_DIRS = (\n"
+    apps = map(lambda x:"    BASE_DIR+'/%s/templates'," % (x), apps)
+    result += "\n".join(apps) + "\n)"
+    
+    return settings + result
+
 def handleApps(settings,properties):
     """Adds south and whatever otehr apps necessary"""
     lines = settings.split("\n")
@@ -9,15 +21,16 @@ def handleApps(settings,properties):
             break
         i += 1
 
-    apps = ["    'south',", "    'main',"] #always include south
+    apps = ["south","main"] #always include south and main
     
     try:
         for app in iter(properties["apps"]):
-            apps.append("    '"+app+"',")
+            apps.append(app)
     except KeyError:
         pass #no apps, we will get an error about this in the appsConfig
 
-    result = lines[0:i] + apps + lines[i:] 
+    
+    result = lines[0:i] + map(lambda x:"    '%s'," % x, apps) + lines[i:] 
     return '\n'.join(result)
 
 def handleAdmins(settings,properties):
@@ -60,6 +73,9 @@ def handleSettings(settings_file, properties):
 
     #add installed apps and south
     contents = handleApps(contents,properties)
+
+    #add in template dirs at the end
+    contents = handleTemplates(contents,properties)
 
     f.close()
 
