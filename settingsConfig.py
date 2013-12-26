@@ -1,4 +1,5 @@
 import re
+from utilities import tupleEntrys
 
 def handleTemplates(settings,properties):
     """Generates the template names"""
@@ -7,7 +8,8 @@ def handleTemplates(settings,properties):
 
     apps = properties["apps"]
     result = "\n#Template directories\nTEMPLATE_DIRS = (\n"
-    apps = map(lambda x:"    BASE_DIR+'/%s/templates'," % (x), apps)
+    apps = map(lambda x:"BASE_DIR+'/%s/templates'" % (x), apps)
+    apps = tupleEntrys(apps,True) #encode for tuple
     result += "\n".join(apps) + "\n)"
     
     return settings + result
@@ -21,7 +23,7 @@ def handleApps(settings,properties):
             break
         i += 1
 
-    apps = ["south","main"] #always include south and main
+    apps = ["south"] #always include south and main
     
     try:
         for app in iter(properties["apps"]):
@@ -30,7 +32,9 @@ def handleApps(settings,properties):
         pass #no apps, we will get an error about this in the appsConfig
 
     
-    result = lines[0:i] + map(lambda x:"    '%s'," % x, apps) + lines[i:] 
+    apps =  map(lambda x:"'%s'" % x, apps)
+    result = lines[0:i] + tupleEntrys(apps) + lines[i:] 
+    
     return '\n'.join(result)
 
 def handleAdmins(settings,properties):
@@ -39,21 +43,20 @@ def handleAdmins(settings,properties):
     
     print "Adding administrators"
 
+    addstring = ""
     try:
         admins = website["admins"]
-        addstring = "ADMINS = ("
-        first = True
+        adminList = []
+        addstring = "ADMINS = (\n"
+        
         for key in admins:
             name, email = admins[key]['name'], admins[key]['email']
-                
-            admin = "('%s', '%s'),\n" % (name, email)
-            if first:
-                first = False
-                admin += "\t"
+            print "Found admin: %s" % name
+            adminList.append("('%s', '%s')" % (name, email))
 
-            addstring += admin
-            print "Found admin: %s" % admin[0:-2]
-        addstring = addstring[0:-2] + ")"
+        adminList = tupleEntrys(adminList,True)
+        addstring += "\n".join(adminList) + "\n)"
+        
         
     except KeyError:
         print "No administrators specified."
