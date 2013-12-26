@@ -3,7 +3,7 @@ import sys
 import getopt
 import json
 from subprocess import call
-import settingsConfig, appsConfig
+import settingsConfig, appsConfig, pagesConfig
 
 
 path = os.getcwd()
@@ -57,6 +57,9 @@ def parse(filename):
         sys.exit(1)
     return properties
 
+def addURLs():
+    """Genreate urls page"""
+
 def main():
     opts, args = getopt.getopt(sys.argv[1:], "spf:t:")
     
@@ -70,7 +73,6 @@ def main():
         if o in ("-t",):
             templatechain = a
 
-            
     properties = {}
 
     #read the json files
@@ -81,16 +83,14 @@ def main():
     if "-s" in flags:
         setup(properties)
 
-    
     #configure apps
     appsConfig.createApps(path,properties)    
 
-    #add urls for all pages
-    addURLs(properties)
+    #configure the pages
+    pagesConfig.createPages(path,properties)
 
     #after the project is built time to start changing properties in the settings
     settingsConfig.handleSettings(path+"/"+properties["website"]["name"]+"/"+properties["website"]["name"]+"/settings.py", properties)
-
 
 if __name__ == "__main__":
     main()
