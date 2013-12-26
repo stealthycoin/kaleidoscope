@@ -36,13 +36,7 @@ def generatePage(app, name, path, properties):
 
 
     #return a mapping from the url to the view
-    return "    url(r'^%s/$', '%s.views.%s', name='%s')," % (properties["url"],app,name,name)
-    
-    
-def createURLs(urls, properties):
-    """Takes the urls mappings and build the urls file"""
-    pass
-
+    return "    url(r'^%s$', '%s.views.%s', name='%s')," % (properties["url"],app,name,name)
     
 def createPages(path,properties):
     """Iterate through and create pages"""
@@ -63,12 +57,15 @@ def createPages(path,properties):
     with open(path+"/"+properties["website"]["name"]+"/"+properties["website"]["name"]+"/urls.py", "r") as f:
         content = f.read().split("\n")
 
+    #find beginning of url mapping
     mark = 1
     for line in content:
         if line.startswith("urlpatterns"):
             break
         mark += 1
+    #splice in our urls
     content = content[0:mark] + urls + content[mark:]
-            
+
+    #re-write the file
     with open(path+"/"+properties["website"]["name"]+"/"+properties["website"]["name"]+"/urls.py", "w") as f:
         f.write("\n".join(content))
