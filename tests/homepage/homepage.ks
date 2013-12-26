@@ -7,7 +7,8 @@
 
     pages: {
 	home: {
-	    title: "Homepage!"
+	    title: "Homepage!",
+	    url: ""
 	}
     }
 }

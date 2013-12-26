@@ -16,6 +16,9 @@ spotless: clean
 
 .PHONY: test
 test:
+	cd ./tests/homepage/ ;\
+	python ../../kaleidoscope.py -ps -f homepage.ks
+
 	cd ./tests/apps/ ;\
 	python ../../kaleidoscope.py -ps -f apps.ks
 
