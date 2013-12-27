@@ -1,7 +1,6 @@
 from subprocess import call
 import sys
 
-
 def configureApp(path, app, properties):
     """After it has been created it is populated"""
     print "Configuring app: " + path
@@ -14,9 +13,15 @@ def configureApp(path, app, properties):
         call(["cp", "-a", "../../resources/templatechains/"+properties["apps"][app]["templatechain"]+"/.", templates])
     except:
         print "Failed to generate templates"
-    
-        
-        
+
+    #generate themes
+    theme = path + "/static/"
+    print "Generating: " + theme
+    try:
+        call(["mkdir",theme])
+        call(["cp","-a","../../resources/themes/"+properties["apps"][app]["theme"]+"/.", theme])
+    except:
+        print "Failed to generate theme"
     
 def createApps(path, properties):
     """Generates all the apps required by the project"""
@@ -30,7 +35,8 @@ def createApps(path, properties):
     except KeyError:
         properties["apps"] = {}
 
-    properties["apps"]["main"] = { "templatechain" : "default" }
+    properties["apps"]["main"] = { "templatechain" : "default", 
+                                   "theme" : "default" }
 
     #create apps and configure them after creation
     try:
