@@ -30,9 +30,7 @@
 
 #nav li a:hover
 {
-    color: #2e3330; /* VertSplit */
-    font-weight: 700;
-    background-color: #8faf9f; /* Cursor bg */
+    background-color: #41363c; /* DiffText */
     padding-bottom: 12px;
 
     border-bottom: 3px;
