@@ -1,7 +1,44 @@
+from menu import Menu, MenuItem
+
 def tabify(string, tabs):
     """Adds tabs before string"""
     return ("    " * tabs) + string + "\n"
 
+
+def generateMenu(path, properties):
+    """Generates the menu for a given page"""
+    #Checks for menu presence
+    try:
+        properties["menu"]
+    except KeyError:
+        print "No menu"
+        return
+
+    path += "/"+properties["website"]["name"]+"/main/templates/standard.html"
+
+    menu = Menu() #create the menu
+    for item in properties["menu"]:
+        menu.addItem(MenuItem(properties["menu"][item]))
+        
+    menu.sortItems()
+
+    #read standard file
+    lines = []
+    with open(path, "r") as f:
+        lines = f.read().split("\n")
+
+    #find the menu tags
+    mark = 1
+    for line in lines:
+        if "block menu" in line:
+            break
+        mark += 1
+        
+    lines = lines[:mark] + menu.show().split("\n") + lines[mark:]
+
+    #write standard file back
+    with open(path, "w") as f:
+        f.write("\n".join(lines))
 
 def generatePage(app, name, path, properties):
     """
@@ -13,10 +50,10 @@ def generatePage(app, name, path, properties):
     #basics for each page
     tabs = 0
     page = "<!-- Generated code for page: " + name + " -->\n" 
-    page += tabify("{% extends \"base.html\" %}", tabs)
+    page += tabify("{% extends \"standard.html\" %}", tabs)
 
     
-    #Pages with non standard-title
+    #Generate unique portion for each page
     try:
         page += tabify(("{%% block title %%}%s{%% endblock %%}" % properties["title"]), tabs)
     except KeyError:
@@ -42,6 +79,10 @@ def createPages(path,properties):
     """Iterate through and create pages"""
     #url mappings variable
     urls = []
+
+    #create a menu in the standard.html file
+    generateMenu(path,properties)
+    
 
     #start with main app
     mainPath = path+"/"+properties["website"]["name"]+"/main/"
