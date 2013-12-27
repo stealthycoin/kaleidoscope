@@ -1,3 +1,4 @@
+SHELL := /bin/bash
 
 main: main.cpp parser.cpp tokens.cpp
 	g++ -std=c++11 -o parser *.cpp
@@ -16,12 +17,11 @@ spotless: clean
 
 .PHONY: test
 test:
-	cd ./tests/homepage/ ;\
+	cd tests/homepage/ ;\
 	python ../../kaleidoscope.py -ps -f homepage.ks ;\
 	source venv/bin/activate ;\
-	touch ./Homepage_Testing/Homepage_Testing/settings.py ;\
-	rm ./Homepage_Testing/Homepage_Testing/*.pyc ;\
-	python ./Homepage_Testing/manage.py runserver
+	rm Homepage_Testing/Homepage_Testing/*.pyc ;\
+	python Homepage_Testing/manage.py runserver
 
 #cd ./tests/apps/ ;\
 #python ../../kaleidoscope.py -ps -f apps.ks
