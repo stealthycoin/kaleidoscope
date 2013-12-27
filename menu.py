@@ -18,10 +18,10 @@ class Menu:
 
     def show(self):
         """Render the menu"""
-        html = "<div id='menu'>\n<ul id='nav'>\n"
+        html = "\n<ul id='nav'>\n"
         for item in self.items:
             html += item.show() + "\n"
-        return html + "</ul></div>"
+        return html + "</ul>"
 
 class MenuItem:
     """Represents a single menu item... god knows what this will entail"""

@@ -1,11 +1,37 @@
 {% extends "base.html" %}
 
-
+<!-- Body -->
 {% block body %}
 
+
+<!-- Header -->
+{% block header %}
+<div id="header">
+</div>
+{% endblock %}
+<!-- End Header -->
+
 <!-- Menu -->
+<div id="menu">
 {% block menu %}
 {% endblock %}
+</div>
 <!-- End Menu -->
 
+<!-- Content -->
+<div id="content">
+{% block content %}
 {% endblock %}
+</div>
+<!-- End Content -->
+
+<!-- Footer -->
+<div id="footer">
+{% block footer%}
+{% endblock %}
+</div>
+<!-- End Footer -->
+
+
+{% endblock %}
+<!-- End Body -->
