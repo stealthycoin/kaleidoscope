@@ -17,10 +17,13 @@ spotless: clean
 .PHONY: test
 test:
 	cd ./tests/homepage/ ;\
-	python ../../kaleidoscope.py -ps -f homepage.ks
+	python ../../kaleidoscope.py -ps -f homepage.ks ;\
+	source venv/bin/activate ;\
+	touch ./Homepage_Testing/Homepage_Testing/settings.py ;\
+	rm ./Homepage_Testing/Homepage_Testing/*.pyc ;\
+	python ./Homepage_Testing/manage.py runserver
 
-	cd ./tests/apps/ ;\
-	python ../../kaleidoscope.py -ps -f apps.ks
-
-	cd ./tests/basic/ ;\
-	python ../../kaleidoscope.py -ps -f basic.ks
+#cd ./tests/apps/ ;\
+#python ../../kaleidoscope.py -ps -f apps.ks
+#cd ./tests/basic/ ;\
+#python ../../kaleidoscope.py -ps -f basic.ks
