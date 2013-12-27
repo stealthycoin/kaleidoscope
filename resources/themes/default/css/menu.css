@@ -1,13 +1,16 @@
 
 /* Zenburn based theme */
 
+/* Div containing the menu */
 #menu { 
     overflow: hidden;
     text-align: center;
+    background-color: #3a3a39; /* TabLineSel */
 }
 
+/* ul inside the div */
 #nav {
-    list-style:none;
+    list-style: none;
     display: inline-block;
     overflow: hidden;
 }
@@ -18,7 +21,7 @@
 
 #nav li a {
     font-family: Arial;
-    font-size: 12px;
+    font-size: 16px;
     text-decoration: none;
     float: left;
     padding: 10px;
