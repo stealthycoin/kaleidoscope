@@ -1,7 +1,15 @@
 <!DOCTYPE html>
 <head>
   <title>{% block title %}Default Title{% endblock %}</title>
-  {% block head %}{% endblock %}
+  {% block head %}
+
+  <!-- CSS for most standard tags -->
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/main.css" />
+
+  <!-- CSS for the menu loaded here -->
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/menu.css" />
+  
+  {% endblock %}
 </head>
 
 <body>
