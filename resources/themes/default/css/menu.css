@@ -3,14 +3,17 @@
 
 #menu { 
     overflow: hidden;
+    text-align: center;
 }
 
 #nav {
     list-style:none;
+    display: inline-block;
+    overflow: hidden;
 }
 
 #nav li {
-    
+    float: left;
 }
 
 #nav li a {
