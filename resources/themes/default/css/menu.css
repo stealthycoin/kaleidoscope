@@ -1,0 +1,41 @@
+
+/* Zenburn based theme */
+
+#menu { 
+    overflow: hidden;
+}
+
+#nav {
+    list-style:none;
+}
+
+#nav li {
+    
+}
+
+#nav li a {
+    font-family: Arial;
+    font-size: 12px;
+    text-decoration: none;
+    float: left;
+    padding: 10px;
+    background-color: #434443; /* CursorLine */
+    color: #f0dfaf; /* Keyword */
+    text-align: center;
+
+    border-bottom:3px;
+    border-bottom-color:#000000;
+    border-bottom-style:solid;
+}
+
+#nav li a:hover
+{
+    color: #2e3330; /* VertSplit */
+    font-weight: 700;
+    background-color: #8faf9f; /* Cursor bg */
+    padding-bottom: 12px;
+
+    border-bottom: 3px;
+    border-bottom-color: #000000;
+    border-bottom-style: solid;
+}
