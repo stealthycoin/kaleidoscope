@@ -1,5 +1,27 @@
 import re
 from utilities import tupleEntrys
+from subprocess import call
+
+def handleStatic(settings,properties):
+    """Add static settings"""
+    lines = settings.split("\n")
+    mark = 2
+    for line in lines:
+        if "STATIC_URL" in line:
+            break
+        mark += 1
+    
+    newLines = ["STATIC_ROOT = os.path.join(BASE_DIR,'static')", "", "STATICFILE_DIRS = ("]
+    
+    for app in iter(properties["apps"]):
+        newLines.append("    os.path.join(BASE_DIR,'%s/static/')," % app)
+
+    newLines += [")"]
+    
+    result = lines[:mark] + newLines + lines[mark:]
+
+    return "\n".join(result)
+    
 
 def handleTemplates(settings,properties):
     """Generates the template names"""
@@ -8,14 +30,14 @@ def handleTemplates(settings,properties):
 
     apps = properties["apps"]
     result = "\n#Template directories\nTEMPLATE_DIRS = (\n"
-    apps = map(lambda x:"BASE_DIR+'/%s/templates'" % (x), apps)
+    apps = map(lambda x: "os.path.join(BASE_DIR, '%s/templates')" % (x), apps)
     apps = tupleEntrys(apps,True) #encode for tuple
     result += "\n".join(apps) + "\n)"
     
     return settings + result
 
 def handleApps(settings,properties):
-    """Adds south and whatever otehr apps necessary"""
+    """Adds south and whatever other apps necessary"""
     lines = settings.split("\n")
     i = 1
     for line in lines:
@@ -47,7 +69,7 @@ def handleAdmins(settings,properties):
     try:
         admins = website["admins"]
         adminList = []
-        addstring = "ADMINS = (\n"
+        addstring = "\n#Administartors\nADMINS = (\n"
         
         for key in admins:
             name, email = admins[key]['name'], admins[key]['email']
@@ -80,9 +102,15 @@ def handleSettings(settings_file, properties):
     #add in template dirs at the end
     contents = handleTemplates(contents,properties)
 
+    #add static dirs and root
+    contents = handleStatic(contents,properties)
+
     f.close()
 
     #rewrite changes
     f = open(settings_file, "w")
     f.write(contents)
     f.close()
+
+    #sometimes the test server fails to see the updated settings file and only loads a cached version (I guess) dunno whats up
+    call(["touch", settings_file])
