@@ -1,4 +1,10 @@
 
-body {
-    background-color: #353535; /* TabLine */
+h1 {
+    padding-left: 25%;
+    color: #8cd0d3; /* Number */
 }
+
+body {
+    background-color: #434443; /* CursorLine */
+}
+

@@ -25,7 +25,7 @@
     text-decoration: none;
     float: left;
     padding: 10px;
-    background-color: #434443; /* CursorLine */
+    background-color: #2B2B2B; /* CursorLine */
     color: #f0dfaf; /* Keyword */
     text-align: center;
 
@@ -36,10 +36,5 @@
 
 #nav li a:hover
 {
-    background-color: #41363c; /* DiffText */
-    padding-bottom: 12px;
-
-    border-bottom: 3px;
-    border-bottom-color: #000000;
-    border-bottom-style: solid;
+    color: #cc9393; /* String */
 }
