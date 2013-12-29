@@ -5,7 +5,14 @@ def tabify(string, tabs):
     return ("    " * tabs) + string + "\n"
 
 
-def generateMenu(path, properties):
+def generateHeader(standard, properties):
+    """Takes the standard file and adds a header to it"""
+    try:
+        return "%s\n<h1>%s</h1>\n" % (standard, properties["website"]["prettyName"])
+    except KeyError:
+        return standard
+
+def generateMenu(standard, properties):
     """Generates the menu for a given page"""
     #Checks for menu presence
     try:
@@ -14,31 +21,22 @@ def generateMenu(path, properties):
         print "No menu"
         return
 
-    path += "/"+properties["website"]["name"]+"/main/templates/standard.html"
-
-    menu = Menu() #create the menu
+    menu = Menu()
     for item in properties["menu"]:
         menu.addItem(MenuItem(properties["menu"][item]))
         
     menu.sortItems()
+    return standard + menu.show()
 
-    #read standard file
-    lines = []
-    with open(path, "r") as f:
-        lines = f.read().split("\n")
+def generateFooter(standard,properties):
+    """Generate footer"""
+    try:
+        owner = properties["website"]["author"]
+    except KeyError:
+        owner = properties["website"]["name"]
 
-    #find the menu tags
-    mark = 1
-    for line in lines:
-        if "block menu" in line:
-            break
-        mark += 1
-        
-    lines = lines[:mark] + menu.show().split("\n") + lines[mark:]
-
-    #write standard file back
-    with open(path, "w") as f:
-        f.write("\n".join(lines))
+    from datetime import date
+    return "%s&copy; %d %s" % (standard, date.today().year, owner)
 
 def generatePage(app, name, path, properties):
     """
@@ -80,9 +78,58 @@ def createPages(path,properties):
     #url mappings variable
     urls = []
 
-    #create a menu in the standard.html file
-    generateMenu(path,properties)
-    
+
+    #read standard.html file
+    standard = """{% extends "base.html" %}
+
+<!-- Body -->
+{% block body %}
+
+
+<!-- Header -->
+<div id="header">
+{% block header %}
+"""
+    standard = generateHeader(standard,properties)
+    standard += """{% endblock %}
+</div>
+<!-- End Header -->
+
+<!-- Menu -->
+<div id="menu">
+{% block menu %}
+"""
+    standard = generateMenu(standard,properties)
+
+    standard += """{% endblock %}
+</div>
+<!-- End Menu -->
+
+<!-- Content -->
+<div id="content">
+{% block content %}
+{% endblock %}
+</div>
+<!-- End Content -->
+"""
+    standard = generateFooter(standard, properties)
+    standard += """<!-- Footer -->
+<div id="footer">
+{% block footer%}
+{% endblock %}
+</div>
+<!-- End Footer -->
+
+
+{% endblock %}
+<!-- End Body -->
+"""
+
+    #write the new standard.html
+    with open(path+"/"+properties["website"]["name"]+"/main/templates/standard.html", "w") as f:
+        standard = f.write(standard)    
+
+
 
     #start with main app
     mainPath = path+"/"+properties["website"]["name"]+"/main/"
@@ -92,6 +139,8 @@ def createPages(path,properties):
             urls.append(generatePage("main", page, mainPath, properties["pages"][page]))
     except KeyError:
         print "No web pages to write"
+
+
 
     #create urls file
     content = ""
