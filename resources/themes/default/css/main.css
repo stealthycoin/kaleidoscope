@@ -15,10 +15,21 @@ div#header h1 {
     display: inline-block;
 }
 
+h2, h3, h4, h5, h6, h7, th {
+    color: #8cd0d3; /* Number */
+}
+
+p, td {
+    color: #dcdccc; /* Font Lock Negation Char Face */
+}
+
 body {
     background-color: #434443; /* CursorLine */
 }
 
 #footer {
     color: #577f5f; /* Mode Line Face */
+    background-color: #3a3a39; /* TabLineSel */
+    text-align: right;
 }
+
