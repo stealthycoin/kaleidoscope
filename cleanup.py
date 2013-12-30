@@ -8,5 +8,5 @@ for test in tests:
         if os.path.isdir(path+f):
             shutil.rmtree(path+f)
         else:
-            if not f.endswith('.ks'):
+            if not f.endswith('.ks') and not f.endswith('.html'):
                 os.remove(path+f)
