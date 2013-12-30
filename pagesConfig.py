@@ -111,12 +111,13 @@ def createPages(path,properties):
 {% endblock %}
 </div>
 <!-- End Content -->
+
+<!-- Footer -->
+<div id="footer">
+{% block footer  %}
 """
     standard = generateFooter(standard, properties)
-    standard += """<!-- Footer -->
-<div id="footer">
-{% block footer%}
-{% endblock %}
+    standard += """{% endblock %}
 </div>
 <!-- End Footer -->
 

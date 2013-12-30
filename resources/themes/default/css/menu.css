@@ -6,6 +6,9 @@
     overflow: hidden;
     text-align: center;
     background-color: #3a3a39; /* TabLineSel */
+    
+    padding-top: 0;
+    margin-top :0;
 }
 
 /* ul inside the div */
