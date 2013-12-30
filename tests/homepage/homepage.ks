@@ -2,7 +2,7 @@
     website: {
 	name: "Homepage_Testing",
 	prettyName: "FatShark",
-	author: "John Carlyle",
+	author: "Brilliant Squid",
 	admins: { a: { name: "John Carlyle", email: "john.w.carlyle@gmail.com"}}
     },
 
@@ -15,10 +15,10 @@
     },
 
     pages: { 
-	home: { title: "Homepage!", url: "" },
-	testimonials: { title: "Testimonials", url: "testimonials" },
-	map: { title: "Site Map", url: "map" }, 
-	about: { title: "About", url: "about" },
-	emacs: { title: "emacs", url: "emacs" }
+	home: { title: "Homepage!", url: "" , content: "home.html" },
+	testimonials: { title: "Testimonials", url: "testimonials", content: "test.html" },
+	map: { title: "Site Map", url: "map", content: "map.html" }, 
+	about: { title: "About", url: "about", content: "about.html" },
+	emacs: { title: "emacs", url: "emacs", content: "emacs.html" }
     }
 }
