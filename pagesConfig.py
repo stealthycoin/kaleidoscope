@@ -1,3 +1,4 @@
+import sys
 from menu import Menu, MenuItem
 
 def tabify(string, tabs):
@@ -8,7 +9,7 @@ def tabify(string, tabs):
 def generateHeader(standard, properties):
     """Takes the standard file and adds a header to it"""
     try:
-        return "%s\n<h1>%s</h1>\n" % (standard, properties["website"]["prettyName"])
+        return "%s\n<a href=\"/\"><h1>%s</h1></a>\n" % (standard, properties["website"]["prettyName"])
     except KeyError:
         return standard
 
@@ -38,7 +39,7 @@ def generateFooter(standard,properties):
     from datetime import date
     return "%s&copy; %d %s" % (standard, date.today().year, owner)
 
-def generatePage(app, name, path, properties):
+def generatePage(app, name, path, appPath, properties):
     """
     Generate a page given a dict of properties
     
@@ -58,7 +59,16 @@ def generatePage(app, name, path, properties):
         pass #no title for page
 
 
-    with open(path+"/templates/"+name+".html", "w") as f:
+    try:
+        with open(path+"/"+properties["content"]) as f:
+            page += "{% block content %}" + f.read() + "{% endblock %}"
+    except KeyError:
+        print "Page " + name + " has no content"
+    except IOError:
+        print "No such file: " + path + "/" + properties["content"]
+        sys.exit(7)
+
+    with open(appPath+"/templates/"+name+".html", "w") as f:
         f.write(page)
         
     tabs = 0
@@ -66,7 +76,7 @@ def generatePage(app, name, path, properties):
     view = tabify("def %s(request):" % name, tabs)
     tabs += 1
     view += tabify("return render(request,\"%s.html\",{})" % name, tabs)
-    with open(path+"/views.py", "a") as f:
+    with open(appPath+"/views.py", "a") as f:
         f.write("\n\n" + view)
 
 
@@ -137,7 +147,7 @@ def createPages(path,properties):
 
     try:
         for page in iter(properties["pages"]):
-            urls.append(generatePage("main", page, mainPath, properties["pages"][page]))
+            urls.append(generatePage("main", page, path, mainPath, properties["pages"][page]))
     except KeyError:
         print "No web pages to write"
 
