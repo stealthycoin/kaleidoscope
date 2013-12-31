@@ -92,5 +92,13 @@ def main():
     #after the project is built time to start changing properties in the settings
     settingsConfig.handleSettings(path+"/"+properties["website"]["name"]+"/"+properties["website"]["name"]+"/settings.py", properties)
 
+    #intiialize the test database
+    print "python " + path+"/"+properties["website"]["name"]+"/manage.py syncdb"
+    try:
+        call([path+"/venv/bin/python", path+"/"+properties["website"]["name"]+"/manage.py", "syncdb"])
+        call([path+"/venv/bin/python", path+"/"+properties["website"]["name"]+"/manage.py", "migrate"])
+    except:
+        print "failed to initialize the database"
+
 if __name__ == "__main__":
     main()
