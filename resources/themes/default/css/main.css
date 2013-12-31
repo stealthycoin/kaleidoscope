@@ -1,4 +1,6 @@
 
+/* Zenburn based theme */
+
 #header {
     margin-bottom: 0;
     padding-bottom: 0;
@@ -27,9 +29,13 @@ body {
     background-color: #434443; /* CursorLine */
 }
 
+#content {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
 #footer {
     color: #577f5f; /* Mode Line Face */
     background-color: #3a3a39; /* TabLineSel */
     text-align: right;
 }
-
