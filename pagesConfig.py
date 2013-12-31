@@ -60,7 +60,7 @@ def generatePage(app, name, path, appPath, properties):
 
 
     try:
-        with open(path+"/"+properties["content"]) as f:
+        with open(path+"/"+properties["template"]) as f:
             page += "{% block content %}" + f.read() + "{% endblock %}"
     except KeyError:
         print "Page " + name + " has no content"

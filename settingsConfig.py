@@ -59,6 +59,19 @@ def handleApps(settings,properties):
     
     return '\n'.join(result)
 
+def handleDatabase(settings,properties):
+    """Configure the datbase settings"""
+
+    try:
+        newDict = {}
+        for key in iter(properties["database"]):
+            newDict[key.upper()] = properties["database"][key]
+    except KeyError:
+        return settings
+    
+    return "%s\nDATABASES = { 'default': %s }\n" % (settings, newDict)
+    
+
 def handleAdmins(settings,properties):
     """Configures admins in the settings file"""
     website = properties["website"] #this is ensured by the parser
@@ -104,6 +117,9 @@ def handleSettings(settings_file, properties):
 
     #add static dirs and root
     contents = handleStatic(contents,properties)
+
+    #setup the database
+    contents = handleDatabase(contents,properties)
 
     f.close()
 
