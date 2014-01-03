@@ -7,8 +7,9 @@ import settingsConfig, appsConfig, pagesConfig
 import consts
 
 
-path = os.getcwd()
-sys.path.append(path) #this is so we can include the compiled ks dictionary
+consts.PATH = os.getcwd()
+
+sys.path.append(consts.PATH) #this is so we can include the compiled ks dictionary
 
 def setup(properties):
     """
@@ -18,28 +19,34 @@ def setup(properties):
     """
 
     try:
-        if not os.path.exists(path+"/venv"):
-            call(["virtualenv", path+"/venv"])
+        try:
+            env = properties["environment"]
+        except KeyError:
+            env = "venv"
+        consts.ENV = os.path.join(consts.PATH, env)
+
+        if not os.path.exists(consts.ENV):
+            call(["virtualenv", consts.ENV])
     except:
-        print "Error creating virtual environment. Make sure it is installed."
+        print "Error creating virtual environment. Make sure viurtualenv is installed."
         sys.exit(1)
             
     try:
         call(["cp", "../../resources/req.pip", "./"])
-        call([path+"/venv/bin/pip", "install", "-r", path+"/req.pip"])
+        call([os.path.join(consts.ENV, 'bin', 'pip'), "install", "-r", os.path.join(consts.PATH, 'req.pip')])
     except:
         print "Error installing django or south"
         sys.exit(2)
 
     try:
         print "Building project"
-        call([path+"/venv/bin/django-admin.py", "startproject", properties["website"]["name"]])
+        call([os.path.join(const.ENV, 'bin', 'django-admin.py'), "startproject", properties["website"]["name"]])
     except:
         print "Error creating django project"
         sys.exit(3)
 
     try:
-        call(["git", "init", path])
+             call(["git", "init", consts.PATH])
     except:
         print "Failed to initialize git"
         sys.exit(4)
@@ -61,13 +68,7 @@ def parse(filename):
 
 def main():
     opts, args = getopt.getopt(sys.argv[1:], "spf:t:")
-    
-    consts.PATH = os.getcwd()
-    consts.PYTHON = consts.PATH + "/bin/python"
-
-    print "PATH: " + consts.PATH
-    print "PYTHON: " + consts.PYTHON
-
+        
     filename = "infile"
     templatechain = "default"
     flags = [o for o,a in opts]
@@ -82,7 +83,7 @@ def main():
 
     #read the json files
     if "-p" in flags:
-        properties = parse(path + "/" + filename)
+        properties = parse(os.path.join(consts.PATH, filename))
 
     #create base project
     if "-s" in flags:
