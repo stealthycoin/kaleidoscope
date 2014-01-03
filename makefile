@@ -20,7 +20,6 @@ test:
 	cd tests/homepage/ ;\
 	python ../../kaleidoscope.py -ps -f homepage.ks ;\
 	source venv/bin/activate ;\
-	rm Homepage_Testing/Homepage_Testing/*.pyc ;\
 	python Homepage_Testing/manage.py runserver
 
 #cd ./tests/apps/ ;\
