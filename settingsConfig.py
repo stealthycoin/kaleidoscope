@@ -1,5 +1,6 @@
 import re
 from utilities import tupleEntrys
+from utilities import showDatabaseDictionary as showDD
 from subprocess import call
 
 def handleStatic(settings,properties):
@@ -62,6 +63,17 @@ def handleApps(settings,properties):
 def handleDatabase(settings,properties):
     """Configure the datbase settings"""
 
+    #cut out default database
+    lines = settings.split("\n")
+    mark = 0
+    for line in lines:
+        if line.startswith("# Database"):
+            break
+        mark += 1
+        
+    lines = lines[:mark] + lines[mark+9:]
+    settings = "\n".join(lines)
+
     try:
         newDict = {}
         for key in iter(properties["database"]):
@@ -69,7 +81,7 @@ def handleDatabase(settings,properties):
     except KeyError:
         return settings
     
-    return "%s\nDATABASES = { 'default': %s }\n" % (settings, newDict)
+    return "%s\nDATABASES = { 'default': %s }\n" % (settings, showDD(newDict))
     
 
 def handleAdmins(settings,properties):
@@ -105,7 +117,8 @@ def handleSettings(settings_file, properties):
 
     f = open(settings_file, "r")
     contents = f.read()
-
+    f.close()
+    
     #add administrators
     contents = handleAdmins(contents,properties)
 
@@ -128,5 +141,6 @@ def handleSettings(settings_file, properties):
     f.write(contents)
     f.close()
 
-    #sometimes the test server fails to see the updated settings file and only loads a cached version (I guess) dunno whats up
-    call(["touch", settings_file])
+    #last thing is to delete the pyc of the settings file otherwise it will be out of date
+    call(["rm", settings_file + "c"])
+    

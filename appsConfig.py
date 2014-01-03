@@ -1,5 +1,5 @@
 from subprocess import call
-import sys
+import sys, os
 
 def generateModelField(key, properties):
     """Takes a single field's properties and maps it to a a django object
@@ -20,24 +20,29 @@ def generateModelField(key, properties):
 
 def generateModel(path,app,model,properties):
     """generates a specific model"""
-    print "Generating Model: " + properties["name"]
+    name = model
+    print "Generating Model: " + name
 
-    model = "class %s(models.Model):\n" % properties["name"]
+    modelStr = "class %s(models.Model):\n" % name
 
     #process fields
     try:
         for key in iter(properties["fields"]):
-            model += generateModelField(key,properties["fields"][key])
+            modelStr += generateModelField(key,properties["fields"][key])
     except KeyError:
-        model += "    pass"
+        modelStr += "    pass"
 
-    return model + "\n"
+
+    #register it in the admin panel right before returning it
+    with open(path+"/admin.py", "a") as f:
+        f.write("\nfrom models import %s\nadmin.site.register(%s)\n" % (name,name))
+    
+    return modelStr + "\n"
     
 def generateModels(path,app,properties):
     """Generates models for a given app"""
 
     print "Generating models for app: " + app
-
     models = "from django.db import models\n\n"
 
     for model in iter(properties):
@@ -72,6 +77,12 @@ def configureApp(path, app, properties):
     #generate the models
     try:
         generateModels(path,app,properties["models"])
+
+        #when done writing models for this app migrate it
+        manPath = os.path.dirname(path)
+        basePath = os.path.dirname(manPath)
+        call([basePath+"/venv/bin/python", manPath+"/manage.py", "schemamigration", app, "--intiial"])
+
     except KeyError:
         print app + " has no models"
         

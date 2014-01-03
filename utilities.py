@@ -8,3 +8,23 @@ def tupleEntrys(l,removeLastComma = False):
 
     return l
         
+
+
+def showDatabaseDictionary(d):
+    """tricky because some elements need to not be quoted like NAME"""
+
+    result = "{\n"
+    first = True
+
+    for key in iter(d):
+        if first:
+            first = False
+        else:
+            result += ", "
+        if key == "NAME":
+            result += "'NAME' : os.path.join(BASE_DIR, '%s')" % d[key]
+        else:
+            result += "'%s' : '%s'" % (key, d[key])
+            
+
+    return result + "\n}"
