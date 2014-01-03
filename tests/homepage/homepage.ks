@@ -20,7 +20,7 @@
 			home: { type: "ForeignKey", argstring: "'Pad'" },
 			homies: { type: "ManyToManyField", argstring: "'Bro'" }
 		    },
-		    display: "%name"
+		    display: "%name - %home"
 		},
 
 		Pad: {
