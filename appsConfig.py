@@ -64,11 +64,10 @@ def generateModel(path,app,model,properties):
                     state = 0
                 else:
                     if symbol == ' ':
-                        newString += symbol
                         state = 0
                         variables.append(buf)
                         buf = ''
-                        newString += '%s'
+                        newString += '%s '
                     else:
                         buf += symbol
 
