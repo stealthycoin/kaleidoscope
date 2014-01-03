@@ -19,14 +19,16 @@
 			name: { type: "CharField", argstring: "max_length=32" },
 			home: { type: "ForeignKey", argstring: "'Pad'" },
 			homies: { type: "ManyToManyField", argstring: "'Bro'" }
-		    }
+		    },
+		    display: "%name"
 		},
 
 		Pad: {
 		    fields: {
-			name: { type: "TextField" },
+			name: { type: "CharField", argstring: "max_length=32" },
 			stunnerShadeCount: { type: "SmallIntegerField" }
-		    }
+		    },
+		    display: "%name"
 		}
 	    }
 	}

@@ -12,9 +12,17 @@ def generateModelField(key, properties):
         return  ""
 
     try:
-        field += "%s)" % properties["argstring"]
+        required = "blank=True,null=True"
+        argstring = properties["argstring"]
+        if len(argstring) > 0:
+            argstring += ","+required
+        else:
+            argstring = required
+        field += "%s)" % argstring
+
     except KeyError:
         field += ")"
+
     
     return field + "\n"
 
@@ -36,6 +44,47 @@ def generateModel(path,app,model,properties):
     #register it in the admin panel right before returning it
     with open(path+"/admin.py", "a") as f:
         f.write("\nfrom models import %s\nadmin.site.register(%s)\n" % (name,name))
+
+    #write the unicode function for display if nessisary
+    try:
+        tokens = properties["display"] + ' '
+        state = 0 #0 normal 1 keyword
+        buf = ''
+        newString = ""
+        variables = []
+        for symbol in tokens:
+            if state == 0:
+                if symbol == '%':
+                    state = 1
+                else:
+                    newString += symbol
+            else:
+                if symbol == '%':
+                    newString += '%'
+                    state = 0
+                else:
+                    if symbol == ' ':
+                        newString += symbol
+                        state = 0
+                        variables.append(buf)
+                        buf = ''
+                        newString += '%s'
+                    else:
+                        buf += symbol
+
+        mapping = ""
+        first = True
+        for var in variables:
+            if first:
+                first = False
+            else:
+                mapping += ','
+            mapping += 'self.'+var
+        modelStr += "\n    def __unicode__(self):\n        return u'%s' %% (%s)" % (newString, mapping)
+
+
+    except KeyError:
+        pass #no special instructions for rendering
     
     return modelStr + "\n"
     
