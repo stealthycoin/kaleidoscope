@@ -40,9 +40,9 @@ def setup(properties):
 
     try:
         print "Building project"
-        call([os.path.join(const.ENV, 'bin', 'django-admin.py'), "startproject", properties["website"]["name"]])
-    except:
-        print "Error creating django project"
+        call([os.path.join(consts.ENV, 'bin', 'django-admin.py'), "startproject", properties["website"]["name"]])
+    except OSError as e:
+        print "Error creating django project", e
         sys.exit(3)
 
     try:
@@ -90,18 +90,20 @@ def main():
         setup(properties)
 
     #configure apps
-    appsConfig.createApps(path,properties)    
+    appsConfig.createApps(properties)    
 
     #configure the pages
-    pagesConfig.createPages(path,properties)
+    pagesConfig.createPages(properties)
 
     #after the project is built time to start changing properties in the settings
-    settingsConfig.handleSettings(path+"/"+properties["website"]["name"]+"/"+properties["website"]["name"]+"/settings.py", properties)
+    settingsConfig.handleSettings(os.path.join(consts.PROJECT,\
+                                               properties["website"]["name"],\
+                                               'settings.py'),\
+                                  properties)
 
     #intiialize the test database
     try:
-        os.chdir(os.path.join(path,properties["website"]["name"]))
-        call(["../venv/bin/python", "manage.py", "syncdb"])
+        call([consts.PYTHON, consts.MANAGE, "syncdb"])
     except:
         print "failed to initialize the database"
 

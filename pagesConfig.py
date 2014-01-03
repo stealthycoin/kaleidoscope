@@ -1,4 +1,4 @@
-import sys
+import sys, os, consts
 from menu import Menu, MenuItem
 
 def tabify(string, tabs):
@@ -39,7 +39,7 @@ def generateFooter(standard,properties):
     from datetime import date
     return "%s&copy; %d %s" % (standard, date.today().year, owner)
 
-def generatePage(app, name, path, appPath, properties):
+def generatePage(app, name, appPath, properties):
     """
     Generate a page given a dict of properties
     
@@ -60,15 +60,15 @@ def generatePage(app, name, path, appPath, properties):
 
 
     try:
-        with open(path+"/"+properties["template"]) as f:
+        with open(os.path.join(consts.PATH, properties["template"])) as f:
             page += "{% block content %}" + f.read() + "{% endblock %}"
     except KeyError:
         print "Page " + name + " has no content"
     except IOError:
-        print "No such file: " + path + "/" + properties["content"]
+        print "No such file: " + os.path.join(consts.PATH, properties["content"])
         sys.exit(7)
 
-    with open(appPath+"/templates/"+name+".html", "w") as f:
+    with open(os.path.join(appPath, 'templates', name+'.html'), 'w') as f:
         f.write(page)
         
     tabs = 0
@@ -76,18 +76,17 @@ def generatePage(app, name, path, appPath, properties):
     view = tabify("def %s(request):" % name, tabs)
     tabs += 1
     view += tabify("return render(request,\"%s.html\",{})" % name, tabs)
-    with open(appPath+"/views.py", "a") as f:
+    with open(os.path.join(appPath, 'views.py'), 'a') as f:
         f.write("\n\n" + view)
 
 
     #return a mapping from the url to the view
     return "    url(r'^%s$', '%s.views.%s', name='%s')," % (properties["url"],app,name,name)
     
-def createPages(path,properties):
+def createPages(properties):
     """Iterate through and create pages"""
     #url mappings variable
     urls = []
-
 
     #read standard.html file
     standard = """{% extends "base.html" %}
@@ -136,18 +135,17 @@ def createPages(path,properties):
 <!-- End Body -->
 """
 
+    #location of main app is used a lot
+    consts.MAIN = os.path.join(consts.PROJECT, 'main')
+
     #write the new standard.html
-    with open(path+"/"+properties["website"]["name"]+"/main/templates/standard.html", "w") as f:
+    with open(os.path.join(consts.MAIN, 'templates', 'standard.html'), 'w') as f:
         standard = f.write(standard)    
 
 
-
-    #start with main app
-    mainPath = path+"/"+properties["website"]["name"]+"/main/"
-
     try:
         for page in iter(properties["pages"]):
-            urls.append(generatePage("main", page, path, mainPath, properties["pages"][page]))
+            urls.append(generatePage("main", page, consts.MAIN, properties["pages"][page]))
     except KeyError:
         print "No web pages to write"
 
@@ -155,7 +153,8 @@ def createPages(path,properties):
 
     #create urls file
     content = ""
-    with open(path+"/"+properties["website"]["name"]+"/"+properties["website"]["name"]+"/urls.py", "r") as f:
+    urlsFile = os.path.join(consts.PROJECT, properties["website"]["name"], 'urls.py')
+    with open(urlsFile, 'r') as f:
         content = f.read().split("\n")
 
     #find beginning of url mapping
@@ -168,5 +167,5 @@ def createPages(path,properties):
     content = content[0:mark] + urls + content[mark:]
 
     #re-write the file
-    with open(path+"/"+properties["website"]["name"]+"/"+properties["website"]["name"]+"/urls.py", "w") as f:
+    with open(urlsFile, 'w') as f:
         f.write("\n".join(content))

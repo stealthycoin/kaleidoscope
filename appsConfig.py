@@ -1,5 +1,5 @@
 from subprocess import call
-import sys, os
+import sys, os, consts
 
 def generateModelField(key, properties):
     """Takes a single field's properties and maps it to a a django object
@@ -54,10 +54,10 @@ def generateModels(path,app,properties):
         
 def configureApp(path, app, properties):
     """After it has been created it is populated"""
-    print "Configuring app: " + path
+    print "Configuring app: " + app
 
     #template chain to copy
-    templates = path + "/templates"
+    templates = os.path.join(path, 'templates')
     print "Generating: " + templates
     try:
         call(["mkdir", templates])
@@ -79,18 +79,19 @@ def configureApp(path, app, properties):
         generateModels(path,app,properties["models"])
 
         #when done writing models for this app migrate it
-        manPath = os.path.dirname(path)
-        basePath = os.path.dirname(manPath)
-        call([basePath+"/venv/bin/python", manPath+"/manage.py", "schemamigration", app, "--intiial"])
+        call([consts.PYTHON, consts.MANAGE, "schemamigration", app, "--intiial"])
 
     except KeyError:
         print app + " has no models"
         
-def createApps(path, properties):
+def createApps(properties):
     """Generates all the apps required by the project"""
-    
-    tool = path+"/venv/bin/python"
-    name = properties["website"]["name"]
+
+    name = properties["website"]["name"]    
+    consts.PYTHON = os.path.join(consts.ENV, 'bin', 'python')
+    consts.PROJECT = os.path.join(consts.PATH, name)
+    consts.MANAGE = os.path.join(consts.PROJECT, "manage.py")
+
 
     #create main app
     try:
@@ -104,13 +105,10 @@ def createApps(path, properties):
     #create apps and configure them after creation
     try:
         for app in iter(properties["apps"]):
-#            try:
-            call([tool, path+"/"+properties["website"]["name"]+ "/manage.py", "startapp", app])
-            call(["mv", path+"/"+app, path+"/"+name])
-            configureApp(path+"/"+name+"/"+app, app, properties["apps"][app])
- #           except:
-          #      print "Error creating apps"
-  #              sys.exit(6)
+            call([consts.PYTHON, consts.MANAGE, "startapp", app])
+            call(["mv", os.path.join(consts.PATH, app), consts.PROJECT])
+            configureApp(os.path.join(consts.PROJECT, app), app, properties["apps"][app])
+
     except KeyError:
         print "No apps detected"
         
