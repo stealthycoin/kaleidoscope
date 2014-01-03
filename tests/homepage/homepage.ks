@@ -12,20 +12,17 @@
     },
 
     apps: {
-    	bro: { 
-	    name: "Bro",
+    	Bro: { 
 	    models: {
-		bro: { 
-		    name: "Bro",
+		Bro: { 
 		    fields: {
-			name: { type: "TextField" },
+			name: { type: "CharField", argstring: "max_length=32" },
 			home: { type: "ForeignKey", argstring: "'Pad'" },
 			homies: { type: "ManyToManyField", argstring: "'Bro'" }
 		    }
 		},
 
-		pad: {
-		    name: "Pad",
+		Pad: {
 		    fields: {
 			name: { type: "TextField" },
 			stunnerShadeCount: { type: "SmallIntegerField" }
