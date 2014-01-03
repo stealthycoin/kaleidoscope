@@ -4,6 +4,7 @@ import getopt
 import json
 from subprocess import call
 import settingsConfig, appsConfig, pagesConfig
+import consts
 
 
 path = os.getcwd()
@@ -57,12 +58,16 @@ def parse(filename):
         sys.exit(1)
     return properties
 
-def addURLs():
-    """Genreate urls page"""
 
 def main():
     opts, args = getopt.getopt(sys.argv[1:], "spf:t:")
     
+    consts.PATH = os.getcwd()
+    consts.PYTHON = consts.PATH + "/bin/python"
+
+    print "PATH: " + consts.PATH
+    print "PYTHON: " + consts.PYTHON
+
     filename = "infile"
     templatechain = "default"
     flags = [o for o,a in opts]
@@ -93,10 +98,9 @@ def main():
     settingsConfig.handleSettings(path+"/"+properties["website"]["name"]+"/"+properties["website"]["name"]+"/settings.py", properties)
 
     #intiialize the test database
-    print "python " + path+"/"+properties["website"]["name"]+"/manage.py syncdb"
     try:
-        call([path+"/venv/bin/python", path+"/"+properties["website"]["name"]+"/manage.py", "syncdb"])
-        call([path+"/venv/bin/python", path+"/"+properties["website"]["name"]+"/manage.py", "migrate"])
+        os.chdir(os.path.join(path,properties["website"]["name"]))
+        call(["../venv/bin/python", "manage.py", "syncdb"])
     except:
         print "failed to initialize the database"
 
