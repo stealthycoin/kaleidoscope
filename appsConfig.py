@@ -1,5 +1,6 @@
 from subprocess import call
 import sys, os, consts
+from utilities import tokenizer
 
 def generateModelField(key, properties):
     """Takes a single field's properties and maps it to a a django object
@@ -45,38 +46,10 @@ def generateModel(path,app,model,properties):
 
     #write the unicode function for display if nessisary
     try:
-        tokens = properties["display"] + ' '
-        state = 0 #0 normal 1 keyword
-        buf = ''
-        newString = ""
-        variables = []
-        for symbol in tokens:
-            if state == 0:
-                if symbol == '%':
-                    state = 1
-                else:
-                    newString += symbol
-            else:
-                if symbol == '%':
-                    newString += '%'
-                    state = 0
-                else:
-                    if symbol == ' ':
-                        state = 0
-                        variables.append(buf)
-                        buf = ''
-                        newString += '%s '
-                    else:
-                        buf += symbol
-        mapping = ""
-        first = True
-        for var in variables:
-            if first:
-                first = False
-            else:
-                mapping += ','
-            mapping += 'self.'+var
-        modelStr += "\n    def __unicode__(self):\n        return u'%s' %% (%s)" % (newString, mapping)
+        boop = utilities.tokenizer(properties["display"],'self.')
+        modelStr += "\n    def __uniocde__(self):\n    "
+        modelStr += ""
+        modelStr += "u'%s' %% (%s)" % (newString, mapping)
 
 
     except KeyError:
