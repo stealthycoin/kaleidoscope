@@ -67,7 +67,6 @@ def parse(filename):
         sys.exit(1)
     return properties
 
-
 def main():
     opts, args = getopt.getopt(sys.argv[1:], "spf:t:")
         
