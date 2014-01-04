@@ -20,7 +20,8 @@
 			home: { type: "ForeignKey", argstring: "'Pad'" },
 			homies: { type: "ManyToManyField", argstring: "'Bro'" }
 		    },
-		    display: "%name - %home"
+		    display: "%name - %home",
+		    listing: "<p>{{ o.name }}</p>"
 		},
 
 		Pad: {
@@ -28,7 +29,8 @@
 			name: { type: "CharField", argstring: "max_length=32" },
 			stunnerShadeCount: { type: "SmallIntegerField" }
 		    },
-		    display: "%name"
+		    display: "%name",
+		    listing: "<p>{{ o.name }}</p>"
 		}
 	    }
 	}
