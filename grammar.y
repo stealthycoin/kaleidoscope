@@ -34,14 +34,15 @@ ObjectNode *root;
 
 %%
 
-start             : object              { root = $1; }
+start             : entries              { root = new ObjectNode(*$1); }
+                  | object               { root = $1; }
                   ;
 
 object            : TOK_LEFTCURLY entries TOK_RIGHTCURLY     { $$ = new ObjectNode(*$2); }
                   | TOK_LEFTCURLY TOK_RIGHTCURLY             { $$ = new ObjectNode(); }
                   ;
 
-entries           : entry               { $$ = new std::vector<EntryNode*>(); $$->push_back($1); }
+entries           : entry                     { $$ = new std::vector<EntryNode*>(); $$->push_back($1); }
                   | entry TOK_COMMA entries   { $3->push_back($1); $$ = $3; }
 		  ;
 
