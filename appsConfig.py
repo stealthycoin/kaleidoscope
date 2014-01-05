@@ -46,11 +46,9 @@ def generateModel(path,app,model,properties):
 
     #write the unicode function for display if nessisary
     try:
-        boop = utilities.tokenizer(properties["display"],'self.')
-        modelStr += "\n    def __uniocde__(self):\n    "
-        modelStr += ""
-        modelStr += "u'%s' %% (%s)" % (newString, mapping)
-
+        remapped = tokenizer(properties["display"],'self.')
+        modelStr += "\n    def __unicode__(self):\n    "
+        modelStr += "    return " + remapped + "\n"
 
     except KeyError:
         pass #no special instructions for rendering

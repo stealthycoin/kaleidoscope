@@ -9,7 +9,7 @@ def tupleEntrys(l,removeLastComma = False):
     return l
 
 def showDatabaseDictionary(d):
-    """tricky because some elements need to not be quoted like NAME"""
+    """tricky because some elements need to have things inserted into them like NAME"""
 
     result = "{\n"
     first = True
@@ -19,10 +19,10 @@ def showDatabaseDictionary(d):
             first = False
         else:
             result += ", "
-            if key == "NAME":
-                result += "'NAME' : os.path.join(BASE_DIR, '%s')" % d[key]
-            else:
-                result += "'%s' : '%s'" % (key, d[key])
+        if key == "NAME":
+            result += "'NAME' : os.path.join(BASE_DIR, '%s')" % d[key]
+        else:
+            result += "'%s' : '%s'" % (key, d[key])
 
     return result + "\n}"
 
