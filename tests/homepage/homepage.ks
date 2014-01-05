@@ -49,6 +49,7 @@ pages: {
     testimonials: { title: "Testimonials", url: "testimonials", template: "test.html" },
     map: { title: "Site Map", url: "map", template: "map.html" }, 
     about: { title: "About", url: "about", template: "about.html" },
-    emacs: { title: "emacs", url: "emacs", template: "emacs.html" }
+    emacs: { title: "emacs", url: "emacs", template: "emacs.html" },
+    bro: { title: "Dude shh, theres a bro", url: "bro", template: "bro.html", thebro: "S[pk=1](Bro->Bro)" }
 }
 
