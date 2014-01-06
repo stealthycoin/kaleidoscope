@@ -37,3 +37,9 @@ Grammar
 ---------------
 
 ![Grammar for defining a site](https://github.com/stealthycoin/kaleidoscope/blob/master/grammar.png?raw=true "Grammar")
+
+
+Documentation
+----------------
+
+File extensions for kaleidoscope file: .ks
