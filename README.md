@@ -42,4 +42,4 @@ Grammar
 Documentation
 ----------------
 
-File extensions for kaleidoscope file: .ks
+File extensions for kaleidoscope file: ```.ks```
