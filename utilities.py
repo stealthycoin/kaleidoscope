@@ -26,7 +26,7 @@ def showDatabaseDictionary(d):
 
     return result + "\n}"
 
-def tokenizer(string, accessor):
+def tokenizer(string, accessor="", context=""):
     """Takes in a string and replaces %word with '%s' % (word)"""
 
     tokens = string

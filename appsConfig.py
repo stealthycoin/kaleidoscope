@@ -110,6 +110,11 @@ def writeModelView(path,model,properties):
 def generateModelView(path,app,properties):
     """Generate template and view for this model"""
     print "Generate templates and views"
+    #add the includes at the top
+    with open(os.path.join(path,'views.py'), 'a') as f:
+        f.write('from django.shortcuts import render_to_response\nfrom django.template import RequestContext\n')
+
+
     #generate the single item view/template
     for model in iter(properties):
         writeModelTemplate(path,model,properties[model])
