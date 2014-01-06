@@ -72,3 +72,10 @@ Within the ```website``` value another set of key values is used to denote all t
 
 ```website : { name: "Example_Project", prettyName: "My First Site", author: "me" }```
 
+To describe this structure this I will use the following notation 
+
++ ```website -> name``` - The folder the project will be stored in and the overall name, cannot contain space characters.
++ ```website -> prettyName``` - This is the name that will appear at the top of every page on the website.
++ ```website -> author``` - This property is used to generate the copyright that appears in the footer of every page.
+
+
