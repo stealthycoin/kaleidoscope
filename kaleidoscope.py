@@ -1,13 +1,8 @@
 #!/usr/bin/python
-
-import os
-import sys
-import getopt
-import json
+import os, sys, getopt
 from subprocess import call
 import settingsConfig, appsConfig, pagesConfig
 import consts
-
 
 consts.PATH = os.getcwd()
 
