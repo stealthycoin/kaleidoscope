@@ -1,9 +1,6 @@
 import sys, os, consts
 from menu import Menu, MenuItem
-
-def tabify(string, tabs):
-    """Adds tabs before string"""
-    return ("    " * tabs) + string + "\n"
+from utilities import decodeRelationalVariable, tabify
 
 
 def generateHeader(standard, properties):
@@ -73,9 +70,24 @@ def generatePage(app, name, appPath, properties):
         
     tabs = 0
     #write view
-    view = tabify("def %s(request):" % name, tabs)
+    #urls need to count capture groups
+    args = "request"
+    counter = 1
+    for symbol in properties["url"]:
+        if symbol == "(": #assume matching for now
+            args += ",u_" + str(counter)
+            counter += 1
+    
+    view = tabify("def %s(%s):" % (name, args), tabs)
     tabs += 1
-    view += tabify("return render(request,\"%s.html\",{})" % name, tabs)
+
+    #time to define relational variables given by the ks file
+    view += tabify("d = {}",tabs) #to hold the variables
+    for key in iter(properties):
+        if key not in ["title", "url", "template"]: #predefined keys, anything else is a variable
+            view += decodeRelationalVariable(key,properties[key],tabs)
+
+    view += tabify("return render(request,\"%s.html\",d)" % name, tabs)
     with open(os.path.join(appPath, 'views.py'), 'a') as f:
         f.write("\n\n" + view)
 

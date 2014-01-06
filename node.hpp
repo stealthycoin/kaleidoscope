@@ -1,9 +1,9 @@
 #ifndef _PARSER_Y_
 #define _PARSER_Y_
 #include <iostream>
-
 #include <string>
 #include <sstream>
+#include <fstream>
 #include <vector>
 
 
@@ -22,6 +22,31 @@ class StringNode : public Node {
   std::string show() const { return value; }
 };
 
+class FileNode : public Node {
+ public:
+  FileNode(std::string &value) : value(value) {}
+  std::string value;
+
+  std::string show() const {
+    std::stringstream ss;
+    std::string filepath = std::string(value);
+    std::ifstream in(filepath.substr(1,filepath.length()-2).c_str());
+    
+    if (in.fail()) {
+      ss << "\"File " << filepath.substr(1,filepath.length()-2) << " not found\"";
+    }
+    else {
+      std::string line;
+      ss << "\"";
+      while (std::getline(in,line)) {
+	ss << line << "\\n";
+      }
+      ss << "\"";
+    }
+    return ss.str();
+  }
+};
+
 class NumberNode : public Node {
  public:
   NumberNode(double value) : value(value) {}
@@ -33,6 +58,7 @@ class NumberNode : public Node {
     return ss.str();
   }
 };
+
 
 class EntryNode : public Node {
  public:

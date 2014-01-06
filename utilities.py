@@ -1,3 +1,24 @@
+import re
+
+def tabify(string, tabs):
+    """Adds tabs before string"""
+    return ("    " * tabs) + string + "\n"
+
+
+def decodeRelationalVariable(key,value,tabs):
+    """Takes in a relational variable and returns python code to define it"""
+    relation = re.compile('([S])\[(.+)\]\((\w+)->(\w+)\).*')
+    m = relation.search(value)
+    
+    result = tabify("from %s.views import get%s, get%sList" % (m.group(3),m.group(4),m.group(4)), tabs)
+    result += tabify('r = {}', tabs)
+    for restriction in m.group(2).split(','):
+        pair = restriction.split('=')
+        result += tabify("r['%s'] = %s" % (pair[0], pair[1].replace('%', 'u_')), tabs)
+
+    result += tabify("d['%s'] = get%s(r)" % (key, m.group(4)) ,tabs)
+
+    return result
 
 def tupleEntrys(l,removeLastComma = False):
     """Takes a list of elements and returns a list of elements prepared to be inserted into a tuple"""

@@ -20,7 +20,8 @@ apps: {
 		    home: { type: "ForeignKey", argstring: "'Pad'" },
 		    homies: { type: "ManyToManyField", argstring: "'Bro'" }
 		},
-		display: "%name - %home",
+		admin: "%name - %home",
+		display: "<h3>Name: %name</h3><p>Home: %home</p>",
 		listing: "<p>{{ o.name }}</p>"
 	    },
 
@@ -29,7 +30,8 @@ apps: {
 		    name: { type: "CharField", argstring: "max_length=32" },
 		    stunnerShadeCount: { type: "SmallIntegerField" }
 		},
-		display: "%name",
+		admin: "%name",
+		display: f"pad.html",
 		listing: "<p>{{ o.name }}</p>"
 	    }
 	}
@@ -49,6 +51,7 @@ pages: {
     testimonials: { title: "Testimonials", url: "testimonials", template: "test.html" },
     map: { title: "Site Map", url: "map", template: "map.html" }, 
     about: { title: "About", url: "about", template: "about.html" },
-    emacs: { title: "emacs", url: "emacs", template: "emacs.html" }
+    emacs: { title: "emacs", url: "emacs", template: "emacs.html" },
+    bropage: { title: "Dude shh, theres a bro", url: "bro/(\\d+)", template: "bropage.html", thebro: "S[pk=%1](Bro->Bro)" },
+    padpage: { title: "Padedup", url: "pad/(\\d+)", template: "padpage.html", thepad: "S[pk=%1](Bro->Pad)" }
 }
-

@@ -6,7 +6,7 @@
 extern int yyparse();
 extern ObjectNode *root;
 
-int main() {
+int main(int argc, char** argv) {
   yyparse();
   FILE *fp = fopen("dictionary.py", "w");
   std::stringstream ss;
