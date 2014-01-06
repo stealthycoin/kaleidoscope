@@ -78,4 +78,12 @@ To describe this structure this I will use the following notation
 + ```website -> prettyName``` - This is the name that will appear at the top of every page on the website.
 + ```website -> author``` - This property is used to generate the copyright that appears in the footer of every page.
 
+Describing a menu
+------------------
 
+A menu is an element that will appear on every page
+To describe a menu you can use the base level key ```menu``` inside that you can add a new key for each menu element you want to generate.
+
+- ```menu -> menuItem -> title``` - This is the display name that will appear on the menu item link.
+- ```menu -> menuItem -> link``` - The link property allows you to define where the menu item will take you when it is clicked on.
+- ```menu -> menuItem -> placement``` - This property is a number that defines which order the menu is displayed in, smaller numbers are on the left.
