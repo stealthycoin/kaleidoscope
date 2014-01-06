@@ -40,19 +40,35 @@ Grammar
 
 
 Documentation
-----------------
+=================
+
+Basic Syntax
+-----------------
 
 File extensions for a kaleidoscope file: ```.ks```
 
-Kaleidescope is made up of key value pairs as such:
+Kaleidescope is made up of comma seperated key value pairs as such:
 
 ```key : value```
 
 A key must consist of only letters numbers and underscores, and must start with a letter.
 
-A value can be several differnet things:
+A value can be several different things:
 
 1. A number, straightforwardly this is a number, either floating point or integer.
 2. A string, Anything encapsulated by quotation marks.
-3. Another set of key : value pairs surrounded by curly brackets ``` car: { name: "Lady Cher", capacity: 6, cylinders: 4 }```
+3. Another set of key : value pairs surrounded by curly brackets and of course seperated by commas ``` car: { name: "Lady Cher", capacity: 6, cylinders: 4 }```
 4. A f-sigil. An f-sigil is a string with the character f before it like so: ```f"example.txt"``` This will load the file example.txt into a string and replace the f-sigil with that string.
+
+
+Describing a website
+---------------------
+
+Kaleidoscope is used to describe websites, to do so there are keys that have a particular meaning.
+
+For example the key ```website``` is used to define all the most rudimentary components of the website such as its name and author.
+
+Within the ```website``` value another set of key values is used to denote all the parts of the website for example:
+
+```website : { name: "Example_Project", prettyName: "My First Site", author: "me" }```
+
