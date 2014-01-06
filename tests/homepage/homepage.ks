@@ -21,6 +21,7 @@ apps: {
 		    homies: { type: "ManyToManyField", argstring: "'Bro'" }
 		},
 		admin: "%name - %home",
+		display: "<h3>Name: %name</h3><p>Home: %home</p>",
 		listing: "<p>{{ o.name }}</p>"
 	    },
 
@@ -30,6 +31,7 @@ apps: {
 		    stunnerShadeCount: { type: "SmallIntegerField" }
 		},
 		admin: "%name",
+		display: f"pad.html",
 		listing: "<p>{{ o.name }}</p>"
 	    }
 	}
@@ -50,6 +52,6 @@ pages: {
     map: { title: "Site Map", url: "map", template: "map.html" }, 
     about: { title: "About", url: "about", template: "about.html" },
     emacs: { title: "emacs", url: "emacs", template: "emacs.html" },
-    bropage: { title: "Dude shh, theres a bro", url: "bro/(\\d+)", template: "bropage.html", thebro: "S[pk=%1](Bro->Bro)" }
+    bropage: { title: "Dude shh, theres a bro", url: "bro/(\\d+)", template: "bropage.html", thebro: "S[pk=%1](Bro->Bro)" },
+    padpage: { title: "Padedup", url: "pad/(\\d+)", template: "padpage.html", thepad: "S[pk=%1](Bro->Pad)" }
 }
-
