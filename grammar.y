@@ -6,7 +6,7 @@ ObjectNode *root;
  void yyerror(const char *s) { printf("ERROR:%s\n", s); }
 %}
 
-%token TOK_RIGHTCURLY TOK_LEFTCURLY TOK_COMMA TOK_COLON
+%token TOK_RIGHTCURLY TOK_LEFTCURLY TOK_COMMA TOK_COLON TOK_FILE
 
 %union {
   Node *node;
@@ -51,6 +51,7 @@ entry             : TOK_KEY TOK_COLON value   { $$ = new EntryNode(*$1, $3); }
 
 value             : object              { $$ = $1; }       
                   | TOK_STRING          { $$ = new StringNode(*$1); }
-                  | TOK_NUMBER          { $$ = new NumberNode($1); }   
+                  | TOK_NUMBER          { $$ = new NumberNode($1); } 
+                  | TOK_FILE TOK_STRING { $$ = new FileNode(*$2); }  
                   ; 
 

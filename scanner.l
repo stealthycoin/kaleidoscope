@@ -18,6 +18,7 @@ TOK_STRINGCON     (\"([^\\"\n]|\\[\\'"0nt])*\")
 %%
 [ \t\n] ;
 
+"f"                   return TOKEN(TOK_FILE);
 [a-zA-Z][a-zA-Z0-9_]* SAVE_TOKEN; return TOK_KEY;
 [0-9]+                SAVE_TOKEN_DOUBLE; return TOK_NUMBER;
 {TOK_STRINGCON}       SAVE_TOKEN; return TOK_STRING;
