@@ -70,28 +70,30 @@ For example the key ```website``` is used to define all the most rudimentary com
 
 Within the ```website``` value another set of key values is used to denote all the parts of the website for example:
 
-```website : { name: "Example_Project", prettyName: "My First Site", author: "me" }```
+`website : { name: "Example_Project", prettyName: "My First Site", author: "me" }`
 
 To describe this structure this I will use the following notation 
 
-+ ```website -> name``` - The folder the project will be stored in and the overall name, cannot contain space characters.
-+ ```website -> prettyName``` - This is the name that will appear at the top of every page on the website.
-+ ```website -> author``` - This property is used to generate the copyright that appears in the footer of every page.
++ `website -> name` - The folder the project will be stored in and the overall name, cannot contain space characters.
++ `website -> prettyName` - This is the name that will appear at the top of every page on the website.
++ `website -> author` - This property is used to generate the copyright that appears in the footer of every page.
 
 Describing a menu
 ------------------
 
 A menu is an element that will appear on every page
-To describe a menu you can use the base level key ```menu``` inside that you can add a new key for each menu element you want to generate.
+To describe a menu you can use the base level key `menu` inside that you can add a new key for each menu element you want to generate.
 
-- ```menu -> menuItem -> title``` - This is the display name that will appear on the menu item link.
-- ```menu -> menuItem -> link``` - The link property allows you to define where the menu item will take you when it is clicked on.
-- ```menu -> menuItem -> placement``` - This property is a number that defines which order the menu is displayed in, smaller numbers are on the left.
+- `menu -> menuItem -> title` - This is the display name that will appear on the menu item link.
+- `menu -> menuItem -> link` - The link property allows you to define where the menu item will take you when it is clicked on.
+- `menu -> menuItem -> placement` - This property is a number that defines which order the menu is displayed in, smaller numbers are on the left.
 
 example:
 
-```menu : { 
+```
+menu : { 
     home: { title: "Home", link: "/", placement: 0}, 
     about: { title: "About Us", link:"/about.html", placement :2 }, 
     contact: { title: "Contact", link:"/contact.html", placement: 3}
-}```
+}
+```
