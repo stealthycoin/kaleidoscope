@@ -87,3 +87,7 @@ To describe a menu you can use the base level key ```menu``` inside that you can
 - ```menu -> menuItem -> title``` - This is the display name that will appear on the menu item link.
 - ```menu -> menuItem -> link``` - The link property allows you to define where the menu item will take you when it is clicked on.
 - ```menu -> menuItem -> placement``` - This property is a number that defines which order the menu is displayed in, smaller numbers are on the left.
+
+example:
+
+```menu : { home: { title: "Home", link: "/", placement: 0}, about: { title: "About Us", link:"/about.html", placement :2 }, contact: { title: "Contact", link:"/contact.html", placement: 3}}
