@@ -8,32 +8,15 @@ Examples
 ```
 {
   website : {
-    name : "Example Site 1",
-    boilerplate: "bs",
+    name : "Example_1",
+    prettyName: "My most wonderous web-diary"
+    author: "Penelopy"
   },
   
-  models: {
-    user : {
-      char: "name",
-      email: "email",
-      password: "pass",
-    },
-    post : {
-      char: "title",
-      date: "posted",
-      text: "content",
-      user: "author",
-    }
-  },
+  menu: {
+    home : { title:"Homepage", link: "/", placement: 1 }
+  }   
   
-  permissions: {
-  
-    user -> post
-  
-  }
-  
-  
-
 }
 ```
 
@@ -42,12 +25,12 @@ Usage
 ----------------
 
 ```
-python prep.py -ps models.json
+python kaleidoscope.py -ps models.ks
 ```
 
-p is for parsing
-s is for starting project
-then a list of json files to parse
+-p is for parsing
+-s is for starting project
+-f specifies the ks file to parse 
 
 
 Grammar

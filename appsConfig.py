@@ -1,5 +1,5 @@
 from subprocess import call
-import sys, os, consts
+import sys, os, consts, re
 from utilities import tokenizer
 
 def generateModelField(key, properties):
@@ -70,11 +70,14 @@ def generateModels(path,app,properties):
 
 def writeModelTemplate(path,model,properties):
     """Generates the template file for the specified model"""
-    
-    #single object template
     t = "<div>"
-    for field in iter(properties["fields"]):
-        t += "\n{{ obj.%s }}" % (field)
+
+
+    try:
+        t += re.sub(r'%([A-Za-z0-9_]+)',r'{{ obj.\1 }}',properties["display"])
+    except KeyError:    #single object template if there exists no display property
+        for field in iter(properties["fields"]):
+            t += "\n{{ obj.%s }}" % (field)
 
     t += "\n</div>"
     print "writing", os.path.join(path,'templates',model+'.html')
