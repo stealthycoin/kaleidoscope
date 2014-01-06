@@ -90,6 +90,12 @@ To describe a menu you can use the base level key ```menu``` inside that you can
 
 example:
 
-```menu : { home: { title: "Home", link: "/", placement: 0}, 
-about: { title: "About Us", link:"/about.html", placement :2 }, 
-contact: { title: "Contact", link:"/contact.html", placement: 3}}```
+```menu : { 
+
+    home: { title: "Home", link: "/", placement: 0}, 
+
+    about: { title: "About Us", link:"/about.html", placement :2 }, 
+
+    contact: { title: "Contact", link:"/contact.html", placement: 3}
+
+}```
