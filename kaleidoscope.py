@@ -56,7 +56,7 @@ def setup(properties):
 def parse(filename):
     properties = {}
     try:
-        os.system("../../parser < " + filename)
+        os.system("../../parser < %s" % (filename))
         from dictionary import d
         properties = d
     except:
