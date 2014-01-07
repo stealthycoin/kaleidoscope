@@ -16,7 +16,7 @@ apps: {
 	models: {
 	    Bro: { 
 		fields: {
-		    name: { type: "CharField", argstring: "max_length=32" },
+		    name: { type: "CharField", argstring: "max_length=32", unique: "True" },
 		    home: { type: "ForeignKey", argstring: "'Pad'" },
 		    homies: { type: "ManyToManyField", argstring: "'Bro'" }
 		},
