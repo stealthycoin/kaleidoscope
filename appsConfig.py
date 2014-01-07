@@ -130,6 +130,39 @@ def generateModelView(path,app,properties):
     for model in iter(properties):
         writeModelTemplate
 
+def generateMiddletierForModel(model, properties):
+    """Generate portion of middletier file for a particular model"""
+    result = "\n\n#interactions for model " + model + "\n"
+
+    #create function
+    result += "def create%s(request):\n" % model
+    result += "    if request.method == 'POST':\n"
+    result += "        data = request.POST\n"
+    result += "        newObject = %s(**data)\n" % model
+    result += "        newObject.save()\n"
+    result += "    return HttpResponse('Succesfully Created')\n\n"
+
+
+    result += "def retrieve%s(request):\n" % model
+    result += "    if request.method == 'POST':\n"
+    result += "        data = request.POST\n"
+    result += "        filters = data['filters']\n"
+    result += "        qs = %s.objects.filter(**filters)\n" % model
+    result += "        return HttpResponse(serializer.serialize([qs]))\n"
+    result += "    return HttpResponse('Please send data as POST')\n"
+
+    return result
+
+def generateMiddletier(path,app,properties):
+    """Generates the middletier interface to a model"""
+    
+    mid = "from models import *\nfrom django.core import serializer\n"
+
+    for model in iter(properties):
+        mid += generateMiddletierForModel(model,properties[model])
+
+    with open(os.path.join(path,'middletier.py'), 'w') as f:
+        f.write(mid)
 
 def configureApp(path, app, properties):
     """After it has been created it is populated"""
@@ -155,15 +188,17 @@ def configureApp(path, app, properties):
     
     #generate the models
     try:
-        generateModels(path,app,properties["models"])
+        generateModels(path,app,properties['models'])
 
         #when done writing models for this app migrate it
         #call([consts.PYTHON, consts.MANAGE, "schemamigration", app, "--intial"])
 
         #generate default html for displaying the models, these are not fullon pages rather
         #they are small snipets that can be loaded by other pages by using a view to access them
-        generateModelView(path,app,properties["models"])
+        generateModelView(path,app,properties['models'])
+        
 
+        generateMiddletier(path,app,properties['models'])
         
     except KeyError:
         print app + " has no models"
