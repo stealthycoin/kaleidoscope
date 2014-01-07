@@ -39,6 +39,13 @@ class FileNode : public Node {
       std::string line;
       ss << "\"";
       while (std::getline(in,line)) {
+	//replace all " with \"
+	std::size_t loc = -2;
+	while ((loc = line.find("\"", loc+2)) != std::string::npos) {
+	  std::cout << line << "\n";
+	  line = line.substr(0,loc) + "\\" + line.substr(loc);
+	}
+
 	ss << line << "\\n";
       }
       ss << "\"";
@@ -85,7 +92,7 @@ class ObjectNode : public Node {
     ss << "{";
     for (unsigned int i = 0 ; i < entries.size() ; i++) {
       if (first) first = false;
-      else ss << ", ";
+      else ss << ",";
       ss << entries[i]->show();
     }
     ss << "}";
