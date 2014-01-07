@@ -127,7 +127,7 @@ An app can be described as an aspect of your website. An app can have various mo
 
 Apps are slightly more complex than the previous keys. The top level key to start defining an app is `apps`. Inside the `apps` key there is one key per app, for example if we wanted to make an app that keeps track of cats we could do this: `apps : { cats : { ... } }` where ... would be used to define what the app was.
 
-On its own this is not very useful, to give the app something to work with we need to give it at least one model, but more than likely multiple models that it can interact with. To define a model inside an app use the `models` key. An example below.
+On its own this is not very useful, to give the app something to work with we need to give it at least one model, but more than likely multiple models that it can interact with. To define a model inside an app use the `models` key. An example:
 
 ```
 apps: {
@@ -139,4 +139,34 @@ apps: {
 }
 ```
 
-Where ... would be used to define what the model was. A model needs two properties `type` and `argstring`.
+Where ... would be used to define what the model was. A model needs a list of data storege elements which it does with the `fields` key. Each field needs two properties `type` and `argstring`.
+
+- `apps -> appName -> models -> modelName -> fields -> type` - This property defines what type of data the field can store
+- `apps -> appName -> models -> modelName -> fields -> argstring` - This property handles initializing the field
+
+Further, each model also needs the ability to draw itself in multiple situations including: admin panel (`admin` key), displayed on a web page (`display` key), and displayed as an element in a list (`listing` key). In any of the below properties the %-sigil can be used to reference a field of the model.
+
+- `apps -> appName -> models -> modelName -> admin` String - Dictating how to draw the model in the admin panel.
+- `apps -> appName -> models -> modelName -> display` String - Determines how to render the element on a normal webpage.
+- `apps -> appName -> models -> modelName -> listing` String - Determines how to render the element in a list context webpage.
+
+Cat example completed:
+
+```
+apps : {
+    cat:
+        models: {
+            cat: {
+                fields: {
+                    name: { type: "CharField", argstring: "max_length=32" },
+                    owner:{ type: "CharField", argstring: "max_length=32" },
+                    description: { type: "TextField" } 
+                },
+                admin: "%name",
+                display: "<h1>%name</h1><h4>Owned by: %owner</h4><p>%description</p>",
+                listing: "<li>%name<\li>"
+            }
+        }
+    }
+}
+```
