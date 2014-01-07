@@ -31,7 +31,7 @@ def setup(properties):
         sys.exit(1)
             
     try:
-        call(["cp", "../../resources/req.pip", "./"])
+        call(["cp", os.path.join(consts.RESOURCES, 'req.pip'), "./"])
         call([os.path.join(consts.ENV, 'bin', 'pip'), "install", "-r", os.path.join(consts.PATH, 'req.pip')])
     except:
         print "Error installing django or south"
