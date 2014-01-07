@@ -57,13 +57,11 @@ def generatePage(app, name, appPath, properties):
 
 
     try:
-        with open(os.path.join(consts.PATH, properties["template"])) as f:
-            page += "{% block content %}" + f.read() + "{% endblock %}"
+
+        page += "{% block content %}" + properties["template"] + "{% endblock %}"
     except KeyError:
         print "Page " + name + " has no content"
-    except IOError:
-        print "No such file: " + os.path.join(consts.PATH, properties["content"])
-        sys.exit(7)
+
 
     with open(os.path.join(appPath, 'templates', name+'.html'), 'w') as f:
         f.write(page)
