@@ -47,11 +47,11 @@ menu: {
 },
 
 pages: { 
-    home: { title: "Homepage!", url: "" , template: "home.html" },
-    testimonials: { title: "Testimonials", url: "testimonials", template: "test.html" },
-    map: { title: "Site Map", url: "map", template: "map.html" }, 
-    about: { title: "About", url: "about", template: "about.html" },
-    emacs: { title: "emacs", url: "emacs", template: "emacs.html" },
-    bropage: { title: "Dude shh, theres a bro", url: "bro/(\\d+)", template: "bropage.html", thebro: "S[pk=%1](Bro->Bro)" },
-    padpage: { title: "Padedup", url: "pad/(\\d+)", template: "padpage.html", thepad: "S[pk=%1](Bro->Pad)" }
+    home: { title: "Homepage!", url: "" , template: f"home.html" },
+    testimonials: { title: "Testimonials", url: "testimonials", template: f"test.html" },
+    map: { title: "Site Map", url: "map", template: f"map.html" }, 
+    about: { title: "About", url: "about", template: f"about.html" },
+    emacs: { title: "emacs", url: "emacs", template: f"emacs.html" },
+    bropage: { title: "Dude shh, theres a bro", url: "bro/(\\d+)", template: f"bropage.html", thebro: "S[pk=%1](Bro->Bro)" },
+    padpage: { title: "Padedup", url: "pad/(\\d+)", template: f"padpage.html", thepad: "S[pk=%1](Bro->Pad)" }
 }
