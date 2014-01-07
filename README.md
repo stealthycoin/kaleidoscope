@@ -108,3 +108,14 @@ Describing a single web page is similar to describing a menu element. The base l
 - `pages -> aPage -> url` - The url property is what url will load this page, it supports regular expressions, remember to escape backslashes. For example a digit would be \\d not \d
 - `pages -> aPage -> template` - The template property is a string that is used as the content for the page. It can either be static or make use of django template tags. Typically these should be defined elsewhere and f-sigil used to load it.
 - `pages -> aPage -> otherKey` - Any key that is not one of the three above will be treated as a database query and loaded into the template variable `otherKey` for the template to make use of. The database querys are made using a subset of relational algebra with specific syntax described later in this document.
+
+example:
+
+```
+pages: { 
+    home: { title: "Homepage!", url: "" , template: f"home.html" },
+    testimonials: { title: "Testimonials", url: "testimonials", template: f"test.html" },
+    map: { title: "Site Map", url: "map", template: f"map.html" }, 
+    about: { title: "About", url: "about", template: f"about.html" },
+}
+```
