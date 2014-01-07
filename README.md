@@ -92,8 +92,9 @@ example:
 
 ```
 menu : { 
-    home: { title: "Home", link: "/", placement: 0}, 
-    about: { title: "About Us", link:"/about.html", placement :2 }, 
-    contact: { title: "Contact", link:"/contact.html", placement: 3}
+    home: { title: "Home", link: "index.html", placement: 0}, 
+    about: { title: "About Us", link:"about.html", placement :2 }, 
+    contact: { title: "Contact", link:"contact.html", placement: 3}
 }
 ```
+
