@@ -98,3 +98,13 @@ menu : {
 }
 ```
 
+
+Describing a page
+-----------------
+
+Describing a single web page is similar to describing a menu element. The base level key is simply called `pages`. Within the `pages` there should be one key value pair for each page you wish to define.
+
+- `pages -> aPage -> title` - The title property will be what is put in the <title></title> tags in the head of the page
+- `pages -> aPage -> url` - The url property is what url will load this page, it supports regular expressions, remember to escape backslashes. For example a digit would be \\d not \d
+- `pages -> aPage -> template` - The template property is a string that is used as the content for the page. It can either be static or make use of django template tags. Typically these should be defined elsewhere and f-sigil used to load it.
+- `pages -> aPage -> otherKey` - Any key that is not one of the three above will be treated as a database query and loaded into the template variable `otherKey` for the template to make use of. The database querys are made using a subset of relational algebra with specific syntax described later in this document.
