@@ -134,6 +134,18 @@ def generateMiddletierForModel(model, properties):
     """Generate portion of middletier file for a particular model"""
     result = "\n\n#interactions for model " + model + "\n"
 
+    fields = properties['fields']
+    unique = []
+    required = []
+    for field in iter(fields):
+        if 'unique' in fields[field].keys():
+            unique.append(field)
+        if 'required' in fields[field].keys():
+            required.append(field)
+
+
+    #TODO verify that unique and required are being honored
+
     #create function
     result += "def create%s(request):\n" % model
     result += "    if request.method == 'POST':\n"
@@ -142,14 +154,29 @@ def generateMiddletierForModel(model, properties):
     result += "        newObject.save()\n"
     result += "    return HttpResponse('Succesfully Created')\n\n"
 
-
+    #retrieve function
     result += "def retrieve%s(request):\n" % model
     result += "    if request.method == 'POST':\n"
     result += "        data = request.POST\n"
     result += "        filters = data['filters']\n"
     result += "        qs = %s.objects.filter(**filters)\n" % model
     result += "        return HttpResponse(serializer.serialize([qs]))\n"
-    result += "    return HttpResponse('Please send data as POST')\n"
+    result += "    return HttpResponse('Please send data as POST')\n\n"
+
+    #delete function
+    result += "def delete%s(request):\n" % model
+    result += "    if request.method == 'POST':\n"
+    result += "        data = request.POST\n"
+    result += "        filters = data['filters']\n"
+    result += "        qs = %s.objects.filter(**filters)\n" % model
+    result += "        count = 0\n"
+    result += "        for obj in qs: d.delete()\n"
+    result += "            obj.delete()\n"
+    result += "            count += 1\n"
+    result += "        return HttpResponse('Deleted %s objects' % count)\n"
+    result += "    return HttpResponse('Please send data as POST')\n\n"
+
+    #unsure how edit differs from creation/deletion must pontificate
 
     return result
 
