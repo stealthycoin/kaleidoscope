@@ -42,7 +42,6 @@ class FileNode : public Node {
 	//replace all " with \"
 	std::size_t loc = -2;
 	while ((loc = line.find("\"", loc+2)) != std::string::npos) {
-	  std::cout << line << "\n";
 	  line = line.substr(0,loc) + "\\" + line.substr(loc);
 	}
 
