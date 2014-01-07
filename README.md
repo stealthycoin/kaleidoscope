@@ -116,6 +116,6 @@ pages: {
     home: { title: "Homepage!", url: "" , template: f"home.html" },
     testimonials: { title: "Testimonials", url: "testimonials", template: f"test.html" },
     map: { title: "Site Map", url: "map", template: f"map.html" }, 
-    about: { title: "About", url: "about", template: f"about.html" },
+    about: { title: "About", url: "about", template: f"about.html" }
 }
 ```
