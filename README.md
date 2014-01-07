@@ -125,4 +125,18 @@ Describing an 'App'
 
 An app can be described as an aspect of your website. An app can have various models that store things in databases, it can have views and templates for controlling the interaction with those models.
 
-Apps are slightly more complex than the previous keys. The top level key to start defining an app is `apps`. Inside the `apps` key there is one key per app, for example if we wanted to make an app that keeps track of cats we could do this: `apps : { cats : { ... } }`.
+Apps are slightly more complex than the previous keys. The top level key to start defining an app is `apps`. Inside the `apps` key there is one key per app, for example if we wanted to make an app that keeps track of cats we could do this: `apps : { cats : { ... } }` where ... would be used to define what the app was.
+
+On its own this is not very useful, to give the app something to work with we need to give it at least one model, but more than likely multiple models that it can interact with. To define a model inside an app use the `models` key. An example below.
+
+```
+apps: {
+    cats: {
+        models: {
+            cat :{ ... }
+        }
+    }
+}
+```
+
+Where ... would be used to define what the model was. A model needs two properties `type` and `argstring`.
