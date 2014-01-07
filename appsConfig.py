@@ -140,7 +140,7 @@ def configureApp(path, app, properties):
     print "Generating: " + templates
     try:
         call(["mkdir", templates])
-        call(["cp", "-a", "../../resources/templatechains/"+properties["templatechain"]+"/.", templates])
+        call(["cp", "-a", os.path.join(consts.RESOURCES, 'templatechains', properties['templatechain'],'.'), templates])
     except:
         print "Failed to generate templates"
 
@@ -149,7 +149,7 @@ def configureApp(path, app, properties):
     print "Generating: " + theme
     try:
         call(["mkdir",theme])
-        call(["cp","-a","../../resources/themes/"+properties["theme"]+"/.", theme])
+        call(["cp","-a", os.path.join(consts.RESOURCES, 'themes', properties['theme'],'.'), theme])
     except:
         print "Failed to generate theme"
     
@@ -173,7 +173,7 @@ def createApps(properties):
 
     name = properties["website"]["name"]
     consts.PYTHON = os.path.join(consts.ENV, 'bin', 'python')
-    consts.PROJECT = os.path.join(consts.PATH, name)
+    consts.PROJECT = os.path.join(consts.ENV, name)
     consts.MANAGE = os.path.join(consts.PROJECT, "manage.py")
 
 
@@ -190,7 +190,7 @@ def createApps(properties):
     try:
         for app in iter(properties["apps"]):
             call([consts.PYTHON, consts.MANAGE, "startapp", app])
-            call(["mv", os.path.join(consts.PATH, app), consts.PROJECT])
+            call(["mv", os.path.join(consts.ENV, app), consts.PROJECT])
             configureApp(os.path.join(consts.PROJECT, app), app, properties["apps"][app])
 
     except KeyError:

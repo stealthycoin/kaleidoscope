@@ -5,6 +5,8 @@ import settingsConfig, appsConfig, pagesConfig
 import consts
 
 consts.PATH = os.getcwd()
+consts.KSCOPE = os.path.abspath(os.path.dirname(__file__))
+consts.RESOURCES = os.path.join(consts.KSCOPE, 'resources')
 
 sys.path.append(consts.PATH) #this is so we can include the compiled ks dictionary
 
@@ -37,6 +39,7 @@ def setup(properties):
 
     try:
         print "Building project"
+        os.chdir(consts.ENV)
         call([os.path.join(consts.ENV, 'bin', 'django-admin.py'), "startproject", properties["website"]["name"]])
     except OSError as e:
         print "Error creating django project", e
@@ -103,5 +106,6 @@ def main():
     except:
         print "failed to initialize the database"
 
+#entry point
 if __name__ == "__main__":
     main()

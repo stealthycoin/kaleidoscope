@@ -20,13 +20,13 @@ test:
 	cd tests/homepage/ ;\
 	python ../../kaleidoscope.py -ps -f homepage.ks;\
 	source venv/bin/activate;\
-	python Homepage_Testing/manage.py runserver
+	python venv/Homepage_Testing/manage.py runserver
 
 save:
-	cp tests/homepage/Homepage_Testing/db.db ~/db.db
+	cp tests/homepage/venv/Homepage_Testing/db.db ~/db.db
 
 restore:
-	cp ~/db.db tests/homepage/Homepage_Testing/db.db
+	cp ~/db.db tests/homepage/venv/Homepage_Testing/db.db
 #cd ./tests/apps/ ;\
 #python ../../kaleidoscope.py -ps -f apps.ks
 #cd ./tests/basic/ ;\
