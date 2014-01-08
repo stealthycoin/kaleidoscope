@@ -16,6 +16,7 @@ extern "C" {
 TOK_STRINGCON     (\"([^\\"\n]|\\[\\'"0nt])*\")
 
 %%
+"//".* ;
 [ \t\n] ;
 
 "f"                   return TOKEN(TOK_FILE);
