@@ -7,18 +7,33 @@ def generateModelField(key, properties):
     the key is the variable name"""
 
     field = ""
+    first = True
     try:
-        field += "    %s = models.%s(" % (key, properties["type"])
+        #test for special cases
+
+        #case 1 ForeignKey
+        if properties['type'] == 'ForeignKey':
+            target = properties['link']
+            if '->' in target:
+                imports = target.split('->')
+                target = imports[1]
+                field += "    from %s.models import %s\n" % (imports[0],imports[1])
+            field += "    %s = models.ForeignKey(%s" % (key, target)
+            first = False
+
+        else:
+            field += "    %s = models.%s(" % (key, properties["type"])
     except KeyError:
         return  ""
 
     try:
         required = "blank=True,null=True"
         argstring = properties["argstring"]
-        if len(argstring) > 0:
-            argstring += ","+required
+        if first:
+            first = False
         else:
-            argstring = required
+            argstring += ","+required
+
         field += "%s)" % argstring
 
     except KeyError:
@@ -59,7 +74,7 @@ def generateModels(path,app,properties):
     """Generates models for a given app"""
 
     print "Generating models for app: " + app
-    models = "from django.db import models\n\n"
+    models = "from django.contrib.auth.models import User\nfrom django.db import models\n\n"
 
     for model in iter(properties):
         models += generateModel(path, app, model, properties[model])
