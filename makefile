@@ -15,6 +15,13 @@ clean:
 spotless: clean
 	-rm parser tokens.cpp parser.cpp parser.hpp *~ *.pyc
 
+.PHONY: prof
+prof:
+	cd tests/epicprof/;\
+	python ../../kaleidoscope.py -ps -f epicprofessors.ks;\
+	source venv/bin/activate;\
+	python venv/EpicProfs/manage.py runserver
+
 .PHONY: test
 test:
 	cd tests/homepage/ ;\
@@ -27,7 +34,3 @@ save:
 
 restore:
 	cp ~/db.db tests/homepage/venv/Homepage_Testing/db.db
-#cd ./tests/apps/ ;\
-#python ../../kaleidoscope.py -ps -f apps.ks
-#cd ./tests/basic/ ;\
-#python ../../kaleidoscope.py -ps -f basic.ks
