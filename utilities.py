@@ -1,4 +1,34 @@
-import re
+import re,os,consts
+
+def writeFile(path,content,mode='w'):
+    """Takes care of writing a file and automatically uses consts.UPDATE to figure out what files to change"""
+    
+    filename = os.path.basename(path)
+    ksfilename = "ks_" + filename
+    pathname = os.path.dirname(path)
+    pre = ''
+
+    #if mode is append (a) we need to read the old ks file if possible and append new content to it. If it doesnt exist use w mode
+    if mode == 'a':
+        try:
+            with open(os.path.join(pathname,ksfilename),'r') as f:
+                pre = f.read()
+        except IOError:
+            #no file exists to append to so write like normal
+            writeFile(path,content)
+            return
+
+
+    if not consts.UPDATE: #it is not an update so we have to generate all files including the ones that the person might make
+        with open(os.path.join(pathname,filename),'w') as f:
+            f.write("from %s import *\n\n#write your own content here, this file will not be overwritten when using the -u option in kaleidoscope" % (ksfilename[:-3]))
+
+    with open(os.path.join(pathname,ksfilename),'w') as f: #write the ks generated file
+        f.write(pre+"\n"+content)
+
+        
+
+    
 
 def tabify(string, tabs):
     """Adds tabs before string"""
@@ -7,16 +37,28 @@ def tabify(string, tabs):
 
 def decodeRelationalVariable(key,value,tabs):
     """Takes in a relational variable and returns python code to define it"""
-    relation = re.compile('([S])\[(.+)\]\((\w+)->(\w+)\).*')
+    relation = re.compile('([SF])\[(.+)\]\((\w+)->(\w+)\).*')
     m = relation.search(value)
     
-    result = tabify("from %s.views import get%s, get%sList" % (m.group(3),m.group(4),m.group(4)), tabs)
-    result += tabify('r = {}', tabs)
-    for restriction in m.group(2).split(','):
-        pair = restriction.split('=')
-        result += tabify("r['%s'] = %s" % (pair[0], pair[1].replace('%', 'u_')), tabs)
+    result = ""
 
-    result += tabify("d['%s'] = get%s(r)" % (key, m.group(4)) ,tabs)
+    if m.group(1) == 'F': #Form selection
+        result = tabify("from %s.views import get%s" % m.group(m.group(3),m.group(4)), tabs)
+        result += tabify('r = {}', tabs)
+        for restriction in m.group(2).split(','):
+            pair = restriction.split('=')
+            result += tabify("r['%s'] = %s" % (pair[0], pair[1].replace('%', 'u_')), tabs)
+        result += tabify("objToForm = get%s(r)" % (key, m.group(4)) ,tabs)
+
+    elif m.group(1) == 'S': #Selection
+        result = tabify("from %s.views import get%s, get%sList" % (m.group(3),m.group(4),m.group(4)), tabs)
+        result += tabify('r = {}', tabs)
+        for restriction in m.group(2).split(','):
+            pair = restriction.split('=')
+            result += tabify("r['%s'] = %s" % (pair[0], pair[1].replace('%', 'u_')), tabs)
+
+        result += tabify("d['%s'] = get%s(r)" % (key, m.group(4)) ,tabs)
+
 
     return result
 

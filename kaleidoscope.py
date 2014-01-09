@@ -8,6 +8,7 @@ consts.PATH = os.getcwd()
 consts.KSCOPE = os.path.abspath(os.path.dirname(__file__))
 consts.RESOURCES = os.path.join(consts.KSCOPE, 'resources')
 
+
 sys.path.append(consts.PATH) #this is so we can include the compiled ks dictionary
 
 def setup(properties):
@@ -66,7 +67,7 @@ def parse(filename):
     return properties
 
 def main():
-    opts, args = getopt.getopt(sys.argv[1:], "spf:t:")
+    opts, args = getopt.getopt(sys.argv[1:], "upf:t:")
         
     filename = "infile"
     templatechain = "default"
@@ -84,9 +85,13 @@ def main():
     if "-p" in flags:
         properties = parse(os.path.join(consts.PATH, filename))
 
-    #create base project
-    if "-s" in flags:
-        setup(properties)
+    #marked as update update
+    if "-u" in flags:
+        consts.UPDATE = True
+        consts.ENV = os.path.join(consts.PATH,'venv')
+    else:
+        setup(properties) #this fn is where consts.up
+        consts.UPDATE = False
 
     #configure apps
     appsConfig.createApps(properties)    

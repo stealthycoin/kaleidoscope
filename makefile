@@ -18,14 +18,21 @@ spotless: clean
 .PHONY: prof
 prof:
 	cd tests/epicprof/;\
-	python ../../kaleidoscope.py -ps -f epicprofessors.ks;\
+	python ../../kaleidoscope.py -p -f epicprofessors.ks;\
+	source venv/bin/activate;\
+	python venv/EpicProfs/manage.py runserver
+
+.PHONY: update
+update:
+	cd tests/epicprof;\
+	python ../../kaleidoscope.py -pu -f epicprofessors.ks;\
 	source venv/bin/activate;\
 	python venv/EpicProfs/manage.py runserver
 
 .PHONY: test
 test:
 	cd tests/homepage/ ;\
-	python ../../kaleidoscope.py -ps -f homepage.ks;\
+	python ../../kaleidoscope.py -p -f homepage.ks;\
 	source venv/bin/activate;\
 	python venv/Homepage_Testing/manage.py runserver
 

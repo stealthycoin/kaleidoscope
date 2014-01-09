@@ -1,7 +1,29 @@
-import re
+import re,consts,os,random
 from utilities import tupleEntrys
 from utilities import showDatabaseDictionary as showDD
 from subprocess import call
+from utilities import writeFile
+
+def handleMiddleware(settings,properties):
+    """Generate the list of middlware classes to be used"""
+    
+    middle = """MIDDLEWARE_CLASSES = (
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+)"""
+
+    return "%s\n\n#Middleware classes\n%s" % (settings,middle)
+
+def generateSecretKey(settings):
+    """Makes and adds a secretkey to the settings file"""
+    key = ''.join([random.SystemRandom().choice('abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)') for i in range(50)])
+    return "%s\nSECRET_KEY = '%s'" % (settings,key) 
+    
+
 
 def handleStatic(settings,properties):
     """Add static settings"""
@@ -39,14 +61,8 @@ def handleTemplates(settings,properties):
 
 def handleApps(settings,properties):
     """Adds south and whatever other apps necessary"""
-    lines = settings.split("\n")
-    i = 1
-    for line in lines:
-        if "INSTALLED_APPS" in line:
-            break
-        i += 1
 
-    apps = ["south"] #always include south and main
+    apps = ['south','main','django.contrib.admin','django.contrib.auth','django.contrib.contenttypes','django.contrib.sessions','django.contrib.sites','django.contrib.messages','django.contrib.staticfiles'] #always include south and main
     
     try:
         for app in iter(properties["apps"]):
@@ -55,10 +71,10 @@ def handleApps(settings,properties):
         pass #no apps, we will get an error about this in the appsConfig
 
     
-    apps =  map(lambda x:"'%s'" % x, apps)
-    result = lines[0:i] + tupleEntrys(apps) + lines[i:] 
+    apps =  map(lambda x:"    '%s'," % x, apps)
+    settings += "\nINSTALLED_APPS = (\n" + '\n'.join(apps) + ")"
     
-    return '\n'.join(result)
+    return settings
 
 def handleDatabase(settings,properties):
     """Configure the datbase settings"""
@@ -90,11 +106,10 @@ def handleAdmins(settings,properties):
     
     print "Adding administrators"
 
-    addstring = ""
+    addstring = "\n#Administrators\nADMINS = (\n"
     try:
         admins = website["admins"]
         adminList = []
-        addstring = "\n#Administartors\nADMINS = (\n"
         
         for key in admins:
             name, email = admins[key]['name'], admins[key]['email']
@@ -102,11 +117,13 @@ def handleAdmins(settings,properties):
             adminList.append("('%s', '%s')" % (name, email))
 
         adminList = tupleEntrys(adminList,True)
-        addstring += "\n".join(adminList) + "\n)"
+        addstring += "\n".join(adminList) + "\n"
         
         
     except KeyError:
         print "No administrators specified."
+
+    addstring += ")\n"
 
     return settings + "\n" + addstring
 
@@ -115,12 +132,32 @@ def handleSettings(settings_file, properties):
     """Reads the settings file and calls functions to edit it using properties
        Once this is done it writes any changes and closes the file"""
 
-    f = open(settings_file, "r")
-    contents = f.read()
-    f.close()
-    
+    #important basics might be editable later for now constant
+    contents = "import os\n"
+    contents += "BASE_DIR = os.path.dirname(os.path.abspath(__file__))\n\n"
+
+    contents += "SITE_ID = 1\n"
+
+    contents += "DEBUG = True\nTEMPLATE_DEBUG=DEBUG\n" #different in different sub settings files
+
+    contents += "ALLOWED_HOSTS = ['']\n\n" #this needs to be changable
+
+    contents += "ROOT_URLCONF = '%s.urls'\n" % properties['website']['name']
+
+    contents += "STATIC_URL = '/static/'\n"
+
+    contents += "WSGI_APPLICATION = '%s.wsgi.application'" % properties['website']['name'] #this is only for testing env
+
+    #middleware
+    contents = handleMiddleware(contents,properties)
+
+    #generate secret key
+    contents = generateSecretKey(contents)
+
     #add administrators
     contents = handleAdmins(contents,properties)
+    contents += "MANAGERS = ADMINS\n"
+
 
     #add installed apps and south
     contents = handleApps(contents,properties)
@@ -134,12 +171,8 @@ def handleSettings(settings_file, properties):
     #setup the database
     contents = handleDatabase(contents,properties)
 
-    f.close()
-
-    #rewrite changes
-    f = open(settings_file, "w")
-    f.write(contents)
-    f.close()
+    #rewite changes
+    writeFile(settings_file,contents)
 
     #last thing is to delete the pyc of the settings file otherwise it will be out of date
     call(["rm", settings_file + "c"])

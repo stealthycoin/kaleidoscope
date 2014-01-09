@@ -1,6 +1,46 @@
 from subprocess import call
 import sys, os, consts, re
-from utilities import tokenizer
+from utilities import tokenizer,writeFile
+
+##################################
+## FORM GENERATION
+##################################
+
+def generateForm(path,app,model,properties):
+    """Generates a single form's code and returns it"""
+
+
+    formFields = []
+    for prop in iter(properties['fields']):
+        try:
+            if properties['fields'][prop]['form'] == 'True':
+                formFields.append(prop)
+        except KeyError:
+            formFields.append(prop)
+
+    form = "from models import %s\n" % model
+
+    form += "class %sForm(ModelForm):\n" % model
+    form += "    class Meta:\n"
+    form += "        model = %s\n" % model
+    form += "        fields = %s\n\n" % formFields
+
+    return form
+
+def generateForms(path,app,properties):
+    """Generates a form for each model for easy search/creation"""
+    forms = "from django.forms import ModelForm\n\n"
+
+    for model in iter(properties):
+        forms += generateForm(path,app,model,properties[model])
+    
+    #write to the forms file
+    writeFile(os.path.join(path,'forms.py'), forms)
+
+
+##################################
+## MODEL GENERATION
+##################################
 
 def generateModelField(key, properties):
     """Takes a single field's properties and maps it to a a django object
@@ -55,9 +95,11 @@ def generateModel(path,app,model,properties):
     except KeyError:
         modelStr += "    pass"
 
-    #register it in the admin panel right before returning it
-    with open(os.path.join(path, 'admin.py'), 'a') as f:
-        f.write("\nfrom models import %s\nadmin.site.register(%s)\n" % (name,name))
+ 
+    #register it in the admin panel right before returning it       
+    writeFile(os.path.join(path,'admin.py'),\
+              "\nfrom django.contrib import admin\nfrom models import %s\nadmin.site.register(%s)\n" % (name,name),\
+              mode='a')
 
     #write the unicode function for admin display if nessisary
     try:
@@ -242,6 +284,9 @@ def configureApp(path, app, properties):
 
         generateMiddletier(path,app,properties['models'])
         
+        #generate the form generators
+        generateForms(path,app,properties['models'])
+        
     except KeyError:
         print app + " has no models"
         
@@ -266,8 +311,9 @@ def createApps(properties):
     #create apps and configure them after creation
     try:
         for app in iter(properties["apps"]):
-            call([consts.PYTHON, consts.MANAGE, "startapp", app])
-            call(["mv", os.path.join(consts.ENV, app), consts.PROJECT])
+            if not consts.UPDATE:
+                call([consts.PYTHON, consts.MANAGE, "startapp", app])
+                call(["mv", os.path.join(consts.ENV, app), consts.PROJECT])
             configureApp(os.path.join(consts.PROJECT, app), app, properties["apps"][app])
 
     except KeyError:

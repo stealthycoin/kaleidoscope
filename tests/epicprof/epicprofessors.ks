@@ -4,7 +4,8 @@ website : {
     name: "EpicProfs",
     prettyName: "Epic Professors",
     author: "Brilliant Squid",
-    admin: { a : { name : "John Carlyle", email: "john.w.carlyle@gmail.com" }}
+    admins: { a : { name : "John Carlyle", email: "john.w.carlyle@gmail.com" },
+	     b : { name: "Morgan McDermott", email: "something@gmail.com" }}
 },
 
 //some apps all up in this house
@@ -61,5 +62,5 @@ pages: {
     home: { title: "Epic Professors", url: "", template: "Im a homepage" },
     search: { title: "Epic Professors", url: "search", template: "Im a search page" },
     random: { title: "Epic Professors", url: "random", template: "Im a random story page" },
-    create: { title: "Epic Professors", url: "create", template: "Im a create story page" }
+    create: { title: "Epic Professors", url: "create", template: "Im a create story page", test: "F[pk=0](professor->School)"}
 }
