@@ -1,7 +1,6 @@
 import sys, os, consts
 from menu import Menu, MenuItem
-from utilities import decodeRelationalVariable, tabify
-
+from utilities import decodeRelationalVariable, tabify, writeFile
 
 def generateHeader(standard, properties):
     """Takes the standard file and adds a header to it"""
@@ -86,8 +85,13 @@ def generatePage(app, name, appPath, properties):
             view += decodeRelationalVariable(key,properties[key],tabs)
 
     view += tabify("return render(request,\"%s.html\",d)" % name, tabs)
-    with open(os.path.join(appPath, 'views.py'), 'a') as f:
-        f.write("\n\n" + view)
+    
+    #write the view files
+    writeFile(os.path.join(appPath, 'views.py'), "from django.shortcuts import render\n\n" + view, 'a')
+
+    
+    #with open(os.path.join(appPath, 'views.py'), 'a') as f:
+    #    f.write("\n\n" + view)
 
 
     #return a mapping from the url to the view
