@@ -16,7 +16,7 @@ apps: {
 	    Professor: {
 		fields: {
 		    name: { type: "CharField", argstring: "max_length=32" },
-		    institute: { type: "ForeignKey", link: "School" }
+		    institute: { type: "ForeignKey", link: "School", noForm: "True" }
 		},
 		admin: "%name"
 	    },
@@ -62,5 +62,6 @@ pages: {
     home: { title: "Epic Professors", url: "", template: "Im a homepage" },
     search: { title: "Epic Professors", url: "search", template: "Im a search page" },
     random: { title: "Epic Professors", url: "random", template: "Im a random story page" },
-    create: { title: "Epic Professors", url: "create", template: "Im a create story page", test: "F[pk=0](professor->School)"}
+    create: { title: "Epic Professors", url: "create", template: "Im a create story page {{editSchool}}", 
+	      createScool: "F[name='UCSC'](professor->School)" }
 }
