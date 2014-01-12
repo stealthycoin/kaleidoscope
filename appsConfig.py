@@ -1,6 +1,6 @@
 from subprocess import call
 import sys, os, consts, re
-from utilities import tokenizer,writeFile,addURL
+from utilities import tokenizer,writeFile,addURL,handlePercentToken
 
 ##################################
 ## FORM GENERATION
@@ -146,7 +146,7 @@ def writeModelTemplate(path,model,properties):
     t = "<div>\n<ul>\n"
     t += "{% for o in objs %}\n"
     try:
-        t += "    <li>"+properties['listing']+"</li>\n"
+        t += "    <li>%s</li>\n" % handlePercentToken(properties['listing'], "{{ o.", " }}")
     except KeyError:
         t += "    <li>{{ o.pk }}</li>\n"
     t += "{% endfor %}\n</ul>\n</div>\n"
@@ -163,7 +163,7 @@ def writeModelView(path,model,properties):
     view += "    return render_to_string('%s.html',{'obj' : %s.objects.get(**args)})\n" % (model, model)
 
     view += "\ndef get%sList(args):\n" % model
-    view += "    return render_to_string('%sList.html',{'objs' : %s.objects.filter(**args)})\n" % (model,model)
+    view += "    return render_to_string('%sList.html',{'objs' : %s.objects.all().filter(**args)})\n" % (model,model)
 
     with open(os.path.join(path,'views.py'), 'a') as f:
         f.write(view)
