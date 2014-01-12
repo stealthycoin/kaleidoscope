@@ -1,15 +1,36 @@
 #!/usr/bin/python
 import os, sys, getopt
 from subprocess import call
+from utilities import tabify,writeFile
 import settingsConfig, appsConfig, pagesConfig
-import consts
+import consts, globs
 
+
+globs.URLS = []
 consts.PATH = os.getcwd()
 consts.KSCOPE = os.path.abspath(os.path.dirname(__file__))
 consts.RESOURCES = os.path.join(consts.KSCOPE, 'resources')
 
 
 sys.path.append(consts.PATH) #this is so we can include the compiled ks dictionary
+
+def writeURLS(properties):
+    """Writes the urls file, last thing done in the setup process to make sure there are no stray urls to be added"""
+    urlfile = """from django.conf.urls import include, patterns, url
+
+from django.contrib import admin
+admin.autodiscover()
+
+urlpatterns = patterns('',
+    url(r'^admin/', include(admin.site.urls)),
+"""
+
+    for url in globs.URLS:
+        urlfile += tabify(url+",",1)
+
+    urlfile += ")\n"
+        
+    writeFile(os.path.join(consts.PROJECT,properties['website']['name'],'urls.py'),urlfile)
 
 def setup(properties):
     """
@@ -99,11 +120,15 @@ def main():
     #configure the pages
     pagesConfig.createPages(properties)
 
+    #write the urls page
+    writeURLS(properties)
+
     #after the project is built time to start changing properties in the settings
     settingsConfig.handleSettings(os.path.join(consts.PROJECT,\
                                                properties["website"]["name"],\
                                                'settings.py'),\
                                   properties)
+
 
     #intiialize the test database
     try:
