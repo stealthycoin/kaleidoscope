@@ -1,5 +1,4 @@
 
-
 website : {
     name: "EpicProfs",
     prettyName: "Epic Professors",
@@ -16,7 +15,7 @@ apps: {
 	    Professor: {
 		fields: {
 		    name: { type: "CharField", argstring: "max_length=32" },
-		    institute: { type: "ForeignKey", link: "School", noForm: "True" }
+		    institute: { type: "ForeignKey", link: "School" }
 		},
 		admin: "%name"
 	    },
@@ -41,7 +40,9 @@ apps: {
 		    author: { type: "ForeignKey", link: "User" }, //user is a built in type
 		    subject: { type: "ForeignKey", link: "professor->Professor" }
 		},
-		admin: "%title by %author"
+		admin: "%title by %author",
+		listing: "<a href='/story/%pk '>%subject in %title </a>",
+		display: "<h2>%title starring: %subject</h2><p><strong>By: %author</strong></p><p>%text</p>"
 	    }
 	}
     }  
@@ -55,18 +56,25 @@ database: {
 menu: {
     home: { title: "Home", link: "/", placement: 0 },
     search: { title: "Search", link: "/search", placement: 1 },
-    random: { title: "Random Story", link: "/random", placement: 2 },
+    stories: { title: "Stories", link: "/stories", placement: 2 },
     create: { title: "Create", link: "/create", placement: 3 },
     story: { title: "Write", link: "/write", placement: 4 }
 },
 
 pages: {
-    home: { title: "Epic Professors", url: "", template: "I'm a homepage" },
-    search: { title: "Epic Professors", url: "search/", template: "I'm a search page" },
+    home: { title: "Epic Professors", url: "", template: "I'm a homepage and I'm useless" },
+
+    stories: { title: "Epic Professors", url: "stories/", template: "{{ storiesList | safe }}", storiesList: "S[](story->Story)|No stories man :(" },
+
     random: { title: "Epic Professors", url: "random/", template: "I'm a random story page" },
+
     create: { title: "Epic Professors", url: "create/", template: "Add people and place page!! {{ createSchool | safe }} {{ createProfessor | safe }}", 
 	      createSchool: "F[](professor->School)|Failt Somehow",
-	      createProfessor: "F[](professor->Professor)|Failt somehow"},
+	      createProfessor: "F[](professor->Professor)|Failt somehow" },
+
     writeStory: { title: "Write a Story", url: "write/", template: "{{ createStory | safe }}", 
-		  createStory: "F[](story->Story)|Failt"}
+		  createStory: "F[](story->Story)|Failt" },
+
+    specificStory: { title: "Epic Professors", url: "story/(\\d+)/", template: "{{ theStory | safe }}", 
+		     theStory: "S[pk=%1](story->Story)|Could not find a matching story, sorry :(" }
 }
