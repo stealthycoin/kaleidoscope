@@ -1,6 +1,7 @@
 import sys, os, consts
 from menu import Menu, MenuItem
-from utilities import decodeRelationalVariable, tabify, writeFile
+from utilities import decodeRelationalVariable, tabify, writeFile, addURL
+
 
 def generateHeader(standard, properties):
     """Takes the standard file and adds a header to it"""
@@ -87,21 +88,14 @@ def generatePage(app, name, appPath, properties):
     view += tabify("return render(request,\"%s.html\",d)" % name, tabs)
     
     #write the view files
-    writeFile(os.path.join(appPath, 'views.py'), "from django.shortcuts import render\n\n" + view, 'a')
+    writeFile(os.path.join(appPath, 'views.py'), "from django.shortcuts import render\nfrom django.template.loader import render_to_string\n\n" + view, 'a')
 
     
-    #with open(os.path.join(appPath, 'views.py'), 'a') as f:
-    #    f.write("\n\n" + view)
-
-
-    #return a mapping from the url to the view
-    return "    url(r'^%s$', '%s.views.%s', name='%s')," % (properties["url"],app,name,name)
+    #adds a url mapping
+    addURL(properties['url'],"%s.views.%s" % (app, name), name)
     
 def createPages(properties):
     """Iterate through and create pages"""
-    #url mappings variable
-    urls = []
-
     #read standard.html file
     standard = """{% extends "base.html" %}
 
@@ -159,27 +153,6 @@ def createPages(properties):
 
     try:
         for page in iter(properties["pages"]):
-            urls.append(generatePage("main", page, consts.MAIN, properties["pages"][page]))
+            generatePage("main", page, consts.MAIN, properties["pages"][page])
     except KeyError:
         print "No web pages to write"
-
-
-
-    #create urls file
-    content = ""
-    urlsFile = os.path.join(consts.PROJECT, properties["website"]["name"], 'urls.py')
-    with open(urlsFile, 'r') as f:
-        content = f.read().split("\n")
-
-    #find beginning of url mapping
-    mark = 1
-    for line in content:
-        if line.startswith("urlpatterns"):
-            break
-        mark += 1
-    #splice in our urls
-    content = content[0:mark] + urls + content[mark:]
-
-    #re-write the file
-    with open(urlsFile, 'w') as f:
-        f.write("\n".join(content))
