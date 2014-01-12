@@ -1,6 +1,12 @@
-import re,os,consts
+import re,os,consts,globs
 
 C = 0 #global counter to make relations unique
+
+def addURL(url,mapping,name):
+    """Takes a url mapping and a name for it and adds it to the global URL list to be added at the end of kscope"""
+    urlstring = "url('^%s$','%s',name='%s')" % (url,mapping,name)
+    globs.URLS.append(urlstring)
+
 
 def writeFile(path,content,mode='w'):
     """Takes care of writing a file and automatically uses consts.UPDATE to figure out what files to change"""
@@ -40,25 +46,40 @@ def tabify(string, tabs):
 def decodeRelationalVariable(key,value,tabs):
     """Takes in a relational variable and returns python code to define it"""
     global C
-    relation = re.compile('(S|F)\[(.*)\]\((\w+)->(\w+)\)')
+    relation = re.compile('(S|F)\[(.*)\]\((\w+)->(\w+)\)\|(.*)')
     m = relation.search(value)
     
     result = ""
     
     if m.group(1) == 'F': #Form selection
-        result = tabify("from %s.views import get%s" % (m.group(3),m.group(4)), tabs)
+        result = tabify("from %s.models import %s" % (m.group(3),m.group(4)), tabs)
         result += tabify('r%d = {}' % C, tabs)
         
+
         #restrictions exist so this is an edit form
         if m.group(2) is not '':
+            #generate a form for editing the object by going to the url /app/model/edit and sending the form data
+            form = "<h2>Edit %s</h2><form action=\"/api/%s/%s/edit/\" method=\"POST\">{%%%% csrf_token %%%%}%s<input type=\"submit\"></form>" % (m.group(4), m.group(3), m.group(4), "%s")
+
             for restriction in m.group(2).split(','):
                 pair = restriction.split('=')
+                result += tabify("try:",tabs)
+                tabs += 1
                 result += tabify("r%d['%s'] = %s" % (C,pair[0], pair[1].replace('%', 'u_')), tabs)
-                result += tabify("objToForm = get%s(r%d)" % (m.group(4), C) ,tabs)
+                result += tabify("objToForm = %s.objects.get(**r%d)" % (m.group(4), C) ,tabs)
                 result += tabify("from %s.forms import %sForm" % (m.group(3),m.group(4)),tabs)
                 result += tabify("form = %sForm(instance=objToForm)" % (m.group(4)), tabs)
-                result += tabify("d['%s'] = form" % key, tabs)
-        
+                result += tabify("d['%s'] = '%%s' %% ('%s' %% form.as_p())" % (key, form), tabs)
+                tabs -= 1
+                result += tabify("except %s.DoesNotExist:" % m.group(4), tabs)
+                tabs += 1
+                result += tabify("d['%s'] = '%s'" % (key,m.group(5)), tabs)
+                tabs -= 1
+                
+        else: #in this case we have a creation form as no query was requested
+            result += tabify("from django.template import RequestContext",tabs)
+            result += tabify("from %s.forms import %sForm" % (m.group(3),m.group(4)), tabs)
+            result += tabify("d['%s'] = render_to_string('form.html',{'title': 'Create %s', 'action' : '/api/%s/%s/create/', 'formFields' : %sForm().as_p()}, context_instance=RequestContext(request))" % (key, m.group(4), m.group(3), m.group(4), m.group(4)), tabs)
 
     elif m.group(1) == 'S': #Selection
         result = tabify("from %s.views import get%s, get%sList" % (m.group(3),m.group(4),m.group(4)), tabs)
