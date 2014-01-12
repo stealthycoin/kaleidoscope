@@ -1,6 +1,6 @@
 from subprocess import call
 import sys, os, consts, re
-from utilities import tokenizer,writeFile
+from utilities import tokenizer,writeFile,addURL
 
 ##################################
 ## FORM GENERATION
@@ -23,7 +23,7 @@ def generateForm(path,app,model,properties):
     form += "class %sForm(ModelForm):\n" % model
     form += "    class Meta:\n"
     form += "        model = %s\n" % model
-    form += "        fields = %s\n\n" % formFields
+    form += "        fields = %s\n\n".replace("[","(").replace("]",")") % formFields
 
     return form
 
@@ -187,7 +187,7 @@ def generateModelView(path,app,properties):
     for model in iter(properties):
         writeModelTemplate
 
-def generateMiddletierForModel(model, properties):
+def generateMiddletierForModel(app, model, properties):
     """Generate portion of middletier file for a particular model"""
     result = "\n\n#interactions for model " + model + "\n"
 
@@ -203,13 +203,22 @@ def generateMiddletierForModel(model, properties):
 
     #TODO verify that unique and required are being honored
 
+    result += "from django.http import HttpResponse\n"
+
     #create function
     result += "def create%s(request):\n" % model
     result += "    if request.method == 'POST':\n"
-    result += "        data = request.POST\n"
-    result += "        newObject = %s(**data)\n" % model
-    result += "        newObject.save()\n"
-    result += "    return HttpResponse('Succesfully Created')\n\n"
+    result += "        data = request.POST.copy()\n"
+    result += "        del data['csrfmiddlewaretoken'] #remove this since it is not a part of the object\n"
+    result += "        from %s.forms import %sForm\n" % (app,model)
+    result += "        form = %sForm(data)\n" % model
+    result += "        if form.is_valid():\n"
+    result += "            data = form.cleaned_data\n"
+    result += "            newObject = %s(**data)\n" % model
+    result += "            newObject.save()\n"
+    result += "            return HttpResponse('Succesfully Created')\n"
+    result += "        return HttpResponse('Unclean Data')\n\n"
+    addURL('api/%s/%s/create/'%(app,model),'%s.middletier.create%s'%(app,model),'create_%s' % (model))
 
     #retrieve function
     result += "def retrieve%s(request):\n" % model
@@ -217,7 +226,7 @@ def generateMiddletierForModel(model, properties):
     result += "        data = request.POST\n"
     result += "        filters = data['filters']\n"
     result += "        qs = %s.objects.filter(**filters)\n" % model
-    result += "        return HttpResponse(serializer.serialize([qs]))\n"
+    result += "        return HttpResponse(serializers.serialize([qs]))\n"
     result += "    return HttpResponse('Please send data as POST')\n\n"
 
     #delete function
@@ -227,7 +236,7 @@ def generateMiddletierForModel(model, properties):
     result += "        filters = data['filters']\n"
     result += "        qs = %s.objects.filter(**filters)\n" % model
     result += "        count = 0\n"
-    result += "        for obj in qs: d.delete()\n"
+    result += "        for obj in qs:\n"
     result += "            obj.delete()\n"
     result += "            count += 1\n"
     result += "        return HttpResponse('Deleted %s objects' % count)\n"
@@ -240,10 +249,10 @@ def generateMiddletierForModel(model, properties):
 def generateMiddletier(path,app,properties):
     """Generates the middletier interface to a model"""
     
-    mid = "from models import *\nfrom django.core import serializer\n"
+    mid = "from models import *\nfrom django.core import serializers\n"
 
     for model in iter(properties):
-        mid += generateMiddletierForModel(model,properties[model])
+        mid += generateMiddletierForModel(app, model,properties[model])
 
     with open(os.path.join(path,'middletier.py'), 'w') as f:
         f.write(mid)
