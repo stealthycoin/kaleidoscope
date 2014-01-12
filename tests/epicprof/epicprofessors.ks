@@ -25,7 +25,8 @@ apps: {
 		fields: {
 		    name: { type: "CharField", argstring: "max_length=128" }
 		},
-		admin: "%name"
+		admin: "%name",
+		display: "<p>The name of this institution is: %name</p>"
 	    }
 	}
     },
@@ -53,15 +54,19 @@ database: {
 
 menu: {
     home: { title: "Home", link: "/", placement: 0 },
-    search: { title: "Search", link: "search", placement: 1 },
-    random: { title: "Random Story", link: "random", placement: 2 },
-    create: { title: "Create", link: "create", placement: 3 } 
+    search: { title: "Search", link: "/search", placement: 1 },
+    random: { title: "Random Story", link: "/random", placement: 2 },
+    create: { title: "Create", link: "/create", placement: 3 },
+    story: { title: "Write", link: "/write", placement: 4 }
 },
 
 pages: {
-    home: { title: "Epic Professors", url: "", template: "Im a homepage" },
-    search: { title: "Epic Professors", url: "search", template: "Im a search page" },
-    random: { title: "Epic Professors", url: "random", template: "Im a random story page" },
-    create: { title: "Epic Professors", url: "create", template: "Im a create story page {{editSchool}}", 
-	      createScool: "F[name='UCSC'](professor->School)" }
+    home: { title: "Epic Professors", url: "", template: "I'm a homepage" },
+    search: { title: "Epic Professors", url: "search/", template: "I'm a search page" },
+    random: { title: "Epic Professors", url: "random/", template: "I'm a random story page" },
+    create: { title: "Epic Professors", url: "create/", template: "Add people and place page!! {{ createSchool | safe }} {{ createProfessor | safe }}", 
+	      createSchool: "F[](professor->School)|Failt Somehow",
+	      createProfessor: "F[](professor->Professor)|Failt somehow"},
+    writeStory: { title: "Write a Story", url: "write/", template: "{{ createStory | safe }}", 
+		  createStory: "F[](story->Story)|Failt"}
 }
