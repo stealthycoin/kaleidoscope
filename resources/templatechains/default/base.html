@@ -8,6 +8,12 @@
 
   <!-- CSS for the menu loaded here -->
   <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/menu.css" />
+
+  <!-- jQuery  -->
+  <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+  <!-- Javascript for handling async forms with AJAX and django liking the csrf tokens-->
+  <script type="text/javascript" src="{{ STATIC_URL }}javascript/django_csrf.js"></script>
   
   {% endblock %}
 </head>
