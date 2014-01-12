@@ -34,9 +34,6 @@ def writeFile(path,content,mode='w'):
     with open(os.path.join(pathname,ksfilename),'w') as f: #write the ks generated file
         f.write(pre+"\n"+content)
 
-        
-
-    
 
 def tabify(string, tabs):
     """Adds tabs before string"""
@@ -55,42 +52,32 @@ def decodeRelationalVariable(key,value,tabs):
         result = tabify("from %s.models import %s" % (m.group(3),m.group(4)), tabs)
         result += tabify('r%d = {}' % C, tabs)
         
-
         #restrictions exist so this is an edit form
         if m.group(2) is not '':
             #generate a form for editing the object by going to the url /app/model/edit and sending the form data
-            form = "<h2>Edit %s</h2><form action=\"/api/%s/%s/edit/\" method=\"POST\">{%%%% csrf_token %%%%}%s<input type=\"submit\"></form>" % (m.group(4), m.group(3), m.group(4), "%s")
-
-            for restriction in m.group(2).split(','):
-                pair = restriction.split('=')
-                result += tabify("try:",tabs)
-                tabs += 1
-                result += tabify("r%d['%s'] = %s" % (C,pair[0], pair[1].replace('%', 'u_')), tabs)
-                result += tabify("objToForm = %s.objects.get(**r%d)" % (m.group(4), C) ,tabs)
-                result += tabify("from %s.forms import %sForm" % (m.group(3),m.group(4)),tabs)
-                result += tabify("form = %sForm(instance=objToForm)" % (m.group(4)), tabs)
-                result += tabify("d['%s'] = '%%s' %% ('%s' %% form.as_p())" % (key, form), tabs)
-                tabs -= 1
-                result += tabify("except %s.DoesNotExist:" % m.group(4), tabs)
-                tabs += 1
-                result += tabify("d['%s'] = '%s'" % (key,m.group(5)), tabs)
-                tabs -= 1
-                
+            pass
+            
         else: #in this case we have a creation form as no query was requested
             result += tabify("from django.template import RequestContext",tabs)
             result += tabify("from %s.forms import %sForm" % (m.group(3),m.group(4)), tabs)
             result += tabify("d['%s'] = render_to_string('form.html',{'title': 'Create %s', 'action' : '/api/%s/%s/create/', 'formFields' : %sForm().as_p()}, context_instance=RequestContext(request))" % (key, m.group(4), m.group(3), m.group(4), m.group(4)), tabs)
 
     elif m.group(1) == 'S': #Selection
-        result = tabify("from %s.views import get%s, get%sList" % (m.group(3),m.group(4),m.group(4)), tabs)
-        result += tabify('r%d = {}' % C, tabs)
-        if m.group(2) is not '':
-            for restriction in m.group(2).split(','):
-                pair = restriction.split('=')
-                result += tabify("r%d['%s'] = %s" % (C, pair[0], pair[1].replace('%', 'u_')), tabs)
+        #in selection mode if the restrictions are empty it means fetch all
+        
+        if m.group(2) is not '': #this means there ARE restrictions
+            result = tabify("from %s.views import get%s, get%sList" % (m.group(3),m.group(4),m.group(4)), tabs)
+            result += tabify('r%d = {}' % C, tabs)
+            if m.group(2) is not '':
+                for restriction in m.group(2).split(','):
+                    pair = restriction.split('=')
+                    result += tabify("r%d['%s'] = %s" % (C, pair[0], pair[1].replace('%', 'u_')), tabs)
 
-        result += tabify("d['%s'] = get%s(r%s)" % (key, m.group(4), C) ,tabs)
+            result += tabify("d['%s'] = get%s(r%s)" % (key, m.group(4), C) ,tabs)
 
+        else: #this means there are NO restrictions so we want to fetch a list of all the objects
+            result = tabify("from %s.views import get%sList" % (m.group(3),m.group(4)) ,tabs)
+            result += tabify("d['%s'] = get%sList({})" % (key, m.group(4)), tabs)
     C += 1
     return result
 
@@ -121,6 +108,32 @@ def showDatabaseDictionary(d):
 
     return result + "\n}"
 
+
+def handlePercentToken(string, prefix="", suffix=""):
+    """takes in a string and replaces the %token with prefix token suffix"""
+
+    result = ""
+
+    i = 0
+    while i < len(string):
+        tok = string[i] #token
+        try:
+            lok = string[i+1]#look ahead 1 token
+        except:
+            lok = ""
+        
+        if tok == '%' and lok != '%':#we found a token!
+            x = i
+            while string[i] != ' ' and i < len(string) - 1:#find end of token
+                i += 1
+            result += prefix + string[x+1:i] + suffix
+        else:
+            result += tok
+            i += 1
+            
+    return result
+            
+    
 def tokenizer(string, accessor="", context=""):
     """Takes in a string and replaces %word with '%s' % (word)"""
 
