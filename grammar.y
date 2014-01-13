@@ -3,7 +3,13 @@
 ObjectNode *root;
 
  extern int yylex();
- void yyerror(const char *s) { printf("ERROR:%s\n", s); }
+ extern char*yytext;
+ extern int yylineno;
+
+ void yyerror(const char *msg) {
+   printf("%d: %s at '%s'\n", yylineno, msg, yytext);
+ }
+
 %}
 
 %token TOK_RIGHTCURLY TOK_LEFTCURLY TOK_COMMA TOK_COLON TOK_FILE
