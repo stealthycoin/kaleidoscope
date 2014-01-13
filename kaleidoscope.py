@@ -76,7 +76,7 @@ def setup(properties):
 def parse(filename):
     properties = {}
     try:
-        os.system("../../parser < %s" % (filename))
+        os.system("/usr/local/lib/kaleidoscope/parser < %s" % (filename))
         from dictionary import d
         properties = d
     except:
