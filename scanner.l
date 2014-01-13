@@ -17,7 +17,8 @@ TOK_STRINGCON     (\"([^\\"\n]|\\[\\'"0nt])*\")
 
 %%
 "//".* ;
-[ \t\n] ;
+[ \t] ;
+\n yylineno++;
 
 "f"                   return TOKEN(TOK_FILE);
 [a-zA-Z][a-zA-Z0-9_]* SAVE_TOKEN; return TOK_KEY;
