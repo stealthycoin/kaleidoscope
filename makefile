@@ -1,11 +1,32 @@
 SHELL := /bin/bash
 
+INSTALL_PATH?=/usr/local
+BIN=$(INSTALL_PATH)/bin
+LIB=$(INSTALL_PATH)/lib/kaleidoscope/
+
+
 main: main.cpp parser.cpp tokens.cpp
 	g++ -std=c++11 -o parser *.cpp
 parser.cpp : grammar.y
 	bison -d -o parser.cpp grammar.y
 tokens.cpp : scanner.l
 	flex -o tokens.cpp scanner.l
+
+
+
+
+install:
+#Move all required library stuff over
+	python install.py $(INSTALL_PATH)
+
+#make kscope executable
+	chmod +x $(BIN)/kaleidoscope
+
+uninstall:
+	-rm $(BIN)/kaleidoscope
+	-rm -rf $(LIB)
+
+
 
 .PHONY: clean
 clean:
@@ -36,8 +57,3 @@ test:
 	source venv/bin/activate;\
 	python venv/Homepage_Testing/manage.py runserver
 
-save:
-	cp tests/homepage/venv/Homepage_Testing/db.db ~/db.db
-
-restore:
-	cp ~/db.db tests/homepage/venv/Homepage_Testing/db.db
