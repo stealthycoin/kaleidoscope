@@ -64,7 +64,7 @@ menu: {
 pages: {
     home: { title: "Epic Professors", url: "", template: "I'm a homepage and I'm useless" },
 
-    stories: { title: "Epic Professors", url: "stories/", template: "{{ storiesList | safe }}", storiesList: "S[](story->Story)|No stories man :(" },
+    stories: { title: "Epic Professors", url: "stories/", template: "{{ storiesList | safe }}", storiesList: S[](story->Story) },
 
     random: { title: "Epic Professors", url: "random/", template: "I'm a random story page" },
 
