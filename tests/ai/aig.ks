@@ -5,22 +5,21 @@ website: {
 	 author: "John Carlyle, Morgan McDermott" 
 },
 pages: {
-    home : { title: "Homepage", url: "", template "Home Page with test form {{ test | safe }}", test: S[](user->User) }
+    home : { title: "Homepage", url: "", template: "Home Page with test form {{ test | safe }}", test: S[](login->User) }
 },
 menu: {
-    home: { title: "", url :"/", placement : 1 }
-}
+    home: { title: "", link :"/", placement : 1 }
+},
 apps: {
     
-    user: {
+    login: {
 	models: {
 	    User : {
 		fields: {
 		    name: { type: "CharField", argstring: "max_length=32" }
-		}
-	    },
-	    admin: "%name"
+		},
+		admin: "%name"
+	    }
 	}
     }
-    
 }

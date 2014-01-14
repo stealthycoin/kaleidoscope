@@ -100,4 +100,73 @@ class ObjectNode : public Node {
 };
 
 
+//Nodes for building relation expressions
+
+class RelationSetNode : public Node {
+public:
+  RelationSetNode(std::string &app, std::string &model) : app(app), model(model) {}
+  std::string app, model;
+
+  std::string show() const {
+    std::stringstream ss;
+    
+    ss << "R_Set(\"" << app << "\",\"" << model << "\")";
+
+    return ss.str();
+  }
+};
+
+
+class RelationRestrictionNode : public Node {
+public:
+  RelationRestrictionNode(std::string &key, std::string &op, Node *value) : key(key), op(op), value(value) {}
+  std::string key, op;
+  Node *value;
+
+  std::string show() const {
+    std::stringstream ss;
+    
+    ss << key << op << value->show();
+
+    ss.str();
+  }
+};
+
+class RelationRestrictionsNode : public Node {
+public:
+  RelationRestrictionsNode() { restrictions = std::vector<RelationRestrictionNode*>(0); }
+  RelationRestrictionsNode(std::vector<RelationRestrictionNode*> &restrictions) : restrictions(restrictions) {}
+  std::vector<RelationRestrictionNode*> restrictions;
+
+  std::string show() const {
+    std::stringstream ss;
+    bool first = true;
+    ss << "R_Restrictions([";
+    for (unsigned int i = 0 ; i < restrictions.size() ; i++) {
+      if (first) first = false;
+      else ss << ",";
+      ss << restrictions[i]->show();
+    }
+    ss << "])";
+    return ss.str();
+  }
+};
+
+class RelationNode : public Node {
+public:
+  RelationNode(StringNode *type, RelationRestrictionsNode *restrictions, RelationSetNode *set) : type(type), restrictions(restrictions), set(set) {}
+  StringNode *type;
+  RelationRestrictionsNode *restrictions;
+  RelationSetNode *set;
+
+  std::string show() const {
+    std::stringstream ss;
+
+    ss << "R_Expr(R_Type(\"" << type->show() << "\")," << restrictions->show() << ","<< set->show() << ")";
+
+    return ss.str();
+  }
+};
+
+
 #endif
