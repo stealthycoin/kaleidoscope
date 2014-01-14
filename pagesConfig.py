@@ -1,6 +1,6 @@
 import sys, os, consts
 from menu import Menu, MenuItem
-from utilities import decodeRelationalVariable, tabify, writeFile, addURL
+from utilities import decodeRelationalVariable, tabify, writeFile, addURL, handlePercentToken
 
 
 def generateHeader(standard, properties):
@@ -58,7 +58,7 @@ def generatePage(app, name, appPath, properties):
 
     try:
 
-        page += "{% block content %}" + properties["template"] + "{% endblock %}"
+        page += "{% block content %}" + handlePercentToken(properties["template"],'{{ ','|safe }}') + "{% endblock %}"
     except KeyError:
         print "Page " + name + " has no content"
 
