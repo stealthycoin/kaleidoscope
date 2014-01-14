@@ -128,7 +128,7 @@ public:
     
     ss << key << op << value->show();
 
-    ss.str();
+    return ss.str();
   }
 };
 
