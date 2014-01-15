@@ -28,7 +28,7 @@ TOK_STRINGCON     (\"([^\\"\n]|\\[\\'"0nt])*\")
 [0-9]+                SAVE_TOKEN_DOUBLE; return TOK_NUMBER;
 {TOK_STRINGCON}       SAVE_TOKEN; return TOK_STRING;
 
-"="                   SAVE_TOKEN; return TOKEN(TOK_EQUAL);
+"="                   SAVE_TOKEN; return TOK_EQUAL;
 "->"                  return TOKEN(TOK_ARROW);
 "]"                   return TOKEN(TOK_RIGHTBRACKET);
 "["                   return TOKEN(TOK_LEFTBRACKET);
