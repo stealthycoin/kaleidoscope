@@ -30,7 +30,7 @@ class R_Type:
         if self.type_symbol == 'S':
             result += "get%s(qs)\n" % ts.model
         if self.type_symbol == 'F':
-            result += "render_to_string('form.html', {'title':'Create %s','action':'api/%s/%s/create/','formFields':%sForm().as_p()},context_instance=RequestContext(request))\n" % (ts.model,ts.app,ts.model,ts.model)
+            result += "render_to_string('form.html', {'title':'Create %s','action':'/api/%s/%s/create/','formFields':%sForm().as_p()},context_instance=RequestContext(request))\n" % (ts.model,ts.app,ts.model,ts.model)
 
         return result
 
@@ -38,10 +38,16 @@ class R_Restrictions:
     def __init__(self,restrictions):
         self.restrictions = restrictions
 
+    def showEquality(self, r):
+        """TODO: Needs to eventually deal with types"""
+        return "qs = qs.filter(%s=%s)\n" % (r[0],r[2].replace('%','u_'))
+
     def show(self):
+        #restrictions are a tuple (field,op,value) different ops imply different logic
         result = ""
         for restriction in self.restrictions:
-            result += "Things later"
+            if restriction[1] == '=':
+                result += self.showEquality(restriction)
 
         return result
 
