@@ -88,23 +88,18 @@ def parse(filename):
     return properties
 
 def main():
-    opts, args = getopt.getopt(sys.argv[1:], "upf:t:")
+    opts, args = getopt.getopt(sys.argv[1:], "ut:")
         
     filename = "infile"
     templatechain = "default"
     flags = [o for o,a in opts]
 
     for o, a in opts:
-        if o in ("-f",):
-            filename = a
         if o in ("-t",):
             templatechain = a
 
-    properties = {}
 
-    #read the json files
-    if "-p" in flags:
-        properties = parse(os.path.join(consts.PATH, filename))
+    properties = parse(os.path.join(consts.PATH, args[0]))
 
     #marked as update update
     if "-u" in flags:
