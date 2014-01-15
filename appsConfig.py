@@ -164,9 +164,9 @@ def writeModelView(path,model,properties):
 
     view = "\ndef get%s(args):\n" % model
     view += "    if len(args) == 1:\n"
-    view += "        return render_to_string('%s.html',{'obj' : args})\n" % model
+    view += "        return render_to_string('%s.html',{ 'obj' : args[0] })\n" % model
     view += "    else:\n"
-    view += "        return render_to_string('%sList.html',{'objs' : args})\n" % model
+    view += "        return render_to_string('%sList.html',{ 'objs' : args })\n" % model
 
     with open(os.path.join(path,'views.py'), 'a') as f:
         f.write(view)
@@ -181,14 +181,11 @@ def generateModelView(path,app,properties):
 
 
 
-    #generate the single item view/template
+    #generate the single item view/template and multi item template
     for model in iter(properties):
         writeModelTemplate(path,model,properties[model])
         writeModelView(path,model,properties[model])
 
-    #generate the multi item view/template
-    for model in iter(properties):
-        writeModelTemplate
 
 def generateMiddletierForModel(app, model, properties):
     """Generate portion of middletier file for a particular model"""
