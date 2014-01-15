@@ -14,7 +14,7 @@ apps: {
 	    //represents a single professor
 	    Professor: {
 		fields: {
-		    name: { type: "CharField", argstring: "max_length=32" },
+		    name: { type: "CharField", length: 32 },
 		    institute: { type: "ForeignKey", link: "School" }
 		},
 		admin: "%name"
@@ -22,10 +22,10 @@ apps: {
 	    //represents a single school
 	    School: {
 		fields: {
-		    name: { type: "CharField", argstring: "max_length=128" }
+		    name: { type: "CharField", length:128 }
 		},
 		admin: "%name",
-		display: "<p>The name of this institution is: %name</p>"
+		display: "<p>The name of this institution is: %name%</p>"
 	    }
 	}
     },
@@ -36,13 +36,13 @@ apps: {
 	    Story: {
 		fields: {
 		    text: { type: "TextField" },
-		    title: { type: "CharField", argstring: "max_length=32" },
+		    title: { type: "CharField",  length: 32 },
 		    author: { type: "ForeignKey", link: "User" }, //user is a built in type
 		    subject: { type: "ForeignKey", link: "professor->Professor" }
 		},
 		admin: "%title by %author",
-		listing: "<a href='/story/%pk '>%subject in %title </a>",
-		display: "<h2>%title starring: %subject</h2><p><strong>By: %author</strong></p><p>%text</p>"
+		listing: "<a href='/story/%pk% '>%subject% in %title%</a>",
+		display: "<h2>%title% starring: %subject%</h2><p><strong>By: %author%</strong></p><p>%text%</p>"
 	    }
 	}
     }  
@@ -64,17 +64,17 @@ menu: {
 pages: {
     home: { title: "Epic Professors", url: "", template: "I'm a homepage and I'm useless" },
 
-    stories: { title: "Epic Professors", url: "stories/", template: "{{ storiesList | safe }}", storiesList: "S[](story->Story)|No stories man :(" },
+    stories: { title: "Epic Professors", url: "stories/", template: "%storiesList%", storiesList: S[](story->Story) },
 
     random: { title: "Epic Professors", url: "random/", template: "I'm a random story page" },
 
-    create: { title: "Epic Professors", url: "create/", template: "Add people and place page!! {{ createSchool | safe }} {{ createProfessor | safe }}", 
-	      createSchool: "F[](professor->School)|Failt Somehow",
-	      createProfessor: "F[](professor->Professor)|Failt somehow" },
+    create: { title: "Epic Professors", url: "create/", template: "Add people and place page!! %createSchool% %createProfessor%", 
+	      createSchool: F[](professor->School),
+	      createProfessor: F[](professor->Professor) },
 
-    writeStory: { title: "Write a Story", url: "write/", template: "{{ createStory | safe }}", 
-		  createStory: "F[](story->Story)|Failt" },
+    writeStory: { title: "Write a Story", url: "write/", template: "%createStory%", 
+		  createStory: F[](story->Story) },
 
-    specificStory: { title: "Epic Professors", url: "story/(\\d+)/", template: "{{ theStory | safe }}", 
-		     theStory: "S[pk=%1](story->Story)|Could not find a matching story, sorry :(" }
+    specificStory: { title: "Epic Professors", url: "story/(\\d+)/", template: "%theStory%", 
+		     theStory: S[pk="%1"](story->Story) }
 }
