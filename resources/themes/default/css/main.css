@@ -29,6 +29,11 @@ body {
     background-color: #434443; /* CursorLine */
 }
 
+label {
+    color: #dfbe95; /* zenburn yellow */
+    font-weight: bold;
+}
+
 #content {
     margin-top: 5px;
     margin-bottom: 5px;
