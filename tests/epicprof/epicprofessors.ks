@@ -55,7 +55,7 @@ database: {
 
 menu: {
     home: { title: "Home", link: "/", placement: 0 },
-    search: { title: "Search", link: "/search", placement: 1 },
+    about: { title: "About", link: "/about", placement: 1 },
     stories: { title: "Stories", link: "/stories", placement: 2 },
     create: { title: "Create", link: "/create", placement: 3 },
     story: { title: "Write", link: "/write", placement: 4 }
@@ -64,11 +64,11 @@ menu: {
 pages: {
     home: { title: "Epic Professors", url: "", template: "I'm a homepage and I'm useless" },
 
+    about: { title: "About Epic Professors", url: "about/", template: f"about.html" },
+
     stories: { title: "Epic Professors", url: "stories/", template: "%storiesList%", storiesList: S[](story->Story) },
 
-    random: { title: "Epic Professors", url: "random/", template: "I'm a random story page" },
-
-    create: { title: "Epic Professors", url: "create/", template: "Add people and place page!! %createSchool% %createProfessor%", 
+    create: { title: "Create", url: "create/", template: "Add people and place page!! %createSchool% %createProfessor%", 
 	      createSchool: F[](professor->School),
 	      createProfessor: F[](professor->Professor) },
 
