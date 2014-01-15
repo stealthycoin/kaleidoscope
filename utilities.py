@@ -16,6 +16,14 @@ def writeFile(path,content,mode='w'):
     pathname = os.path.dirname(path)
     pre = ''
 
+    if not consts.UPDATE: #it is not an update so we have to generate all files including the ones that the person might make
+        with open(os.path.join(pathname,filename),'w') as f:
+            f.write("from %s import *\n\n#write your own content here, this file will not be overwritten when using the -u option in kaleidoscope" % (ksfilename[:-3]))
+    elif pathname+ksfilename not in globs.DELETED:#delete it the first time we try to write to the ks file to avoid any issues with mode=a
+        globs.DELETED.append(pathname+ksfilename)
+        os.remove(os.path.join(pathname,ksfilename))
+        
+
     #if mode is append (a) we need to read the old ks file if possible and append new content to it. If it doesnt exist use w mode
     if mode == 'a':
         try:
@@ -26,10 +34,6 @@ def writeFile(path,content,mode='w'):
             writeFile(path,content)
             return
 
-
-    if not consts.UPDATE: #it is not an update so we have to generate all files including the ones that the person might make
-        with open(os.path.join(pathname,filename),'w') as f:
-            f.write("from %s import *\n\n#write your own content here, this file will not be overwritten when using the -u option in kaleidoscope" % (ksfilename[:-3]))
 
     with open(os.path.join(pathname,ksfilename),'w') as f: #write the ks generated file
         f.write(pre+"\n"+content)

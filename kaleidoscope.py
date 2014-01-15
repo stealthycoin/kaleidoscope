@@ -5,7 +5,7 @@ from utilities import tabify,writeFile
 import settingsConfig, appsConfig, pagesConfig
 import consts, globs
 
-
+globs.DELETED = []
 globs.URLS = []
 consts.PATH = os.getcwd()
 consts.KSCOPE = os.path.abspath(os.path.dirname(__file__))
