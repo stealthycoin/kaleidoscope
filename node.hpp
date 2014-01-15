@@ -126,7 +126,7 @@ public:
   std::string show() const {
     std::stringstream ss;
     
-    ss << key << op << value->show();
+    ss << "(\"" << key << "\",\"" << op << "\"," << value->show() << ")";
 
     return ss.str();
   }
