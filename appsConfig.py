@@ -266,6 +266,7 @@ def configureApp(path, app, properties):
     print "Generating: " + templates
     try:
         call(["mkdir", templates])
+        call(["cp", "-a", os.path.join(consts.RESOURCES, 'templatechains', 'core','.'), templates])
         call(["cp", "-a", os.path.join(consts.RESOURCES, 'templatechains', properties['templatechain'],'.'), templates])
     except:
         print "Failed to generate templates"
@@ -275,6 +276,7 @@ def configureApp(path, app, properties):
     print "Generating: " + theme
     try:
         call(["mkdir",theme])
+        call(["cp","-a", os.path.join(consts.RESOURCES, 'themes', 'core', '.'), theme])
         call(["cp","-a", os.path.join(consts.RESOURCES, 'themes', properties['theme'],'.'), theme])
     except:
         print "Failed to generate theme"
