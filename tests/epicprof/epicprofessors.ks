@@ -1,4 +1,6 @@
 
+environment: "Epic_Professors",
+
 website : {
     name: "EpicProfs",
     prettyName: "Epic Professors",
