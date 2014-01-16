@@ -11,7 +11,8 @@ blog.ks
 website : {
     name : "Example_1",
     prettyName: "My most wonderous web-diary",
-    author: "Penelopy"
+    author: "Penelopy",
+    theme: "dreamcloud"
 },
 
 apps: {
@@ -23,8 +24,8 @@ apps: {
                     body: { type: "TextField" },
                     time: { type: "DateField", argstring: "auto_now=True", form: "False" }
                 },
-                listing: "<h2>%title%</h2><h7>Posted By Penelopy at %time%</h7><p>%body%<p>",
-                display: "<h2>%title%</h2><h7>Posted By Penelopy at %time%</h7><p>%body%<p>"
+                listing: "<div class='box'><h2>%title%</h2><h7>Posted By Penelopy at %time%</h7><p>%body%<p></div>",
+                display: "<div class='box'><h2>%title%</h2><h7>Posted By Penelopy at %time%</h7><p>%body%<p></div>"
             }
         }
     }
@@ -37,43 +38,45 @@ menu: {
 },
 
 pages: {
-    home: {
-        title: "Penelopy Wonderhagan",
-        url: "",
-        template: "<h2>Welcome to Penelopy Wonderhagan's wonderful blog!</h2>"
+    home: { 
+        title: "Penelopy Wonderhagan", 
+        url: "", 
+        template: "<div class='box'><h2>Welcome to Penelopy Wonderhagan's wonderful blog!</h2><p>Check back here to keep up with Penelopy's most recent projects.</p></div>" 
     },
-    about: {
-        title: "About Penelopy Wonderhagan",
-        url: "about/",
+    about: { 
+        title: "About Penelopy Wonderhagan", 
+        url: "about/", 
         template: f"aboutPenelopy.html"
     },
-    blog: {
-        title: "Penelopy Blog",
-        url:"blog/",
-        template: "%blogPosts%",
-        blogPosts: S[](blog->Entry)
+    blog: { 
+        title: "Penelopy Blog", 
+        url:"blog/", 
+        template: "%blogPosts%", 
+        blogPosts: S[](blog->Entry) 
     },
-    superSecretBlogPostMakingPage: {
-        title: "Make a blog post!",
-        url: "ugogurl/",
-        template: "<h4>Write a new blog entry you sexy important lady you. The people want to hear from you!</h4>%newPost%",
-        newPost: F[](blog->Entry)
+    superSecretBlogPostMakingPage: { 
+        title: "Make a blog post!", 
+        url: "ugogurl/", 
+        template: "<div class='box'><h4>Write a new blog entry you sexy important lady you. The people want to hear from you!</h4>%newPost%</div>",
+        newPost: F[](blog->Entry) 
     }
 },
 
-database: {
-    name: "profs.db",
+database: {                                                                                                                                                                                                                                 
+    name: "penelopy.db",
     engine: "django.db.backends.sqlite3"
-} 
+}
 ```
 
 aboutPenelopy.html
 ```
 <!-- File aboutPenelopy.html -->
+<div class='box'>
 <h2>Penelopy!</h2>
 <p>Penelopy Wonderhagan is just a smalltime girl from New York. 
 She enjoys her quite life of high volume stock trading and spending time with her three boyfriends.</p>
 <p>You can learn all you want to know (and more) about Penelopy by clicking on the Blog link in the menu above!</p>
+</div>
 ```
 
 Usage
