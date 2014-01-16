@@ -39,26 +39,26 @@ menu: {
 
 pages: {
     home: { 
-	title: "Penelopy Wonderhagan", 
-	url: "", 
-	template: "<h1>Welcome to Penelopy Wonderhagan's wonderful blog!</h2>" 
+        title: "Penelopy Wonderhagan", 
+        url: "", 
+        template: "<h1>Welcome to Penelopy Wonderhagan's wonderful blog!</h2>" 
     },
     about: { 
-	title: "About Penelopy Wonderhagan", 
-	url: "about/", 
-	template: f"aboutPenelopy.html"
+        title: "About Penelopy Wonderhagan", 
+        url: "about/", 
+        template: f"aboutPenelopy.html"
     },
     blog: { 
-	title: "Penelopy Blog", 
-	url:"blog/", 
-	template: "%blogPosts%", 
-	blogPosts: S[](blog->Entry) 
+        title: "Penelopy Blog", 
+        url:"blog/", 
+        template: "%blogPosts%", 
+        blogPosts: S[](blog->Entry) 
     },
     superSecretBlogPostMakingPage: { 
-	title: "Make a blog post!", 
-	url: "ugogurl/", 
-	template: "Write a new blog entry you sexy important lady you. The people want to hear from you! %newPost%", 
-	newPost: F[](blog->Entry) 
+        title: "Make a blog post!", 
+        url: "ugogurl/", 
+        template: "Write a new blog entry you sexy important lady you. The people want to hear from you! %newPost%", 
+        newPost: F[](blog->Entry) 
     }
 }   
 
