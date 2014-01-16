@@ -8,27 +8,30 @@ Basic Blog Example
 blog.ks
 ```
 //File: blog.ks
-website : {                                                                                                                                                                                                                                 
-    name : "Example_1",                                                                                                                                                                                                                     
-    prettyName: "My most wonderous web-diary",                                                                                                                                                                                                  author: "Penelopy"                                                                                                                                                                                                                     
-},                                                                                                                                                                                                                                           
-                                                                                                                                                                                                                                          
-apps: {                                                                                                                                                                                                                                     
-    blog: {                                                                                                                                                                                                                                          models: {                                                                                                                                                                                                                          
-            Entry: {                                                                                                                                                                                                                        
-                fields: {                                                                                                                                                                                                                   
-                    title: { type: "CharField", length: 64 },                                                                                                                                                                               
-                    body: { type: "TextField" },                                                                                                                                                                                            
-                    time: { type: "DateField", argstring: "auto_now=True", form: "False" }                                                                                                                                                  
-                },                                                                                                                                                                                                                          
-                listing: "<h2>%title%</h2><h7>Posted By Penelopy at %time%</h7><p>%body%<p>",                                                                                                                                               
-                display: "<h2>%title%</h2><h7>Posted By Penelopy at %time%</h7><p>%body%<p>"                                                                                                                                                
-            }                                                                                                                                                                                                                                        }                                                                                                                                                                                                                                  
-    }                                                                                                                                                                                                                                       
-},                                                                                                                                                                                                                                           
-                                                                                                                                                                                                                                            
-menu: {                                                                                                                                                                                                                                     
-    home: { title:"Homepage", link: "/", placement: 1 },                                                                                                                                                                                    
+website : {
+    name : "Example_1",
+    prettyName: "My most wonderous web-diary",
+    author: "Penelopy"
+},
+
+apps: {
+    blog: {
+        models: {
+            Entry: {
+                fields: {
+                    title: { type: "CharField", length: 64 },
+                    body: { type: "TextField" },
+                    time: { type: "DateField", argstring: "auto_now=True", form: "False" }
+                },
+                listing: "<h2>%title%</h2><h7>Posted By Penelopy at %time%</h7><p>%body%<p>",
+                display: "<h2>%title%</h2><h7>Posted By Penelopy at %time%</h7><p>%body%<p>"
+            }
+        }
+    }
+},
+
+menu: {
+    home: { title:"Homepage", link: "/", placement: 1 },
     about: { title: "About", link: "/about", placement: 2 },                                                                                                                                                                                
     posts: { title: "Blog", link: "/blog", placement: 3}                                                                                                                                                                                    
 },                                                                                                                                                                                                                                          
@@ -83,12 +86,6 @@ python kaleidoscope.py -ps models.ks
 -p is for parsing
 -s is for starting project
 -f specifies the ks file to parse 
-
-
-Grammar
----------------
-
-![Grammar for defining a site](https://github.com/stealthycoin/kaleidoscope/blob/master/grammar.png?raw=true "Grammar")
 
 
 Documentation
