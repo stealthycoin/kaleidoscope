@@ -80,13 +80,16 @@ Usage
 ----------------
 
 ```
-python kaleidoscope.py -ps models.ks
+kaleidoscope models.ks
 ```
+-u is for update
 
--p is for parsing
--s is for starting project
--f specifies the ks file to parse 
+Installation
+---------------
 
+``` make ; sudo make install```
+
+To uninstall simply `sudo make uninstall` but why would you ever do that?!
 
 Documentation
 =================
