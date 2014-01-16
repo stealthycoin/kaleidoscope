@@ -1,0 +1,28 @@
+
+
+div.box {
+    width: 800px;
+    margin: 0 auto;
+    background-color: #FFFFFF;
+}
+
+div.box h2 {
+    background-color: #C9D9FB;
+    margin: 0;
+    padding: 5px;
+    color: #4161A3;
+}
+
+div.box h7 {
+    float: right;
+}
+
+div.box p {
+    color: #4242a3;
+    margin-left: 10px;
+    text-indent: 30px;
+}
+
+div.box h7 {
+    padding-right: 2px;  
+}

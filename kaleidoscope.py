@@ -2,15 +2,16 @@
 import os, sys, getopt
 from subprocess import call
 from utilities import tabify,writeFile
-import settingsConfig, appsConfig, pagesConfig
+import settingsConfig, appsConfig, pagesConfig, devConfig
 import consts, globs
 
 globs.DELETED = []
 globs.URLS = []
+
 consts.PATH = os.getcwd()
 consts.KSCOPE = os.path.abspath(os.path.dirname(__file__))
 consts.RESOURCES = os.path.join(consts.KSCOPE, 'resources')
-
+consts.WEBAPPS = '/webapps'
 
 sys.path.append(consts.PATH) #this is so we can include the compiled ks dictionary
 
@@ -41,10 +42,10 @@ def setup(properties):
 
     try:
         try:
-            env = properties["environment"]
+            globs.ENVNAME = properties["environment"]
         except KeyError:
-            env = "venv"
-        consts.ENV = os.path.join(consts.PATH, env)
+            globs.ENVNAME = "venv"
+        consts.ENV = os.path.join(consts.PATH, globs.ENVNAME)
 
         if not os.path.exists(consts.ENV):
             call(["virtualenv", consts.ENV])
@@ -91,15 +92,16 @@ def main():
     opts, args = getopt.getopt(sys.argv[1:], "ut:")
         
     filename = "infile"
-    templatechain = "default"
     flags = [o for o,a in opts]
 
-    for o, a in opts:
-        if o in ("-t",):
-            templatechain = a
 
 
     properties = parse(os.path.join(consts.PATH, args[0]))
+
+    try:
+        theme = properties['website']['theme']
+    except KeyError:
+        theme = "default"
 
     #marked as update update
     if "-u" in flags:
@@ -110,7 +112,7 @@ def main():
         consts.UPDATE = False
 
     #configure apps
-    appsConfig.createApps(properties)    
+    appsConfig.createApps(properties, theme)    
 
     #configure the pages
     pagesConfig.createPages(properties)
@@ -124,6 +126,8 @@ def main():
                                                'settings.py'),\
                                   properties)
 
+    #prepare the configuration files for the dev environment
+    devConfig.createDevFiles(properties)
 
     #intiialize the test database
     try:

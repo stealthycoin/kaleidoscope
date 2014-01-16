@@ -1,0 +1,41 @@
+
+/* Theme based on the dreams of ground up clouds */
+
+#header {
+    background-color: #A0BABD;
+
+    margin: 0;
+    padding: 10px;
+    padding-left: 50px;
+}
+
+div#header h1 {
+    color: #FFFFF2;
+    text-decoration: none;
+}
+
+body {
+    background-color: #FFFFF2;
+    padding: 0;
+    margin: 0;
+}
+
+#content {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#footer {
+    padding: 3px;
+    color: #FFFFFF;
+    background-color: #A0BABD;
+    text-align: right;
+}
+
+a {
+    text-decoration: none;
+}
+
+ul {
+    list-style-type: none;
+}

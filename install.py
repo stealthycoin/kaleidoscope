@@ -18,7 +18,7 @@ def main():
     mkdir_p(LIB)
 
     #copy files
-    LIB_FILES = ['utilities.py','kaleidoscope.py','consts.py','globs.py','menu.py','appsConfig.py','pagesConfig.py','settingsConfig.py','utilities.py','parser','dictPreamble.py']
+    LIB_FILES = ['utilities.py','kaleidoscope.py','consts.py','globs.py','menu.py','appsConfig.py','pagesConfig.py','settingsConfig.py','utilities.py','parser','dictPreamble.py','devConfig.py']
 
     for f in LIB_FILES:
         shutil.copy2(f,LIB)

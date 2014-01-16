@@ -4,40 +4,95 @@ Kaleidoscope
 Examples
 ---------------
 
-
+Basic Blog Example
+blog.ks
 ```
-{
-  website : {
+//File: blog.ks
+website : {
     name : "Example_1",
-    prettyName: "My most wonderous web-diary"
-    author: "Penelopy"
-  },
-  
-  menu: {
-    home : { title:"Homepage", link: "/", placement: 1 }
-  }   
-  
+    prettyName: "My most wonderous web-diary",
+    author: "Penelopy",
+    theme: "dreamcloud"
+},
+
+apps: {
+    blog: {
+        models: {
+            Entry: {
+                fields: {
+                    title: { type: "CharField", length: 64 },
+                    body: { type: "TextField" },
+                    time: { type: "DateField", argstring: "auto_now=True", form: "False" }
+                },
+                listing: "<div class='box'><h2>%title%</h2><h7>Posted By Penelopy at %time%</h7><p>%body%<p></div>",
+                display: "<div class='box'><h2>%title%</h2><h7>Posted By Penelopy at %time%</h7><p>%body%<p></div>"
+            }
+        }
+    }
+},
+
+menu: {
+    home: { title:"Homepage", link: "/", placement: 1 },
+    about: { title: "About", link: "/about", placement: 2 },
+    posts: { title: "Blog", link: "/blog", placement: 3}
+},
+
+pages: {
+    home: { 
+        title: "Penelopy Wonderhagan", 
+        url: "", 
+        template: "<div class='box'><h2>Welcome to Penelopy Wonderhagan's wonderful blog!</h2><p>Check back here to keep up with Penelopy's most recent projects.</p></div>" 
+    },
+    about: { 
+        title: "About Penelopy Wonderhagan", 
+        url: "about/", 
+        template: f"aboutPenelopy.html"
+    },
+    blog: { 
+        title: "Penelopy Blog", 
+        url:"blog/", 
+        template: "%blogPosts%", 
+        blogPosts: S[](blog->Entry) 
+    },
+    superSecretBlogPostMakingPage: { 
+        title: "Make a blog post!", 
+        url: "ugogurl/", 
+        template: "<div class='box'><h4>Write a new blog entry you sexy important lady you. The people want to hear from you!</h4>%newPost%</div>",
+        newPost: F[](blog->Entry) 
+    }
+},
+
+database: {                                                                                                                                                                                                                                 
+    name: "penelopy.db",
+    engine: "django.db.backends.sqlite3"
 }
 ```
 
+aboutPenelopy.html
+```
+<!-- File aboutPenelopy.html -->
+<div class='box'>
+<h2>Penelopy!</h2>
+<p>Penelopy Wonderhagan is just a smalltown girl from New York. 
+She enjoys her quiet life of high volume stock trading and spending time with her three boyfriends.</p>
+<p>You can learn all you want to know (and more) about Penelopy by clicking on the Blog link in the menu above!</p>
+</div>
+```
 
 Usage
 ----------------
 
 ```
-python kaleidoscope.py -ps models.ks
+kaleidoscope models.ks
 ```
+-u is for update
 
--p is for parsing
--s is for starting project
--f specifies the ks file to parse 
-
-
-Grammar
+Installation
 ---------------
 
-![Grammar for defining a site](https://github.com/stealthycoin/kaleidoscope/blob/master/grammar.png?raw=true "Grammar")
+``` make ; sudo make install```
 
+To uninstall simply `sudo make uninstall` but why would you ever do that?!
 
 Documentation
 =================
@@ -158,8 +213,8 @@ apps : {
         models: {
             cat: {
                 fields: {
-                    name: { type: "CharField", argstring: "max_length=32" },
-                    owner:{ type: "CharField", argstring: "max_length=32" },
+                    name: { type: "CharField", length: 32 },
+                    owner:{ type: "CharField", length: 32 },
                     description: { type: "TextField" } 
                 },
                 admin: "%name",

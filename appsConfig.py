@@ -299,7 +299,7 @@ def configureApp(path, app, properties):
     except KeyError:
         print app + " has no models"
         
-def createApps(properties):
+def createApps(properties, theme):
     """Generates all the apps required by the project"""
 
     name = properties["website"]["name"]
@@ -314,8 +314,8 @@ def createApps(properties):
     except KeyError:
         properties["apps"] = {}
 
-    properties["apps"]["main"] = { "templatechain" : "default", 
-                                   "theme" : "default" }
+    properties["apps"]["main"] = { "templatechain" : theme, 
+                                   "theme" : theme }
 
     #create apps and configure them after creation
     try:
