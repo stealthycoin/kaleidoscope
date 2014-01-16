@@ -35,8 +35,8 @@ label {
 }
 
 #content {
-    margin-top: 5px;
-    margin-bottom: 5px;
+    width: 800px;
+    margin: 0 auto;
 }
 
 #footer {
