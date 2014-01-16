@@ -1,0 +1,43 @@
+
+/* Theme based on the dreams of ground up clouds */
+
+/* Div containing the menu */
+#menu { 
+    overflow: hidden;
+    text-align: center;
+    background-color: #A0BABD;
+    
+    padding-top: 0;
+    margin-top: 0;
+}
+
+/* ul inside the div */
+#nav {
+    list-style: none;
+    display: inline-block;
+    overflow: hidden;
+}
+
+#nav li {
+    float: left;
+}
+
+#nav li a {
+    font-family: Arial;
+    font-size: 26px;
+    text-decoration: none;
+    float: left;
+    padding: 10px;
+    background-color: #AOBABD;
+    color: #568D99; 
+
+    margin-left: 20px;
+
+    border-right: 3px solid #568D99;
+}
+
+#nav li a:hover
+{
+    color: #cc9393;
+    border-right: 3px solid #cc9393;
+}
