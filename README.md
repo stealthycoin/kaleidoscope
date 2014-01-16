@@ -73,8 +73,8 @@ aboutPenelopy.html
 <!-- File aboutPenelopy.html -->
 <div class='box'>
 <h2>Penelopy!</h2>
-<p>Penelopy Wonderhagan is just a smalltime girl from New York. 
-She enjoys her quite life of high volume stock trading and spending time with her three boyfriends.</p>
+<p>Penelopy Wonderhagan is just a smalltown girl from New York. 
+She enjoys her quiet life of high volume stock trading and spending time with her three boyfriends.</p>
 <p>You can learn all you want to know (and more) about Penelopy by clicking on the Blog link in the menu above!</p>
 </div>
 ```
