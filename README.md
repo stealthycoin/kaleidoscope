@@ -6,6 +6,7 @@ Examples
 
 Basic Blog Example
 ```
+//File: blog.ks
 {
     website : {
 	name : "Example_1",
@@ -37,7 +38,7 @@ Basic Blog Example
 	
     pages: {
 	home: { title: "Penelopy Wonderhagan", url: "", template: "<h1>Welcome to Penelopy Wonderhagan's wonderful blog!</h2>" },
-	about: { title: "About Penelopy Wonderhagan", url: "about/", template: "<h2>Penelopy!</h2><p>Penelopy Wonderhagan is just a smalltime girl from New York. She enjoys her quite life of high volume stock trading and spending time with her three boyfriends.</p>"},
+	about: { title: "About Penelopy Wonderhagan", url: "about/", template: f"aboutPenelopy.html" }
 	blog: { title: "Penelopy Blog", url:"blog/", template: "%blogPosts%", blogPosts: S[](blog->Entry) },
 	superSecretBlogPostMakingPage: { title: "Make a blog post!", url: "ugogurl/", template: "Write a new blog entry you sexy important lady you. The people want to hear from you! %newPost%", newPost: F[](blog->Entry) }
     }
@@ -46,6 +47,13 @@ Basic Blog Example
 }
 ```
 
+```
+<!-- File aboutPenelopy.html -->
+<h2>Penelopy!</h2>
+<p>Penelopy Wonderhagan is just a smalltime girl from New York. 
+She enjoys her quite life of high volume stock trading and spending time with her three boyfriends.</p>
+<p>You can learn all you want to know (and more) about Penelopy by clicking on the Blog link in the menu above!</p>
+```
 
 Usage
 ----------------
