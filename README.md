@@ -32,38 +32,38 @@ apps: {
 
 menu: {
     home: { title:"Homepage", link: "/", placement: 1 },
-    about: { title: "About", link: "/about", placement: 2 },                                                                                                                                                                                
-    posts: { title: "Blog", link: "/blog", placement: 3}                                                                                                                                                                                    
-},                                                                                                                                                                                                                                          
-                                                                                                                                                                                                                                            
-pages: {                                                                                                                                                                                                                                    
-    home: {                                                                                                                                                                                                                                 
-        title: "Penelopy Wonderhagan",                                                                                                                                                                                                      
-        url: "",                                                                                                                                                                                                                            
-        template: "<h2>Welcome to Penelopy Wonderhagan's wonderful blog!</h2>"                                                                                                                                                              
-    },                                                                                                                                                                                                                                      
-    about: {                                                                                                                                                                                                                                
-        title: "About Penelopy Wonderhagan",                                                                                                                                                                                                
-        url: "about/",                                                                                                                                                                                                                      
-        template: f"aboutPenelopy.html"                                                                                                                                                                                                     
-    },                                                                                                                                                                                                                                      
-    blog: {                                                                                                                                                                                                                                 
-        title: "Penelopy Blog",                                                                                                                                                                                                             
-        url:"blog/",                                                                                                                                                                                                                        
-        template: "%blogPosts%",                                                                                                                                                                                                            
-        blogPosts: S[](blog->Entry)                                                                                                                                                                                                         
-    },                                                                                                                                                                                                                                      
-    superSecretBlogPostMakingPage: {                                                                                                                                                                                                        
+    about: { title: "About", link: "/about", placement: 2 },
+    posts: { title: "Blog", link: "/blog", placement: 3}
+},
+
+pages: {
+    home: {
+        title: "Penelopy Wonderhagan",
+        url: "",
+        template: "<h2>Welcome to Penelopy Wonderhagan's wonderful blog!</h2>"
+    },
+    about: {
+        title: "About Penelopy Wonderhagan",
+        url: "about/",
+        template: f"aboutPenelopy.html"
+    },
+    blog: {
+        title: "Penelopy Blog",
+        url:"blog/",
+        template: "%blogPosts%",
+        blogPosts: S[](blog->Entry)
+    },
+    superSecretBlogPostMakingPage: {
         title: "Make a blog post!",
-        url: "ugogurl/",                                                                                                                
+        url: "ugogurl/",
         template: "<h4>Write a new blog entry you sexy important lady you. The people want to hear from you!</h4>%newPost%",
-        newPost: F[](blog->Entry)                                                                                                                                                                                                           
-    }                                                                                                                                                                                                                                       
-},                                                                                                                                                                                                                                           
-                                                                                                                                                                                                                                             
-database: {                                                                                                                                                                                                                                  
-    name: "profs.db",                                                                                                                                                                                                                        
-    engine: "django.db.backends.sqlite3"                                                                                                                                                                                                     
+        newPost: F[](blog->Entry)
+    }
+},
+
+database: {
+    name: "profs.db",
+    engine: "django.db.backends.sqlite3"
 } 
 ```
 
@@ -210,8 +210,8 @@ apps : {
         models: {
             cat: {
                 fields: {
-                    name: { type: "CharField", argstring: "max_length=32" },
-                    owner:{ type: "CharField", argstring: "max_length=32" },
+                    name: { type: "CharField", length: 32 },
+                    owner:{ type: "CharField", length: 32 },
                     description: { type: "TextField" } 
                 },
                 admin: "%name",
