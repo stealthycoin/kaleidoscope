@@ -1,40 +1,43 @@
-import sys, os, consts
+import sys, os, consts, re
 from menu import Menu, MenuItem
 from utilities import decodeRelationalVariable, tabify, writeFile, addURL, handlePercentToken
 
 
-def generateHeader(standard, properties):
+def generateHeader(properties):
     """Takes the standard file and adds a header to it"""
+    print "Header generated"
     try:
-        return "%s\n<a href=\"/\"><h1>%s</h1></a>\n" % (standard, properties["website"]["prettyName"])
+        return "<a href=\"/\"><h1>%s</h1></a>\n" % (properties["website"]["prettyName"])
     except KeyError:
-        return standard
+        return ""
 
-def generateMenu(standard, properties):
+def generateMenu(properties):
     """Generates the menu for a given page"""
     #Checks for menu presence
+    print "Menu Generated"
     try:
         properties["menu"]
     except KeyError:
         print "No menu"
-        return
+        return ""
 
     menu = Menu()
     for item in properties["menu"]:
         menu.addItem(MenuItem(properties["menu"][item]))
         
     menu.sortItems()
-    return standard + menu.show()
+    return menu.show()
 
-def generateFooter(standard,properties):
+def generateFooter(properties):
     """Generate footer"""
+    print "Footer genreated"
     try:
         owner = properties["website"]["author"]
     except KeyError:
         owner = properties["website"]["name"]
 
     from datetime import date
-    return "%s&copy; %d %s" % (standard, date.today().year, owner)
+    return "&copy; %d %s" % (date.today().year, owner)
 
 def generatePage(app, name, appPath, properties):
     """
@@ -96,59 +99,27 @@ def generatePage(app, name, appPath, properties):
     
 def createPages(properties):
     """Iterate through and create pages"""
-    #read standard.html file
-    standard = """{% extends "base.html" %}
-
-<!-- Body -->
-{% block body %}
-
-
-<!-- Header -->
-<div id="header">
-{% block header %}
-"""
-    standard = generateHeader(standard,properties)
-    standard += """{% endblock %}
-</div>
-<!-- End Header -->
-
-<!-- Menu -->
-<div id="menu">
-{% block menu %}
-"""
-    standard = generateMenu(standard,properties)
-
-    standard += """{% endblock %}
-</div>
-<!-- End Menu -->
-
-<!-- Content -->
-<div id="content">
-{% block content %}
-{% endblock %}
-</div>
-<!-- End Content -->
-
-<!-- Footer -->
-<div id="footer">
-{% block footer  %}
-"""
-    standard = generateFooter(standard, properties)
-    standard += """{% endblock %}
-</div>
-<!-- End Footer -->
-
-
-{% endblock %}
-<!-- End Body -->
-"""
-
     #location of main app is used a lot
     consts.MAIN = os.path.join(consts.PROJECT, 'main')
 
+    #read standard.html file
+    with open(os.path.join(consts.MAIN,'templates', 'standard.html'), 'r') as f:
+        standard = f.read()
+
+    #now splice in all the content for standard
+    #add in the header
+
+    standard = re.sub("{% block header %}", "{%% block header %%}%s"%generateHeader(properties),standard,flags=re.DOTALL)
+
+    #menu
+    standard = re.sub("{% block menu %}", "{%% block menu %%}%s"%generateMenu(properties),standard,flags=re.DOTALL)
+
+    #footer
+    standard = re.sub("{% block footer %}", "{%% block footer %%}%s"%generateFooter(properties),standard,flags=re.DOTALL)
+
     #write the new standard.html
     with open(os.path.join(consts.MAIN, 'templates', 'standard.html'), 'w') as f:
-        standard = f.write(standard)    
+        f.write(standard)    
 
 
     try:
