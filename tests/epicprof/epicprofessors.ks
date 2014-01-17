@@ -1,6 +1,4 @@
 
-environment: "Epic_Professors",
-
 website : {
     name: "EpicProfs",
     prettyName: "Epic Professors",
@@ -60,7 +58,8 @@ menu: {
     about: { title: "About", link: "/about", placement: 1 },
     stories: { title: "Stories", link: "/stories", placement: 2 },
     create: { title: "Create", link: "/create", placement: 3 },
-    story: { title: "Write", link: "/write", placement: 4 }
+    story: { title: "Write", link: "/write", placement: 4 },
+    signUp: { title: "Signup", link: "/signup", placement: 5 }
 },
 
 pages: {
@@ -73,6 +72,8 @@ pages: {
     create: { title: "Create", url: "create/", template: "Add people and place page!! %createSchool% %createProfessor%", 
 	      createSchool: F[](professor->School),
 	      createProfessor: F[](professor->Professor) },
+
+    signup: { title: "Sign up", url: "signup/", template: "%newUser%", newUser: F[](Builtin->User) },
 
     writeStory: { title: "Write a Story", url: "write/", template: "%createStory%", 
 		  createStory: F[](story->Story) },

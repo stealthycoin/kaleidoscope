@@ -26,6 +26,8 @@ uninstall:
 	-rm $(BIN)/kaleidoscope
 	-rm -rf $(LIB)
 
+reinstall: uninstall install
+	@echo "Reinstalled"
 
 
 .PHONY: clean
