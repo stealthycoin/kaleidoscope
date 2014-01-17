@@ -261,13 +261,13 @@ def configureApp(path, app, properties):
     """After it has been created it is populated"""
     print "Configuring app: " + app
 
-    #template chain to copy
+    #where to put template chains
     templates = os.path.join(path, 'templates')
     print "Generating: " + templates
     try:
         call(["mkdir", templates])
-        call(["cp", "-a", os.path.join(consts.RESOURCES, 'templatechains', 'core','.'), templates])
         call(["cp", "-a", os.path.join(consts.RESOURCES, 'templatechains', properties['templatechain'],'.'), templates])
+        call(["cp", "-a", os.path.join(consts.RESOURCES, 'templatechains', 'core','.'), templates])
     except:
         print "Failed to generate templates"
 
@@ -276,8 +276,8 @@ def configureApp(path, app, properties):
     print "Generating: " + theme
     try:
         call(["mkdir",theme])
-        call(["cp","-a", os.path.join(consts.RESOURCES, 'themes', 'core', '.'), theme])
         call(["cp","-a", os.path.join(consts.RESOURCES, 'themes', properties['theme'],'.'), theme])
+        call(["cp","-a", os.path.join(consts.RESOURCES, 'themes', 'core', '.'), theme])
     except:
         print "Failed to generate theme"
     
