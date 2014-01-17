@@ -51,7 +51,6 @@ class R_Restrictions:
 
         return result
 
-
 class R_Set:
     def __init__(self,app,model):
         self.app = app

@@ -216,8 +216,8 @@ def generateMiddletierForModel(app, model, properties):
     result += "            data = form.cleaned_data\n"
     result += "            newObject = %s(**data)\n" % model
     result += "            newObject.save()\n"
-    result += "            return HttpResponse('Succesfully Created')\n"
-    result += "        return HttpResponse('Unclean Data')\n\n"
+    result += "            return HttpResponse('\\'Succesfully Created\\'')\n"
+    result += "        return HttpResponse('\\'Data Unclean\\'')\n\n"
     addURL('api/%s/%s/create/'%(app,model),'%s.middletier.create%s'%(app,model),'create_%s' % (model))
 
     #retrieve function
@@ -260,6 +260,16 @@ def generateMiddletier(path,app,properties):
 def configureApp(path, app, properties):
     """After it has been created it is populated"""
     print "Configuring app: " + app
+
+    try:
+        print "89043507843007508923475980437598234790857432908572438"
+
+        print properties['theme']
+        print properties['templatechain']
+
+        print "09843utr8eo9i;fhgureiv5h7bt9838w4wpwuyw8tioeuyhdt8934y"
+    except KeyError:
+        pass
 
     #where to put template chains
     templates = os.path.join(path, 'templates')
