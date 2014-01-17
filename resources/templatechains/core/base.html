@@ -11,13 +11,6 @@
   <script type='text/javascript' src='{{ STATIC_URL }}javascript/physics.sig.js'></script>
   <script type='text/javascript' src='{{ STATIC_URL }}javascript/autoform.js'></script>
 
-
-  <!-- CSS for most standard tags -->
-  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/main.css" />
-
-  <!-- CSS for the menu loaded here -->
-  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/menu.css" />
-
   <!-- jQuery  -->
   <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 
@@ -28,8 +21,11 @@
   <script type="text/javascript" src="{{ STATIC_URL }}javascript/django_csrf.js"></script>
   <script type='text/javascript'>setup_django_csrf()</script>
 
+  <!-- CSS for most standard tags -->
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/main.css" />
 
-  
+  <!-- CSS for the menu loaded here -->
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/menu.css" />  
   {% endblock %}
 </head>
 

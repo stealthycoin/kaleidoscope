@@ -1,5 +1,13 @@
 {% extends "base.html" %}
 
+<!-- Head -->
+{% block head %}
+{{ block.super }}
+
+<!-- box.css -->
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/box.css" />
+{% endblock %}
+
 <!-- Body -->
 {% block body %}
 
