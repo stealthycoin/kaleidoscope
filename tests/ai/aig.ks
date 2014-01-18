@@ -21,9 +21,11 @@ apps: {
     student: {
 	models: {
 	    StudentInfo: {
-		studentId: { type: "IntegerField" },
-		description: { type: "TextField" },
-		user: { type: "ForeignKey", link: "User" }
+		fields: {
+		    studentId: { type: "IntegerField" },
+		    description: { type: "TextField" },
+		    user: { type: "ForeignKey", link: "User" }
+		}
 	    }
 	}
     }
