@@ -123,8 +123,8 @@ def generateModels(path,app,properties):
         models += generateModel(path, app, model, properties[model])
         
     #write the model
-    with open(os.path.join(path,'models.py'), 'w') as f:
-        f.write(models)
+    writeFile(os.path.join(path,'models.py'), models)
+
 
 def writeModelTemplate(path,model,properties):
     """Generates the template file for the specified model"""
@@ -261,15 +261,6 @@ def configureApp(path, app, properties):
     """After it has been created it is populated"""
     print "Configuring app: " + app
 
-    try:
-        print "89043507843007508923475980437598234790857432908572438"
-
-        print properties['theme']
-        print properties['templatechain']
-
-        print "09843utr8eo9i;fhgureiv5h7bt9838w4wpwuyw8tioeuyhdt8934y"
-    except KeyError:
-        pass
 
     #where to put template chains
     templates = os.path.join(path, 'templates')
@@ -309,7 +300,24 @@ def configureApp(path, app, properties):
         generateForms(path,app,properties['models'])
         
     except KeyError:
+        #but we still want to make a models file
+        writeFile(os.path.join(path,'models.py'), "from django.contrib.auth.models import User")
         print app + " has no models"
+
+    if app == 'main':
+        #set urls to callback to the middletier
+        addURL('/api/login/', 'main.middletier.login', 'login')
+        addURL('/api/logout/', 'main.middletier.logout', 'logout')
+        addURL('/api/signup/', 'main.middletier.signup', 'signup')
+
+        #need to put in the context processor that allows us to access login/logout/signout stuff
+        call(["cp", os.path.join(consts.RESOURCES,'processors','context_processors.py'),os.path.join(consts.PROJECT,'main','context_processors.py')])
+        #copy in the middletier
+        call(["cp", os.path.join(consts.RESOURCES,'middletier','middletier.py'),os.path.join(consts.PROJECT,'main','middletier.py')])
+        #copy in the form data
+        call(["cp", os.path.join(consts.RESOURCES,'userforms.html'),os.path.join(consts.PROJECT,'main','templates','userforms.html')])
+        
+
         
 def createApps(properties, theme):
     """Generates all the apps required by the project"""
