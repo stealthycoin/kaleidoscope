@@ -73,7 +73,7 @@ pages: {
 	      createSchool: F[](professor->School),
 	      createProfessor: F[](professor->Professor) },
 
-    signup: { title: "Sign up", url: "signup/", template: "%login% %signup%" },
+    signup: { title: "Sign up", url: "signup/", template: "%login% %signup% %logout%" },
 
     writeStory: { title: "Write a Story", url: "write/", template: "%createStory%", 
 		  createStory: F[](story->Story) },

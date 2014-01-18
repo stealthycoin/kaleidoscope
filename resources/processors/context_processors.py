@@ -17,7 +17,11 @@ def signupForm(request):
     }
     
 def logoutForm(request):
+    csrf_token_value = request.COOKIES['csrftoken']
     return {
-        'logout' : 'LOGOUT BRO'
+        'logout' : render_to_string('userforms.html',\
+                                    { 'data' : '<tr><td><input type="submit" value="Logout" /></td></tr>',\
+                                      'dst' : 'logout',\
+                                      'csrf_token_value' : csrf_token_value })
     }
     
