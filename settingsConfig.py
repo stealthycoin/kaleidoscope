@@ -4,6 +4,24 @@ from utilities import showDatabaseDictionary as showDD
 from subprocess import call
 from utilities import writeFile
 
+def handleContextProcessors(settings,properties):
+    """Generate the list of context processors"""
+    processors = """TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.static",
+    "django.core.context_processors.tz",
+    "django.contrib.messages.context_processors.messages",
+    "main.context_processors.loginForm",
+    "main.context_processors.logoutForm",
+    "main.context_processors.signupForm",
+    "django.core.context_processors.request"
+)"""
+
+    return "%s\n\n#Context Processors\n%s" % (settings,processors)
+
 def handleMiddleware(settings,properties):
     """Generate the list of middlware classes to be used"""
     
@@ -151,13 +169,15 @@ def handleSettings(settings_file, properties):
     #middleware
     contents = handleMiddleware(contents,properties)
 
+    #handle 
+    contents = handleContextProcessors(contents,properties)
+
     #generate secret key
     contents = generateSecretKey(contents)
 
     #add administrators
     contents = handleAdmins(contents,properties)
     contents += "MANAGERS = ADMINS\n"
-
 
     #add installed apps and south
     contents = handleApps(contents,properties)
