@@ -5,14 +5,11 @@ class R_Expr:
         self.target_set = r_set
     def show(self,key):
         #always need this just to be able to retrieve things from database
-        result = "from %s.models import %s\n" % (self.target_set.app,self.target_set.model)
-        result += "qs = %s.objects.all()\n" % self.target_set.model
+        result = self.expression_type.showImports(self.target_set)
         result += self.restrictions.show()
-        result += self.expression_type.showImports(self.target_set)
         result += self.expression_type.show(key,self.target_set)
 
         return result
-        
 
 class R_Type:
     def __init__(self,t):
@@ -20,7 +17,10 @@ class R_Type:
 
     def showImports(self, ts):
         if self.type_symbol == 'S':
-            return "from %s.views import get%s\n" % (ts.app,ts.model)
+            result = "from %s.models import %s\n" % (ts.app, ts.model)
+            result += "qs = %s.objects.all()\n" % ts.model
+            return result
+            
         if self.type_symbol == 'F':
             return "from %s.forms import %sForm\n" % (ts.app,ts.model)
 
@@ -55,6 +55,9 @@ class R_Set:
     def __init__(self,app,model):
         self.app = app
         self.model = model
+
+    def showUserCase(self):
+        return ""
 
     def show(self):
         return "(%s->%s)" %(self.app, self.model)
