@@ -17,7 +17,8 @@ class R_Type:
 
     def showImports(self, ts):
         if self.type_symbol == 'S':
-            result = "from %s.models import %s\n" % (ts.app, ts.model)
+            result = "from %s.views import get%s\n" % (ts.app,ts.model)
+            result += "from %s.models import %s\n" % (ts.app,ts.model)
             result += "qs = %s.objects.all()\n" % ts.model
             return result
             
