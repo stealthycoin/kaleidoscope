@@ -118,7 +118,6 @@ def main():
     #marked as update update
     if "-u" in flags:
         consts.UPDATE = True
-        consts.ENV = os.path.join(consts.PATH,'venv')
     else:
         setup(properties) #this fn is where consts.up
         consts.UPDATE = False
