@@ -33,6 +33,16 @@ urlpatterns = patterns('',
         
     writeFile(os.path.join(consts.PROJECT,properties['website']['name'],'urls.py'),urlfile)
 
+def handleMakefile(properties):
+    """Makefile generation for easy launching of the test site"""
+    with open(os.path.join(consts.RESOURCES, 'makefile'), 'r') as f:
+        makefile = f.read()
+
+    with open(os.path.join(consts.PATH, 'makefile'), 'w') as f:
+        f.write(makefile % (properties['website']['name'],\
+                            os.path.join(consts.ENV,'bin','activate'),\
+                            os.path.join(consts.ENV,properties['website']['name'])))
+
 def setup(properties):
     """
     Creates basic django project
@@ -41,12 +51,6 @@ def setup(properties):
     """
 
     try:
-        try:
-            globs.ENVNAME = properties["environment"]
-        except KeyError:
-            globs.ENVNAME = "venv"
-        consts.ENV = os.path.join(consts.PATH, globs.ENVNAME)
-
         if not os.path.exists(consts.ENV):
             call(["virtualenv", consts.ENV])
     except:
@@ -103,6 +107,14 @@ def main():
     except KeyError:
         theme = "default"
 
+    #setup v environment vars
+    try:
+        globs.ENVNAME = properties["environment"]
+    except KeyError:
+        globs.ENVNAME = "venv"
+    consts.ENV = os.path.join(consts.PATH, globs.ENVNAME)
+
+
     #marked as update update
     if "-u" in flags:
         consts.UPDATE = True
@@ -128,6 +140,9 @@ def main():
 
     #prepare the configuration files for the dev environment
     devConfig.createDevFiles(properties)
+
+    #copy the makefile over
+    handleMakefile(properties)
 
     #intiialize the test database
     try:
