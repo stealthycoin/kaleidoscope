@@ -1,5 +1,9 @@
 Kaleidoscope
 ===============
+What is Kaleidoscope?
+----------------
+Kaleidoscope is all natrual and grass fed. No perservatives, addatives, smuggling rings, or gamechanging logistics.
+
 
 Examples
 ---------------
@@ -102,18 +106,19 @@ Basic Syntax
 
 File extensions for a kaleidoscope file: ```.ks```
 
-Kaleidescope is made up of comma seperated key value pairs as such:
+Kaleidescope is made up of key value pairs as such:
 
 ```key : value```
 
-A key must consist of only letters numbers and underscores, and must start with a letter.
+A key must consist of only letters numbers and underscores, and must start with a letter. Multiple key value pairs can be seperated by a comma.
 
 A value can be several different things:
 
 1. A number, straightforwardly this is a number, either floating point or integer.
 2. A string, Anything encapsulated by quotation marks.
 3. Another set of key : value pairs surrounded by curly brackets and of course seperated by commas ``` car: { name: "Lady Cher", capacity: 6, cylinders: 4 }```
-4. A f-sigil. An f-sigil is a string with the character f before it like so: ```f"example.txt"``` This will load the file example.txt into a string and replace the f-sigil with that string.
+4. An f-sigil. An f-sigil is a string with the character f before it like so: ```f"example.txt"``` This will load the file example.txt into a string and replace the f-sigil with that string.
+5. A relational expression, these allow you to express interactions with the database. They can retrive, edit, or create data on the backend. How this data is displayed is defined in the model section below. A simple relation expression that fetches a person named Hank: ```S[name='Hank'](person->Person)``` More about relation expressions below.
 
 
 Describing a website
@@ -225,3 +230,18 @@ apps : {
     }
 }
 ```
+
+Relation Expressions
+--------------------
+
+Relation expressions implemenmt a subset of Relational Algebra. Currently only two operations are defined.
+The ```S``` and ```F``` operations. 
+
+All relation expressions are made up of three segments like the following example: ```S[name='']```
+
+The first segment is the operator name for example ```F``` is for form, and ```S``` is for selection.
+
+How the operators work:
+
+```S``` The selection operation.
+
