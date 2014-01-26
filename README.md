@@ -1,5 +1,9 @@
 Kaleidoscope
 ===============
+What is Kaleidoscope
+----------------
+Kaleidoscope is all natrual and grass fed. No perservatives, addatives, smuggling rings, or gamechanging logistics.
+
 
 Examples
 ---------------
