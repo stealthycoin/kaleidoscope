@@ -237,5 +237,11 @@ Relation Expressions
 Relation expressions implemenmt a subset of Relational Algebra. Currently only two operations are defined.
 The ```S``` and ```F``` operations. 
 
-How the operators work
+All relation expressions are made up of three segments like the following example: ```S[name='']```
+
+The first segment is the operator name for example ```F``` is for form, and ```S``` is for selection.
+
+How the operators work:
+
+```S``` The selection operation.
 
