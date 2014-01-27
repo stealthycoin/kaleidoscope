@@ -237,7 +237,7 @@ Relation Expressions
 Relation expressions define a subset of Relational Algebra. Currently only two operations are defined.
 The ```S``` and ```F``` operations. 
 
-All relation expressions are made up of three segments like the following example: ```S[name='Fuzzy'](animals->cat```
+All relation expressions are made up of three segments like the following example: ```S[name='Fuzzy'](animals->cat)```
 
 The first segment is the operator name for example ```F``` is for form, and ```S``` is for selection.
 
