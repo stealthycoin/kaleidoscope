@@ -214,7 +214,7 @@ Cat example completed:
 
 ```
 apps : {
-    cat:
+    animals:
         models: {
             cat: {
                 fields: {
@@ -234,14 +234,25 @@ apps : {
 Relation Expressions
 --------------------
 
-Relation expressions implemenmt a subset of Relational Algebra. Currently only two operations are defined.
+Relation expressions define a subset of Relational Algebra. Currently only two operations are defined.
 The ```S``` and ```F``` operations. 
 
-All relation expressions are made up of three segments like the following example: ```S[name='']```
+All relation expressions are made up of three segments like the following example: ```S[name='Fuzzy'](animals->cat```
 
 The first segment is the operator name for example ```F``` is for form, and ```S``` is for selection.
 
 How the operators work:
 
-```S``` The selection operation.
+```S``` The selection operation. This selects (or tries to select) a set of objects from the database.
+
+```F``` The form operation. This operator will generate a form based on its arguments.
+
+```[name='Fuzzy']``` The second portion of the expression is a list of restrictions enclosed in square brackets. Currently only the equality operator is defined. If the restrictions are left blank (```[]```) then everything from the database is selected. If the ```F``` operator is being used then an empty set of restrictions will make a creation form.
+
+```(animals->cat)``` The third and final section is the set of objects to be selected from. In this case we are searching in the animals app, and searching through the cat models.
+
+The example above Selects a cat from the databased with a name of Fuzzy. If there are multiple cats named Fuzzy it will select multiples and display them using the ```listing``` key. If there is only a single one it will use the ```display``` rule to render it.
+
+
+
 
