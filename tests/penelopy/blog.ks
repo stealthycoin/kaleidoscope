@@ -3,7 +3,7 @@ website : {
     name : "Example_1",
     prettyName: "My most wonderous web-diary",
     author: "Penelopy",
-    theme: "dreamcloud"
+    theme: "minecraft"
 },
 
 apps: {
