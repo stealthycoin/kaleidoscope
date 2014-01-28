@@ -3,21 +3,30 @@ from django.template.loader import render_to_string
 from django.template import RequestContext
 
 def loginForm(request):    
-    csrf_token_value = request.COOKIES['csrftoken']
+    try:
+        csrf_token_value = request.COOKIES['csrftoken']
+    except KeyError:
+        csrf_token_value = "dunno"
     return {
         'login' : render_to_string('userforms.html',\
                                    { 'data' : AuthenticationForm().as_table(), 'dst' : 'login', 'csrf_token_value' : csrf_token_value })
     }
     
 def signupForm(request):
-    csrf_token_value = request.COOKIES['csrftoken']
+    try:
+        csrf_token_value = request.COOKIES['csrftoken']
+    except KeyError:
+        csrf_token_value = "dunno"
     return {
         'signup' : render_to_string('userforms.html',\
                                     { 'data' : UserCreationForm().as_table(), 'dst' : 'signup', 'csrf_token_value' : csrf_token_value })
     }
     
 def logoutForm(request):
-    csrf_token_value = request.COOKIES['csrftoken']
+    try:
+        csrf_token_value = request.COOKIES['csrftoken']
+    except KeyError:
+        csrf_token_value = "dunno"
     return {
         'logout' : render_to_string('userforms.html',\
                                     { 'data' : '<tr><td><input type="submit" value="Logout" /></td></tr>',\
