@@ -1,0 +1,45 @@
+
+/* Theme based on the dreams of ground up clouds */
+
+@font-face {
+    font-family: "Minecraftia";
+    src: url(/static/Minecraftia.ttf) format("truetype");
+}
+
+/* Div containing the menu */
+#menu { 
+    overflow: hidden;
+    text-align: center;
+    font-family: "Minecraftia";
+    padding-top: 0;
+    margin-top: 0;
+    border-top: solid .5em #A6B2D3;
+}
+
+/* ul inside the div */
+#nav {
+    display: inline-block;
+    overflow: hidden;
+}
+
+#nav li {
+    display: inline;
+}
+
+#nav li a {
+    font-size: 26px;
+    text-decoration: note;
+    float: left;
+    padding: 10px;
+    color: #7FA5FF; 
+    margin-left: 20px;
+    border-right: 3px solid #7FA5FF;
+    border-bottom: 3px solid #7FA5FF;
+}
+
+#nav li a:hover
+{
+    color: #294FA6;
+    border-right: 3px solid #294FA6;
+    border-bottom: 3px solid #294FA6;
+}
