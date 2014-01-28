@@ -1,4 +1,4 @@
-
+//generate a webular site man
 website : {
     name: "EpicProfs",
     prettyName: "Epic Professors",
@@ -35,10 +35,10 @@ apps: {
 	    //represents a single story
 	    Story: {
 		fields: {
-		    text: { type: "TextField" },
-		    title: { type: "CharField",  length: 32 },
-		    author: { type: "ForeignKey", link: "User" }, //user is a built in type
-		    subject: { type: "ForeignKey", link: "professor->Professor" }
+		    text: { type: "TextField", label: "Story" },
+		    title: { type: "CharField",  length: 32, label: "Title" },
+		    author: { type: "ForeignKey", link: "User", label: "Sillytimefaces" }, //user is a built in type
+		    subject: { type: "ForeignKey", link: "professor->Professor", label: "Professor" }
 		},
 		admin: "%title by %author",
 		listing: "<a href='/story/%pk% '>%subject% in %title%</a>",
