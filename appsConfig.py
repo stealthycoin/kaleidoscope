@@ -265,21 +265,25 @@ def configureApp(path, app, properties):
 
     #where to put template chains
     templates = os.path.join(path, 'templates')
-    print "Generating: " + templates
-    try:
-        call(["mkdir", templates])
-        call(["cp", "-a", os.path.join(consts.RESOURCES, 'templatechains', properties['templatechain'],'.'), templates])
-        call(["cp", "-a", os.path.join(consts.RESOURCES, 'templatechains', 'core','.'), templates])
-    except:
-        print "Failed to generate templates"
 
     #generate themes
     theme = path + "/static/"
     print "Generating: " + theme
     try:
-        call(["mkdir",theme])
-        call(["cp","-a", os.path.join(consts.RESOURCES, 'themes', properties['theme'],'.'), theme])
-        call(["cp","-a", os.path.join(consts.RESOURCES, 'themes', 'core', '.'), theme])
+        call(["mkdir", theme])
+        call(["mkdir", templates])
+        if call(["cp","-a", os.path.join(consts.RESOURCES, 'themes', properties['theme'],'static','.'), theme]) == 1:
+            print "No builtin theme found"
+            if call(["cp", "-a", os.path.join(consts.PATH, properties['theme'], 'static',  '.'), theme]) == 1:
+                print "Blerp"
+                print "Failed to find theme: " + properties['theme'] + " static files"
+                sys.exit(1)
+        if call(["cp", "-a", os.path.join(consts.RESOURCES, 'themes', properties['theme'], 'templates', '.'), templates]) == 1:
+            if call(["cp", "-a", os.path.join(consts.PATH, properties['theme'], 'templates',  '.'), templates]) == 1:
+                print "Failed to find theme " + properties['theme'] + " templates"
+
+        call(["cp", "-a", os.path.join(consts.RESOURCES, 'themes', 'core', '.'), theme])
+        call(["cp", "-a", os.path.join(consts.RESOURCES, 'templatechains', 'core','.'), templates])
     except:
         print "Failed to generate theme"
     
@@ -294,7 +298,7 @@ def configureApp(path, app, properties):
         #they are small snipets that can be loaded by other pages by using a view to access them
         generateModelView(path,app,properties['models'])
         
-
+        #generate middletier functions for each model
         generateMiddletier(path,app,properties['models'])
         
         #generate the form generators

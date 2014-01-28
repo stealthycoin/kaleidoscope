@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+<!-- Head -->
+{% block head %}
+{{ block.super }}
+
+<!-- box.css -->
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/box.css" />
+{% endblock %}
+
+<!-- Body -->
+{% block body %}
+
+
+<!-- Header -->
+<div id="header">
+{% block header %}
+{% endblock %}
+</div>
+<!-- End Header -->
+
+<!-- Menu -->
+<div id="menu">
+{% block menu %}
+{% endblock %}
+</div>
+<!-- End Menu -->
+
+<!-- Content -->
+<div id="content">
+{% block content %}
+{% endblock %}
+</div>
+<!-- End Content -->
+
+<!-- Footer -->
+<div id="footer">
+{% block footer%}
+{% endblock %}
+</div>
+<!-- End Footer -->
+
+
+{% endblock %}
+<!-- End Body -->

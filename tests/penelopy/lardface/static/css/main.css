@@ -1,0 +1,57 @@
+
+/* Theme based on the dreams of ground up clouds */
+
+@font-face {
+    font-family: "Minecraftia";
+    src: url(/static/Minecraftia.ttf) format("truetype");
+}
+
+h1 {
+    text-align: center;
+}
+
+#header {
+    background-image:url('/static/images/Clouds.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #7FA5FF;
+    background-size: 100%;
+    margin: 0;
+    padding: 10px;
+    padding-left: 50px;
+}
+
+div#header h1 {
+    text-align: center;
+    color:  #294FA6;
+    text-decoration: none;
+    font-size: 4em;
+}
+
+body {
+    background-color: #C8D4F3;
+    padding: 0;
+    margin: 0;
+    font-family: "Minecraftia";
+}
+
+#content {
+    margin-top: 5px;
+    margin-bottom: 5px;
+
+}
+
+#footer {
+    padding: 3px;
+    color: #FFFFFF;
+    background-color: #A0BABD;
+    text-align: right;
+}
+
+a {
+    text-decoration: none;
+}
+
+ul {
+    list-style-type: none;
+}
