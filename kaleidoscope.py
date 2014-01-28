@@ -117,9 +117,9 @@ def main():
 
     #marked as update update
     if "-u" in flags:
-        consts.UPDATE = True
+        consts.UPDATE = True #need to modify this to build missing portions
     else:
-        setup(properties) #this fn is where consts.up
+        setup(properties) #this fn is where the project is built
         consts.UPDATE = False
 
     #configure apps
