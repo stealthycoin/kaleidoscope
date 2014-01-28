@@ -273,9 +273,7 @@ def configureApp(path, app, properties):
         call(["mkdir", theme])
         call(["mkdir", templates])
         if call(["cp","-a", os.path.join(consts.RESOURCES, 'themes', properties['theme'],'static','.'), theme]) == 1:
-            print "No builtin theme found"
             if call(["cp", "-a", os.path.join(consts.PATH, properties['theme'], 'static',  '.'), theme]) == 1:
-                print "Blerp"
                 print "Failed to find theme: " + properties['theme'] + " static files"
                 sys.exit(1)
         if call(["cp", "-a", os.path.join(consts.RESOURCES, 'themes', properties['theme'], 'templates', '.'), templates]) == 1:
