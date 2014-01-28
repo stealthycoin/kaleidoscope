@@ -8,8 +8,6 @@ from utilities import tokenizer,writeFile,addURL,handlePercentToken
 
 def generateForm(path,app,model,properties):
     """Generates a single form's code and returns it"""
-
-
     formFields = []
     for prop in iter(properties['fields']):
         try:
@@ -24,12 +22,20 @@ def generateForm(path,app,model,properties):
     form += "    class Meta:\n"
     form += "        model = %s\n" % model
     form += "        fields = %s\n\n".replace("[","(").replace("]",")") % formFields
-
+    form += "        labels = {\n"
+    for field in formFields:
+        try:
+            form += "            '%s' : _('%s'),\n" % (field, properties['fields'][field]['label'])
+        except KeyError:
+            pass #no special label was defined so use the default which is what django does automatically
+    form += "        }\n"
+    
     return form
 
 def generateForms(path,app,properties):
     """Generates a form for each model for easy search/creation"""
-    forms = "from django.forms import ModelForm\n\n"
+    forms = "from django.utils.translation import gettext as _\n"
+    forms += "from django.forms import ModelForm\n\n"
 
     for model in iter(properties):
         forms += generateForm(path,app,model,properties[model])
