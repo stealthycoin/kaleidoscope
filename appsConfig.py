@@ -202,6 +202,7 @@ def generateMiddletierForModel(app, model, properties):
 
 
     #TODO verify that unique and required are being honored
+    #TODO also this is a pretty horrible way to generate these functions, should implemenmt a template system (again) for it
 
     result += "from django.http import HttpResponse\n"
 
