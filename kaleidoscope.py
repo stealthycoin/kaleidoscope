@@ -11,7 +11,7 @@ globs.URLS = []
 consts.PATH = os.getcwd()
 consts.KSCOPE = os.path.abspath(os.path.dirname(__file__))
 consts.RESOURCES = os.path.join(consts.KSCOPE, 'resources')
-consts.WEBAPPS = '/webapps'
+
 
 sys.path.append(consts.PATH) #this is so we can include the compiled ks dictionary
 
@@ -115,6 +115,17 @@ def main():
         globs.ENVNAME = "venv"
     consts.ENV = os.path.join(consts.PATH, globs.ENVNAME)
 
+    #get the hostname (localhost if none provided)
+    try:
+        consts.HOSTNAME = properties["website"]["host"]
+    except KeyError:
+        consts.HOSTNAME = "localhost"
+
+    #try and get the root directory on the server (/webapps otherwise)
+    try:
+        consts.WEBAPPS = properties["website"]["root"]
+    except KeyError:
+        consts.WEBAPPS = '/webapps'
 
     #marked as update update
     if "-u" in flags:
