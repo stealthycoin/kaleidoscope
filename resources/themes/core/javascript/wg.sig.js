@@ -465,6 +465,12 @@ function wgSig(s){
 	return input;
     }
 
+    function passwordField() {
+	var input = elem().constGen(
+	    "<input type='password' class='fieldInput'/>");
+	return input;
+    }
+
     function textareaField(value){
 	var input = elem().constGen(
 	    "<textarea class='fieldInput formField' placeholder='"+value+"'></textarea>");
@@ -553,6 +559,7 @@ function wgSig(s){
 	inlineField : inlineField,
 	inputField : inputField,
 	textareaField : textareaField,
+	passwordField: passwordField,
 	hiddenField : hiddenField,
 	toggleField : toggleField,
 	dropdownField : dropdownField,
