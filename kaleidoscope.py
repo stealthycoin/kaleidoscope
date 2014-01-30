@@ -41,7 +41,8 @@ def handleMakefile(properties):
     with open(os.path.join(consts.PATH, 'makefile'), 'w') as f:
         f.write(makefile % (properties['website']['name'],\
                             os.path.join(consts.ENV,'bin','activate'),\
-                            os.path.join(consts.ENV,properties['website']['name'])))
+                            os.path.join(consts.ENV,properties['website']['name']),\
+                            consts.ENV))
 
 def setup(properties):
     """

@@ -20,6 +20,9 @@ var inputTypes = {
     ,"textarea" : function(z){
 	return wg.textareaField(z.val()); 
     }
+    ,"input[type=password]" : function(z) {
+	return wg.passwordField();
+    }
 }
 
 function labelElem(contents, name){
@@ -32,6 +35,8 @@ function autoform(){
 	var form = jQuery(this);
 	var elems = [];
 	var values = {};
+	var submitValue = form.find(":submit").val() || "Submit"; //Might need custom message on submit button
+
 	for(k in inputTypes){
 		var key = k; 
 	    form.find(k).each(function(){
@@ -48,7 +53,7 @@ function autoform(){
 		elems.push(elem);
 	    });
 	}
-	var button = wg.button(sig.constant("Submit")); 	
+	var button = wg.button(sig.constant(submitValue)); 	
 	elems.push(button);
 	var httpRes = sig.ojoin(values)
 	    .onChange(button.clicked().toggle().throttle(50))
