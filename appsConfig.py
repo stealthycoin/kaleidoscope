@@ -22,6 +22,7 @@ def generateForm(path,app,model,properties):
     form += "    class Meta:\n"
     form += "        model = %s\n" % model
     form += "        fields = %s\n\n".replace("[","(").replace("]",")") % formFields
+    #add custom labels
     form += "        labels = {\n"
     for field in formFields:
         try:
