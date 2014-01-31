@@ -314,9 +314,9 @@ def configureApp(path, app, properties):
 
     if app == 'main':
         #set urls to callback to the middletier
-        addURL('/api/login/', 'main.middletier.login', 'login')
-        addURL('/api/logout/', 'main.middletier.logout', 'logout')
-        addURL('/api/signup/', 'main.middletier.signup', 'signup')
+        addURL('api/login/', 'main.middletier.login', 'login')
+        addURL('api/logout/', 'main.middletier.logout', 'logout')
+        addURL('api/signup/', 'main.middletier.signup', 'signup')
 
         #need to put in the context processor that allows us to access login/logout/signout stuff
         call(["cp", os.path.join(consts.RESOURCES,'processors','context_processors.py'),os.path.join(consts.PROJECT,'main','context_processors.py')])
