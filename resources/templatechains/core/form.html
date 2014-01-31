@@ -1,4 +1,5 @@
 <h2>{{ title }}</h2>
+<p>{{ description }}</p>
 <form action="{{ action }}" method="POST">
   {% csrf_token %}
   {{ formFields }}
