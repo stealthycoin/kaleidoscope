@@ -55,7 +55,7 @@ apps: {
 	    Submission: {
 		fields: {
 		    date: {type: "DateField", argstring: "auto_now=True", form: "False"},
-		    mainContributor: { type: "CharField", length: 64 },
+		    mainContributor: { type: "CharField", length: 64, label: "Main Contributor:" },
 		    year: {type: "CharField", length: 4 },
 		    bigIdea: {type: "TextField", label: "What\\'s the big idea?"},
 		    whatDidYouLearn: {type: "TextField", label: "What did you learn?"}
@@ -99,7 +99,7 @@ apps: {
 	}
     },
     
-    mathmatics: {
+    mathematics: {
 	models: {
 	    Submission: {
 		fields: {
@@ -124,7 +124,7 @@ menu: {
     currentEvents: {title: "Current Events", link: "/current", placement: 2},
     mathHistory: {title: "Math History", link: "/mathhistory", placement: 3},
     pe: {title: "P.E.", link: "/pe", placement: 4},
-    math: {title: "Mathmatics", link: "/math", placement: 5},
+    math: {title: "Mathematics", link: "/math", placement: 5},
     log: {title: "Logs", link: "/log", placement: 6}
 },
 
@@ -132,48 +132,48 @@ pages: {
     Home: {
 	title: "Elena Bernard",
 	url: "",
-	template: "<div class='box'>Click on the links above to go to a topic page.</div>"
+	template: f"home.html"
     },
     Science:{
 	title: "Science",
 	url: "science/",
 	template: "<h1>Science!</h1><div class='box'>%homework%</div><div class='box'>%addSubject%</div>",
-	homework: F[](science->Submission),
-	addSubject: F[](science->Subject)
+	homework: { type: "expr", expr: F[](science->Submission) },
+	addSubject: { type: "expr", expr: F[](science->Subject) }
     },
     Current: {
 	title: "Current Events",
 	url: "current/",
 	template: "<h1>Current Events!</h1><div class='box'>%homework%</div>",
-	homework: F[](current_events->Submission)
+	homework: { type: "expr", expr: F[](current_events->Submission) }
     },
     MathHistory: {
 	title: "Math History",
 	url: "mathhistory/",
 	template: "<h1>Math History!</h1><div class='box'>%homework%</div>",
-	homework: F[](math_history->Submission)
+	homework: { type: "expr", expr: F[](math_history->Submission) }
     },
-    Mathmatics: {
-	title: "Mathmatics",
+    Mathematics: {
+	title: "Mathematics",
 	url: "math/",
-	template: "<h1>Mathmatics!</h1><div class='box'>%homework%</div>",
-	homework: F[](mathmatics->Submission)
+	template: "<h1>Mathematics!</h1><div class='box'>%homework%</div>",
+	homework: { type: "expr", expr: F[](mathematics->Submission) }
     },
     PE: {
 	title: "Physical Education",
 	url: "pe/",
 	template: "<h1>Physical Education</h1><div class='box'>%homework%</div>",
-	homework: F[](pe->Submission)
+	homework: { type: "expr", expr: F[](pe->Submission), title: "Inspiring quote?", description: "Why the hell would you put something inspiring here? Its a freaking homework submission form" }
     },
     log: {
 	title: "Log",
 	url: "log/",
 	template: f"log.html",
-	scienceList: S[](science->Submission),
-	currentList: S[](current_events->Submission),
-	mhList: S[](math_history->Submission),
-	peList: S[](pe->Submission),
-	mathList: S[](mathmatics->Submission)
+	scienceList: { type: "expr", expr: S[](science->Submission) },
+	currentList: { type: "expr", expr: S[](current_events->Submission) },
+	mhList: { type: "expr", expr: S[](math_history->Submission) },
+	peList: { type: "expr", expr: S[](pe->Submission) },
+	mathList: { type: "expr", expr: S[](mathematics->Submission) }
     }
 },
 
