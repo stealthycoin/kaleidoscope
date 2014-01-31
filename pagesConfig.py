@@ -1,6 +1,6 @@
 import sys, os, consts, re
 from menu import Menu, MenuItem
-from utilities import decodeRelationalVariable, tabify, writeFile, addURL, handlePercentToken
+from utilities import decodeRelationalVariable, tabify, writeFile, addURL, handlePercentToken, decodePageKey
 
 
 def generateHeader(properties):
@@ -82,11 +82,11 @@ def generatePage(app, name, appPath, properties):
     view = tabify("def %s(%s):" % (name, args), tabs)
     tabs += 1
 
-    #time to define relational variables given by the ks file
+    #time to define variables in the page
     view += tabify("d = {}",tabs) #to hold the variables
     for key in iter(properties):
         if key not in ["title", "url", "template"]: #predefined keys, anything else is a variable
-            view += decodeRelationalVariable(key,properties[key],tabs)
+            view += decodePageKey(key,properties[key],tabs)
 
     view += tabify("return render(request,\"%s.html\",d)" % name, tabs)
     
