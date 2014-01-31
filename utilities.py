@@ -46,13 +46,39 @@ def tabify(string, tabs):
 
 def decodeRelationalVariable(key,value,tabs):
     """Takes in a relational expression and attemmpts to write some code for value"""
-    result = value.show(key)
+    
+    #might have these, change to be less terrible later
+    try:
+        title = value['title']
+    except KeyError:
+        title = "Creation Form"
+    
+    try:
+        desc = value['description']
+    except KeyError:
+        desc = ""
+
+    result = value['expr'].show(key,title,desc)
     replacement = ("    " * tabs)
     result = replacement + result
     import re
     result = re.sub('\n','\n'+replacement,result,result.count('\n')-1)
     return result
 
+
+def decodePageKey(key, value, tabs):
+    """Decodes a variable in a page that doesn't have a predefined meaning"""
+    
+    tabstr = ("    " * tabs)
+    
+    if type(value) is str:
+        return tabstr + "d['%s'] = '%s'\n" % (key,value)
+    elif type(value) is int:
+        return tabstr + "d['%s'] = %s\n" % (key, value)
+    elif type(value) is dict:
+        if value['type'] == "expr":
+            return decodeRelationalVariable(key,value,tabs)
+    
 
 def tupleEntrys(l,removeLastComma = False):
     """Takes a list of elements and returns a list of elements prepared to be inserted into a tuple"""
