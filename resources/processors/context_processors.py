@@ -9,7 +9,9 @@ def loginForm(request):
         csrf_token_value = "dunno"
     return {
         'login' : render_to_string('userforms.html',\
-                                   { 'data' : AuthenticationForm().as_table(), 'dst' : 'login', 'csrf_token_value' : csrf_token_value })
+                                   { 'data' : AuthenticationForm().as_table(),\
+                                     'dst' : 'login',\
+                                     'csrf_token_value' : csrf_token_value })
     }
     
 def signupForm(request):
@@ -19,7 +21,9 @@ def signupForm(request):
         csrf_token_value = "dunno"
     return {
         'signup' : render_to_string('userforms.html',\
-                                    { 'data' : UserCreationForm().as_table(), 'dst' : 'signup', 'csrf_token_value' : csrf_token_value })
+                                    { 'data' : UserCreationForm().as_table(),\
+                                      'dst' : 'signup',\
+                                      'csrf_token_value' : csrf_token_value })
     }
     
 def logoutForm(request):
