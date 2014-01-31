@@ -3,11 +3,11 @@ class R_Expr:
         self.expression_type = r_type
         self.restrictions = r_restrictions
         self.target_set = r_set
-    def show(self,key):
+    def show(self,key,title,desc):
         #always need this just to be able to retrieve things from database
         result = self.expression_type.showImports(self.target_set)
         result += self.restrictions.show()
-        result += self.expression_type.show(key,self.target_set)
+        result += self.expression_type.show(key,self.target_set,title,desc)
 
         return result
 
@@ -25,13 +25,13 @@ class R_Type:
         if self.type_symbol == 'F':
             return "from %s.forms import %sForm\n" % (ts.app,ts.model)
 
-    def show(self,key,ts):
+    def show(self,key,ts,title,desc):
         result = "from django.template import RequestContext\n"
         result += "d['%s'] = " % key
         if self.type_symbol == 'S':
             result += "get%s(qs)\n" % ts.model
         if self.type_symbol == 'F':
-            result += "render_to_string('form.html', {'title':'Create %s','action':'/api/%s/%s/create/','formFields':%sForm().as_p()},context_instance=RequestContext(request))\n" % (ts.model,ts.app,ts.model,ts.model)
+            result += "render_to_string('form.html', {'title':'%s', 'description': '%s', 'action':'/api/%s/%s/create/','formFields':%sForm().as_p()},context_instance=RequestContext(request))\n" % (title,desc,ts.app,ts.model,ts.model)
 
         return result
 
