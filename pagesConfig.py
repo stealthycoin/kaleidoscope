@@ -37,7 +37,7 @@ def generateFooter(properties):
         owner = properties["website"]["name"]
 
     from datetime import date
-    return "&copy; %d %s" % (date.today().year, owner)
+    return "<span style='float:right;'>&copy; %d %s</span><span style='float:left;'>Powered by Kaleidoscope</span>" % (date.today().year, owner)
 
 def generatePage(app, name, appPath, parent, properties, top):
     """

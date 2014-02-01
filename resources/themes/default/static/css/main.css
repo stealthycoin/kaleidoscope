@@ -59,6 +59,6 @@ label {
 
 #footer {
     color: #577f5f; /* Mode Line Face */
+    overflow: auto;
     background-color: #3a3a39; /* TabLineSel */
-    text-align: right;
 }
