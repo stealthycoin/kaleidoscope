@@ -1,5 +1,6 @@
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, logout
+from django.contrib.auth import login as dj_login
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 
@@ -9,12 +10,12 @@ def login(request):
     user = authenticate(username=username, password=password)
     if user is not None:
         if user.is_active:
-            login(request, user)
-            HttpResponse('\'Successful login\'')
+            dj_login(request, user)
+            return HttpResponse('\'Successful login\'')
         else:
-            HttpResponse('\'Disabled account\'')
+            return HttpResponse('\'Disabled account\'')
     else:
-        HttpResponse('\'Invalid login\'')
+        return HttpResponse('\'Invalid login\'')
 
 def logout(request):
     logout(request)
