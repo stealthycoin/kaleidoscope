@@ -17,6 +17,24 @@ div#header h1 {
     display: inline-block;
 }
 
+a:link {
+    color: #D4C4A9;
+    font-weight: 700;
+}
+
+a:visited {
+    color: #7F9F7F;
+}
+
+a:hover {
+    color: #D4C4A9;
+}
+
+a:active {
+    color: #8CD0D3;
+}
+
+
 h2, h3, h4, h5, h6, h7, th {
     color: #8cd0d3; /* Number */
 }
