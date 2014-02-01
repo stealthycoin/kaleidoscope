@@ -35,9 +35,9 @@ apps: {
 	    //represents a single story
 	    Story: {
 		fields: {
-		    text: TextField { label: "Story" },
+		    text: TextField,
 		    title: CharField { length: 32, label: "Title" },
-		    author: ForeignKey { link: "User", label: "Sillytimefaces" }, //user is a built in type
+		    author: ForeignKey { link: "User", label: "Username" }, //user is a built in type
 		    subject: ForeignKey { link: "professor->Professor", label: "Professor" }
 		},
 		admin: "%title by %author",
@@ -58,8 +58,7 @@ menu: {
     about: { title: "About", link: "/about", placement: 1 },
     stories: { title: "Stories", link: "/stories", placement: 2 },
     create: { title: "Create", link: "/create", placement: 3 },
-    story: { title: "Write", link: "/write", placement: 4 },
-    signUp: { title: "Signup", link: "/signup", placement: 5 }
+    story: { title: "Write", link: "/write", placement: 4 }
 },
 
 pages: {
@@ -86,8 +85,6 @@ pages: {
 		      } 
 		    },
 
-	    signup: { title: "Sign up", url: "signup/", template: "%1% %login% %signup% %logout% %1%" },
-
 	    writeStory: { title: "Write a Story", url: "write/", template: "%1% %createStory% %1%", 
 			  createStory: expr { title: "Write a story",
 					      description: "Share your favorite story about a professor. Fact or Fiction.",
@@ -96,5 +93,8 @@ pages: {
 	    specificStory: { title: "Epic Professors", url: "story/(\\d+)/", template: "%1% %theStory% %1%", 
 			     theStory: expr { expr: S[pk="%1"](story->Story) } }
 	}
-    }
+    },
+
+    //this one doesn't have a login stripe on it so its outside the loginstripe page
+    signup: { title: "Sign up", url: "signup/", template: f"signup.html" }
 }

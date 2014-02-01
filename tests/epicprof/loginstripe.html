@@ -1,5 +1,9 @@
 <div id='stripe'>
-  
+  {%% if user.is_authenticated %%}
+  Logged in as %user.username% %logout%
+  {%% else %%}
+  <a href="/signup">Login or Signup</a>
+  {%% endif %%}
 </div>
 
 %1% %1%
