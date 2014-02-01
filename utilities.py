@@ -78,7 +78,7 @@ def decodePageKey(key, value, tabs):
     elif type(value) is dict:
         if value['type'] == "expr":
             return decodeRelationalVariable(key,value,tabs)
-    
+    return ""
 
 def tupleEntrys(l,removeLastComma = False):
     """Takes a list of elements and returns a list of elements prepared to be inserted into a tuple"""
@@ -110,7 +110,7 @@ def showDatabaseDictionary(d):
 
 def handlePercentToken(string, prefix="", suffix=""):
     """takes in a string and replaces the %token with prefix token suffix"""
-
+    even = True
     result = ""
 
     i = 0
@@ -120,13 +120,20 @@ def handlePercentToken(string, prefix="", suffix=""):
             lok = string[i+1]#look ahead 1 token
         except:
             lok = ""
-        
+            
         if tok == '%' and lok != '%':#we found a token!
             i += 1
             x = i
             while i < len(string) and string[i] != '%':
                 i += 1
-            result += prefix + string[x:i] + suffix
+            if string[x:i].isdigit():#template insertion
+                if even:
+                    result += "{%% block blk_%s %%}" % string[x:i]
+                else:
+                    result += "{% endblock %}"
+                even = not even
+            else:#template variable
+                result += prefix + string[x:i] + suffix
             i += 1
         else:
             result += tok
