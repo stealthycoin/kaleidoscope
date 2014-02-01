@@ -59,8 +59,13 @@ start             : entries              { root = new ObjectNode(*$1); }
                   ;
 
 /* Basic JSON rules with a couple simplifying twists */
-object            : TOK_LEFTCURLY entries TOK_RIGHTCURLY     { $$ = new ObjectNode(*$2); }
-                  | TOK_LEFTCURLY TOK_RIGHTCURLY             { $$ = new ObjectNode(); }
+object            : TOK_LEFTCURLY entries TOK_RIGHTCURLY         { $$ = new ObjectNode(*$2); }
+                  | TOK_KEY TOK_LEFTCURLY entries TOK_RIGHTCURLY { std::string type("type"); 
+                                                                   std::string value("\"" + *$1 + "\"");
+                                                                   $3->push_back(new EntryNode(type,new StringNode(value))); 
+                                                                   $$ = new ObjectNode(*$3); }
+                  | TOK_LEFTCURLY TOK_RIGHTCURLY                 { $$ = new ObjectNode(); }
+                  | TOK_KEY TOK_LEFTCURLY TOK_RIGHTCURLY         { $$ = new ObjectNode(); }
                   ;
 
 entries           : entry                     { $$ = new std::vector<EntryNode*>(); $$->push_back($1); }
