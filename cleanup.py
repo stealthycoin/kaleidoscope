@@ -1,12 +1,10 @@
 import sys,os,shutil
+from subprocess import call
 
-tests = ["homepage", "epicprof", "penelopy"]
-
+tests = ["ai", "epicprof", "penelopy"]
+old = os.getcwd()
 for test in tests:
     path = "./tests/"+test+"/"
-    for f in os.listdir(path):
-        if os.path.isdir(path+f):
-            shutil.rmtree(path+f)
-        else:
-            if not f.endswith('.ks') and not f.endswith('.html'):
-                os.remove(path+f)
+    os.chdir(path)
+    call(["make","nuke"])
+    os.chdir(old)
