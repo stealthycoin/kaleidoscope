@@ -14,7 +14,7 @@ apps: {
 	    //represents a single professor
 	    Professor: {
 		fields: {
-		    name: { type: "CharField", length: 32 },
+		    name: CharField { length: 32 },
 		    institute: { type: "ForeignKey", link: "School" }
 		},
 		admin: "%name"
