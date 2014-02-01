@@ -65,7 +65,11 @@ object            : TOK_LEFTCURLY entries TOK_RIGHTCURLY         { $$ = new Obje
                                                                    $3->push_back(new EntryNode(type,new StringNode(value))); 
                                                                    $$ = new ObjectNode(*$3); }
                   | TOK_LEFTCURLY TOK_RIGHTCURLY                 { $$ = new ObjectNode(); }
-                  | TOK_KEY TOK_LEFTCURLY TOK_RIGHTCURLY         { $$ = new ObjectNode(); }
+                  | TOK_KEY                                      { std::string type("type");
+                                                                   std::string value("\""+ *$1 + "\"");
+								   std::vector<EntryNode*> *entries = new std::vector<EntryNode*>();
+								   entries->push_back(new EntryNode(type,new StringNode(value)));
+                                                                   $$ = new ObjectNode(*entries); }
                   ;
 
 entries           : entry                     { $$ = new std::vector<EntryNode*>(); $$->push_back($1); }
