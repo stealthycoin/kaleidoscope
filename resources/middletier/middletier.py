@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.contrib.auth import authenticate, logout
+from django.contrib.auth import authenticate
 from django.contrib.auth import login as dj_login
+from django.contrib.auth import logout as dj_logout
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 
@@ -18,7 +19,7 @@ def login(request):
         return HttpResponse('\'Invalid login\'')
 
 def logout(request):
-    logout(request)
+    dj_logout(request)
     return HttpResponse('\'Successful logout\'')
 
 def signup(request):
