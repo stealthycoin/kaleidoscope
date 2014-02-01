@@ -4,7 +4,7 @@ website : {
     prettyName: "Epic Professors",
     author: "Brilliant Squid",
     admins: { a : { name : "John Carlyle", email: "john.w.carlyle@gmail.com" },
-	     b : { name: "Morgan McDermott", email: "something@gmail.com" }}
+	      b : { name: "Morgan McDermott", email: "something@gmail.com" }}
 },
 
 //some apps all up in this house
@@ -63,21 +63,27 @@ menu: {
 },
 
 pages: {
-    home: { title: "Epic Professors", url: "", template: "I'm a homepage and I'm useless" },
+    master: {
+	template: "Dude like whoa. %1% %1%",
+	pages: {
 
-    about: { title: "About Epic Professors", url: "about/", template: f"about.html" },
+	    home: { title: "Epic Professors", url: "", template: "%1% I'm a homepage and I'm useless %1%" },
 
-    stories: { title: "Epic Professors", url: "stories/", template: "%storiesList%", storiesList: S[](story->Story) },
+	    about: { title: "About Epic Professors", url: "about/", template: f"about.html" },
 
-    create: { title: "Create", url: "create/", template: "Add people and place page!! %createSchool% %createProfessor%", 
-	      createSchool: F[](professor->School),
-	      createProfessor: F[](professor->Professor) },
+	    stories: { title: "Epic Professors", url: "stories/", template: "%1% %storiesList% %1%", storiesList: { type: "expr", expr: S[](story->Story) } },
 
-    signup: { title: "Sign up", url: "signup/", template: "%login% %signup% %logout%" },
+	    create: { title: "Create", url: "create/", template: "%1% Add people and place page!! %createSchool% %createProfessor% %1%", 
+		      createSchool: { type: "expr", expr: F[](professor->School) },
+		      createProfessor: { type: "expr", expr: F[](professor->Professor) } },
 
-    writeStory: { title: "Write a Story", url: "write/", template: "%createStory%", 
-		  createStory: F[](story->Story) },
+	    signup: { title: "Sign up", url: "signup/", template: "%1% %login% %signup% %logout% %1%" },
 
-    specificStory: { title: "Epic Professors", url: "story/(\\d+)/", template: "%theStory%", 
-		     theStory: S[pk="%1"](story->Story) }
+	    writeStory: { title: "Write a Story", url: "write/", template: "%1% %createStory% %1%", 
+			  createStory: { type: "expr" , expr: F[](story->Story) } },
+
+	    specificStory: { title: "Epic Professors", url: "story/(\\d+)/", template: "%1% %theStory% %1%", 
+			     theStory: { type: "expr", expr: S[pk="%1"](story->Story) } }
+	}
+    }
 }
