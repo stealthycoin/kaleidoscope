@@ -135,7 +135,10 @@ def handlePercentToken(string, prefix="", suffix=""):
             else:#template variable
                 result += prefix + string[x:i] + suffix
             i += 1
-        else:
+        elif tok == '%' and lok == '%':#map this to 1 percent
+            result += '%'
+            i += 2
+        else:#normal character
             result += tok
             i += 1
             
