@@ -28,8 +28,9 @@ input.fieldInput, textarea.fieldInput {
     color: #333;   width: 300px;
     clear: left; 
     display: block; 
-    resize: none; 
 }
+
+textarea { width: auto; }
 
 input:focus {
     background-color: white; 
