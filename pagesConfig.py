@@ -107,6 +107,12 @@ def generatePage(app, name, appPath, parent, properties, top):
     except KeyError:
         groups = ""
 
+
+    try:
+        error_message = "messages.add_message(request, messages.ERROR, '%s')" % properties['security']['failmessage']
+    except KeyError:
+        error_message = "messages.add_message(request, messages.ERROR, 'Something went wrong man!')"
+
     try:
         redirect = "return %s(request)" % properties['security']['fail']
     except KeyError:
@@ -114,6 +120,7 @@ def generatePage(app, name, appPath, parent, properties, top):
 
     view += tabify("if not permissionsCheck(request,%s,'%s'):" % (login,groups), tabs)
     tabs += 1
+    view += tabify(error_message, tabs)
     view += tabify(redirect, tabs)
     tabs -= 1
 
@@ -173,6 +180,7 @@ from django.shortcuts import render
 from django.template.loader import render_to_string
 from middletier import permissionsCheck
 from django.http import HttpResponse
+from django.contrib import messages
 
 """
     writeFile(os.path.join(consts.MAIN, 'views.py'), viewHeader)

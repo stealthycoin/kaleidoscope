@@ -6,6 +6,14 @@
     padding-bottom: 0;
 }
 
+#errors {
+    background-color: #FF5454;
+    color: #000000;
+    text-align: center;
+    margin: 0;
+    padding: 5px 0;
+}
+
 div#header h1 {
     padding: 6px;
     margin-left: 25%;
@@ -45,6 +53,9 @@ p, td {
 
 body {
     background-color: #434443; /* CursorLine */
+    width: 100%;
+    padding: 0;
+    margin: 0;
 }
 
 label {

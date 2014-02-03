@@ -30,6 +30,15 @@
 </head>
 
 <body>
+
+{% if messages %}
+<div id="errors">
+{% for message in messages %}
+{{ message }}
+{% endfor %}
+</div>
+{% endif %}
+
 {% block body %}{% endblock %}
 </body>
 </html>
