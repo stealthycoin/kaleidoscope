@@ -5,6 +5,30 @@ from django.contrib.auth import logout as dj_logout
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 
+
+
+def permissionsCheck(request, loggedIn, groups):
+    """checks to see that the user has the required permissions to do something"""
+
+    if loggedIn == False:
+        #we dont even care if the user is logged in, so yes they have access
+        return True
+    
+    user = request.user
+
+    if not user.is_authenticated():
+        #user is not logged in so return false
+        return False
+
+    #user is logged in but we need to check groups
+
+    for group in groups.split(" "):
+        if user.groups.filter(name=group).count() == 0:
+            return False #they aren't in a required group
+        
+    return True
+
+
 def login(request):
     username = request.POST['username']
     password = request.POST['password']
