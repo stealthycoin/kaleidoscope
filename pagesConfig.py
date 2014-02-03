@@ -110,7 +110,7 @@ def generatePage(app, name, appPath, parent, properties, top):
     try:
         redirect = "return %s(request)" % properties['security']['fail']
     except KeyError:
-        redirect = "return HttpResponse('Denied', status_code=403)"
+        redirect = "return HttpResponse('Denied', status=403)"
 
     view += tabify("if not permissionsCheck(request,%s,'%s'):" % (login,groups), tabs)
     tabs += 1
@@ -172,6 +172,7 @@ def createPages(properties):
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from middletier import permissionsCheck
+from django.http import HttpResponse
 
 """
     writeFile(os.path.join(consts.MAIN, 'views.py'), viewHeader)

@@ -21,8 +21,11 @@ def permissionsCheck(request, loggedIn, groups):
         return False
 
     #user is logged in but we need to check groups
+    if groups == '':
+        return True #no group requirements
 
     for group in groups.split(" "):
+        print group
         if user.groups.filter(name=group).count() == 0:
             return False #they aren't in a required group
         
@@ -47,7 +50,6 @@ def logout(request):
     return HttpResponse('\'Successful logout\'')
 
 def signup(request):
-    print request.POST
     username = request.POST['username']
     password = request.POST['password1']
     try:
