@@ -85,7 +85,10 @@ pages: {
 		      } 
 		    },
 
-	    writeStory: { title: "Write a Story", url: "write/", template: "%1% %createStory% %1%", 
+	    writeStory: { security: { login: "True",
+				      groups: "",
+				      fail: "signup"},
+			  title: "Write a Story", url: "write/", template: "%1% %createStory% %1%", 
 			  createStory: expr { title: "Write a story",
 					      description: "Share your favorite story about a professor. Fact or Fiction.",
 					      expr: F[](story->Story) } },

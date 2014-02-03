@@ -48,7 +48,7 @@ def generatePage(app, name, appPath, parent, properties, top):
 
     print "Generating page: " + name
 
-    #basics for each page
+    #basics for each page template
     tabs = 0
     page = "<!-- Generated code for page: " + name + " -->\n" 
     page += tabify("{%% extends \"%s.html\" %%}" % parent, tabs)
@@ -67,7 +67,7 @@ def generatePage(app, name, appPath, parent, properties, top):
             page += "{% block content %}" + handlePercentToken(properties["template"],'{{ ','|safe }}') + "{% endblock %}"
         except KeyError:
             print "Page " + name + " has no content"
-    else:
+    else:#otherwise we just pop everything in assuming the percent tokens are set up right
         try:
             page += handlePercentToken(properties["template"],'{{ ','|safe }}')
         except KeyError:
@@ -90,20 +90,43 @@ def generatePage(app, name, appPath, parent, properties, top):
     except KeyError:
         pass #didnt have a url
     
-    view = tabify("def %s(%s):" % (name, args), tabs)
+    view = ""
+    
+    #now the definition of the view function
+    view += tabify("def %s(%s):" % (name, args), tabs)
     tabs += 1
 
+    #time to call the security function
+    try:
+        login = properties['security']['login'] #requires a login
+    except KeyError:
+        login = "False"
+
+    try:
+        groups = properties['security']['groups'] #get groups required
+    except KeyError:
+        groups = ""
+
+    try:
+        redirect = "return %s(request)" % properties['security']['fail']
+    except KeyError:
+        redirect = "return HttpResponse('Denied', status_code=403)"
+
+    view += tabify("if not permissionsCheck(request,%s,'%s'):" % (login,groups), tabs)
+    tabs += 1
+    view += tabify(redirect, tabs)
+    tabs -= 1
 
     #time to define variables in the page
     view += tabify("d = {}",tabs) #to hold the variables
     for key in iter(properties):
-        if key not in ["title", "url", "template", "pages"]: #predefined keys, anything else is a variable
+        if key not in ["title", "url", "template", "pages", "security"]: #predefined keys, anything else is a variable
             view += decodePageKey(key,properties[key],tabs)
 
     view += tabify("return render(request,\"%s.html\",d)" % name, tabs)
     
     #write the view files
-    writeFile(os.path.join(appPath, 'views.py'), "from django.shortcuts import render\nfrom django.template.loader import render_to_string\n\n" + view, 'a')
+    writeFile(os.path.join(appPath, 'views.py'), view, 'a')
 
     
     #adds a url mapping
@@ -144,8 +167,15 @@ def createPages(properties):
     with open(os.path.join(consts.MAIN, 'templates', 'standard.html'), 'w') as f:
         f.write(standard)    
 
+#at the top of a view file
+    viewHeader = """from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from django.template.loader import render_to_string
+from middletier import permissionsCheck
 
-        
+"""
+    writeFile(os.path.join(consts.MAIN, 'views.py'), viewHeader)
+
     for page in iter(properties["pages"]):
         generatePage("main", page, consts.MAIN, 'standard', properties["pages"][page], True)
 #    except KeyError:
