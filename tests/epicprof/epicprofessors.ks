@@ -86,8 +86,9 @@ pages: {
 		    },
 
 	    writeStory: { security: { login: "True",
-				      groups: "writer"
-				      },
+				      fail: "signup",
+				      failmessage: "You are not signed in, please try signing in and realoading the page."
+				    },
 			  title: "Write a Story", url: "write/", template: "%1% %createStory% %1%", 
 			  createStory: expr { title: "Write a story",
 					      description: "Share your favorite story about a professor. Fact or Fiction.",
