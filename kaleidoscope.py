@@ -94,10 +94,11 @@ def parse(filename):
     return properties
 
 def main():
-    opts, args = getopt.getopt(sys.argv[1:], "ut:")
+    opts, args = getopt.getopt(sys.argv[1:], "ut:s:")
         
     filename = "infile"
     flags = [o for o,a in opts]
+    arguments = {key: value for (key, value) in opts}
 
 
 
@@ -154,6 +155,10 @@ def main():
 
     #copy the makefile over
     handleMakefile(properties)
+
+    #if there are static files copy them
+    if "-s" in flags:
+        call(["cp", "-a", os.path.join(consts.PATH, arguments["-s"], "."), os.path.join(consts.MAIN, 'static')])
 
     #intiialize the test database
     try:
