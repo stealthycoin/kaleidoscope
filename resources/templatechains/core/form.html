@@ -1,5 +1,5 @@
 <h2>{{ title }}</h2>
-<p>{{ description }}</p>
+<p>{{ description|safe }}</p>
 <form action="{{ action }}" method="POST">
   {% csrf_token %}
   {{ formFields }}
