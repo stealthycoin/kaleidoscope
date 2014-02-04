@@ -49,6 +49,7 @@ ObjectNode *root;
 %type <r_restriction_vec> restriction_list;
 %type <r_set> operation_set set;
 %type <r_string> relation_rule;
+%type <str> restriction_op;
 
 %start start
 
@@ -100,7 +101,10 @@ restriction_list  : restriction                            { $$ = new std::vecto
                   | restriction TOK_COMMA restriction_list { $3->push_back($1); $$ = $3; }
                   ;
 
-restriction       : TOK_KEY TOK_EQUAL restriction_val      { $$ = new RelationRestrictionNode(*$1, *$2, $3); }
+restriction       : TOK_KEY restriction_op restriction_val      { $$ = new RelationRestrictionNode(*$1, *$2, $3); }
+                  ;
+
+restriction_op    : TOK_EQUAL           { $$ = $1; }
                   ;
 
 restriction_val   : TOK_STRING          { $$ = new StringNode(*$1); }

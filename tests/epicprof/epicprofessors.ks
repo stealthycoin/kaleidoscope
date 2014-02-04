@@ -1,7 +1,7 @@
 //generate a webular site man
 website : {
     name: "EpicProfs",
-    prettyName: "<img src='{{ STATIC_URL }}images/aig.png' />Epic Professors",
+    prettyName: "Epic Professors",
     author: "Brilliant Squid",
     admins: { a : { name : "John Carlyle", email: "john.w.carlyle@gmail.com" },
 	      b : { name: "Morgan McDermott", email: "something@gmail.com" }}
