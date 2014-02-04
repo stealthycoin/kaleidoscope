@@ -23,6 +23,7 @@ TOK_STRINGCON     (\"([^\\"\n]|\\[\\'"0nt])*\")
 "f"                   return TOKEN(TOK_FILE);
 "S"                   SAVE_TOKEN; return TOK_S;
 "F"                   SAVE_TOKEN; return TOK_F;
+"J"                   SAVE_TOKEN; return TOK_J;
 
 [a-zA-Z][a-zA-Z0-9_]* SAVE_TOKEN; return TOK_KEY;
 [0-9]+                SAVE_TOKEN_DOUBLE; return TOK_NUMBER;

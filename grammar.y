@@ -36,7 +36,7 @@ ObjectNode *root;
 }
 
 %token <number> TOK_NUMBER;
-%token <str> TOK_STRING TOK_KEY TOK_F TOK_S TOK_EQUAL;
+%token <str> TOK_STRING TOK_KEY TOK_J TOK_F TOK_S TOK_EQUAL;
 
 %type <object> start object;
 %type <entry> entry; 
