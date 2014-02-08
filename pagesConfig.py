@@ -96,25 +96,25 @@ def generatePage(app, name, appPath, parent, properties, top):
     view += tabify("def %s(%s):" % (name, args), tabs)
     tabs += 1
 
-    #time to call the security function
+    #time to call the access function
     try:
-        login = properties['security']['login'] #requires a login
+        login = properties['access']['login'] #requires a login
     except KeyError:
         login = "False"
 
     try:
-        groups = properties['security']['groups'] #get groups required
+        groups = properties['access']['groups'] #get groups required
     except KeyError:
         groups = ""
 
 
     try:
-        error_message = "messages.add_message(request, messages.ERROR, '%s')" % properties['security']['failmessage']
+        error_message = "messages.add_message(request, messages.ERROR, '%s')" % properties['access']['failmessage']
     except KeyError:
         error_message = "messages.add_message(request, messages.ERROR, 'Something went wrong man!')"
 
     try:
-        redirect = "return %s(request)" % properties['security']['fail']
+        redirect = "return %s(request)" % properties['access']['fail']
     except KeyError:
         redirect = "return HttpResponse('Denied', status=403)"
 
@@ -127,7 +127,7 @@ def generatePage(app, name, appPath, parent, properties, top):
     #time to define variables in the page
     view += tabify("d = {}",tabs) #to hold the variables
     for key in iter(properties):
-        if key not in ["title", "url", "template", "pages", "security"]: #predefined keys, anything else is a variable
+        if key not in ["title", "url", "template", "pages", "access"]: #predefined keys, anything else is a variable
             view += decodePageKey(key,properties[key],tabs)
 
     view += tabify("return render(request,\"%s.html\",d)" % name, tabs)
