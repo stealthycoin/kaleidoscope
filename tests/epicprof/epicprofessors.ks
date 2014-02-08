@@ -85,7 +85,7 @@ pages: {
 		      } 
 		    },
 
-	    writeStory: { security: { login: "True",
+	    writeStory: { access: { login: "True",
 				      fail: "signup",
 				      failmessage: "You are not signed in, please try signing in and realoading the page."
 				    },
