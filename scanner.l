@@ -29,6 +29,7 @@ TOK_STRINGCON     (\"([^\\"\n]|\\[\\'"0nt])*\")
 -?[0-9]+              SAVE_TOKEN_DOUBLE; return TOK_NUMBER;
 {TOK_STRINGCON}       SAVE_TOKEN; return TOK_STRING;
 
+":"                   SAVE_TOKEN; return TOK_COLON;
 "="                   SAVE_TOKEN; return TOK_EQUAL;
 "->"                  return TOKEN(TOK_ARROW);
 "]"                   return TOKEN(TOK_RIGHTBRACKET);
@@ -38,7 +39,6 @@ TOK_STRINGCON     (\"([^\\"\n]|\\[\\'"0nt])*\")
 ")"                   return TOKEN(TOK_RIGHTPAREN);
 "("                   return TOKEN(TOK_LEFTPAREN);
 ","                   return TOKEN(TOK_COMMA);
-":"                   return TOKEN(TOK_COLON);
 .                     printf("Unknown token\n"); yyterminate();
 
 %%

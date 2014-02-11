@@ -169,7 +169,7 @@ pages: {
 	title: "Log",
 	url: "log/",
 	template: f"log.html",
-	scienceList: { type: "expr", expr: S[](science->Submission) },
+	scienceList: { type: "expr", expr: S[limit:5,sortby:"-pk"](science->Submission) },
 	currentList: { type: "expr", expr: S[](current_events->Submission) },
 	mhList: { type: "expr", expr: S[](math_history->Submission) },
 	peList: { type: "expr", expr: S[](pe->Submission) },

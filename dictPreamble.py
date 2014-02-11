@@ -43,12 +43,25 @@ class R_Restrictions:
         """TODO: Needs to eventually deal with types"""
         return "qs = qs.filter(%s=%s)\n" % (r[0],r[2].replace('%','u_'))
 
+    def showFilter(self, r):
+        """Given a key and a value do something with it"""
+        #the key tells us what to do
+        if r[0] == "limit":
+            return "qs = qs[:%s]\n" % r[2]
+        elif r[0] == "offset":
+            return "qs = qs[%s:]\n" % r[2]
+        elif r[0] == "sortby":
+            return "qs = qs.order_by('%s')\n" % r[2]
+        return ""
+
     def show(self):
         #restrictions are a tuple (field,op,value) different ops imply different logic
         result = ""
         for restriction in self.restrictions:
             if restriction[1] == '=':
                 result += self.showEquality(restriction)
+            elif restriction[1] == ':':
+                result += self.showFilter(restriction)
 
         return result
 
