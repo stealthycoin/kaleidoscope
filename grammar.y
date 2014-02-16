@@ -122,3 +122,8 @@ operation_set     : TOK_LEFTPAREN set TOK_RIGHTPAREN  { $$ = $2; }
 
 set               : TOK_KEY TOK_ARROW TOK_KEY { $$ = new RelationSetNode(*$1, *$3); }
                   ;
+
+
+/* 
+ * BEGIN PARSING OF FRP EXPRESSIONS 
+ */
