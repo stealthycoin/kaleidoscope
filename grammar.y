@@ -13,7 +13,7 @@ ObjectNode *root;
 %}
 
 %token TOK_RIGHTCURLY TOK_LEFTCURLY TOK_COMMA TOK_FILE
-%token TOK_RIGHTBRACKET TOK_LEFTBRACKET TOK_ARROW TOK_LEFTPAREN TOK_RIGHTPAREN
+%token TOK_RIGHTBRACKET TOK_LEFTBRACKET TOK_ARROW TOK_BACK_ARROW TOK_LEFTPAREN TOK_RIGHTPAREN
 
 %union {
   Node *node;
@@ -36,7 +36,7 @@ ObjectNode *root;
 }
 
 %token <number> TOK_NUMBER;
-%token <str> TOK_STRING TOK_KEY TOK_J TOK_F TOK_S TOK_EQUAL TOK_COLON;
+%token <str> TOK_STRING TOK_KEY TOK_J TOK_L TOK_F TOK_S TOK_EQUAL TOK_COLON;
 
 %type <object> start object;
 %type <entry> entry; 
@@ -127,3 +127,13 @@ set               : TOK_KEY TOK_ARROW TOK_KEY { $$ = new RelationSetNode(*$1, *$
 /* 
  * BEGIN PARSING OF FRP EXPRESSIONS 
  */
+
+frp_statement     : frp_exp {}
+                  | frp_var TOK_BACK_ARROW frp_expr {} 
+                  ;
+
+frp_expr          : frp_simple_expr {}
+                  ;
+
+frp_simple_expr   : TOK_L TOK_LEFTBRACKET TOK_STRING TOK_RIGHTBRACKET {}
+                  ;

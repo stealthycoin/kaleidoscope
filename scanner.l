@@ -24,6 +24,7 @@ TOK_STRINGCON     (\"([^\\"\n]|\\[\\'"0nt])*\")
 "S"                   SAVE_TOKEN; return TOK_S;
 "F"                   SAVE_TOKEN; return TOK_F;
 "J"                   SAVE_TOKEN; return TOK_J;
+"L"                   SAVE_TOKEN; return TOK_L;
 
 [a-zA-Z][a-zA-Z0-9_]* SAVE_TOKEN; return TOK_KEY;
 -?[0-9]+              SAVE_TOKEN_DOUBLE; return TOK_NUMBER;
@@ -32,6 +33,7 @@ TOK_STRINGCON     (\"([^\\"\n]|\\[\\'"0nt])*\")
 ":"                   SAVE_TOKEN; return TOK_COLON;
 "="                   SAVE_TOKEN; return TOK_EQUAL;
 "->"                  return TOKEN(TOK_ARROW);
+"<-"                  return TOKEN(TOK_BACK_ARROW);
 "]"                   return TOKEN(TOK_RIGHTBRACKET);
 "["                   return TOKEN(TOK_LEFTBRACKET);
 "}"                   return TOKEN(TOK_RIGHTCURLY);
