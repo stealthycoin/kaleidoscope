@@ -169,4 +169,70 @@ public:
 };
 
 
+/*
+ * Begin FRP nodes
+ */
+
+class JavascriptNode : public Node {
+public:
+  JavascriptNode(std::string &str) : str(str) {}
+
+  std::string str;
+
+  std::string show() const {
+    return "";
+  }
+};
+
+class FRPAtNode : public Node {
+public:
+  FRPAtNode(std::string &str) : str(str) {}
+
+  std::string str;
+
+  std::string show() const {
+    return "";
+  }
+};
+
+class FRPDollarNode : public Node {
+public:
+  FRPDollarNode(std::string &str) : str(str) {}
+
+  std::string str;
+
+  std::string show() const {
+    return "";
+  }
+};
+
+
+class FRPSimpleExprNode : public Node {
+public:
+  FRPSimpleExprNode(JavascriptNode *js) : js(js), d(NULL), a(NULL) {}
+  FRPSimpleExprNode(FRPDollarNode *d) : d(d), js(NULL), a(NULL) {}
+  FRPSimpleExprNode(FRPAtNode *a) : a(a), d(NULL), js(NULL) {}
+
+  FRPDollarNode *d;
+  FRPAtNode *a;
+  JavascriptNode *js;
+
+  std::string show() const {
+    return "";
+  }
+};
+
+
+class FRPStatementNode : public Node {
+public:
+  FRPStatementNode(FRPSimpleExprNode *expr) : expr(expr) {}
+  FRPStatementNode() {}
+  
+  FRPSimpleExprNode *expr;
+
+  std::string show() const {
+    return "";
+  }
+};
+
 #endif

@@ -33,6 +33,13 @@ ObjectNode *root;
 
   std::string *string;
   int token;
+
+
+
+  //frp
+  FRPStatementNode *frpsmt;
+  FRPSimpleExprNode *snp;
+  std::vector<FRPSimpleExprNode*> *simple_expr_vector;
 }
 
 %token <number> TOK_NUMBER;
@@ -50,6 +57,11 @@ ObjectNode *root;
 %type <r_set> operation_set set;
 %type <r_string> relation_rule;
 %type <str> restriction_op;
+
+//frp stuff
+%type <snp> frp_simple_expr;
+%type <frpsmt> frp_statement;
+%type <simple_expr_vector> frp_exprlist;
 
 %start start
 
@@ -85,6 +97,7 @@ value             : object              { $$ = $1; }
                   | TOK_NUMBER          { $$ = new NumberNode($1); } 
                   | TOK_FILE TOK_STRING { $$ = new FileNode(*$2); }  
                   | relation_expr       { $$ = $1; }
+                  | frp_statement       { $$ = $1; }
                   ; 
 
 
@@ -133,17 +146,18 @@ frp_statement     : frp_expr {}
                   ;
 
 frp_expr          : frp_simple_expr {}
+                  | frp_signet {}
                   ;
 
 frp_signet        : TOK_LEFTPAREN frp_exprlist TOK_RIGHTPAREN TOK_ARROW frp_signet {}
                   | TOK_LEFTPAREN frp_exprlist TOK_RIGHTPAREN {}
 
-frp_exprlist      : frp_simple_expr {}
-                  | frp_simple_expr TOK_COMMA frp_exprlist {}
+frp_exprlist      : frp_simple_expr                        { $$ = new std::vector<FRPSimpleExprNode*>(); $$->push_back($1); }
+                  | frp_simple_expr TOK_COMMA frp_exprlist { $3->push_back($1); $$ = $3; }
 
-frp_simple_expr   : TOK_L TOK_LEFTBRACKET TOK_STRING TOK_RIGHTBRACKET {}
-                  | TOK_AT TOK_KEY {}
-                  | TOK_DOLLAR TOK_KEY {}
+frp_simple_expr   : TOK_L TOK_LEFTBRACKET TOK_STRING TOK_RIGHTBRACKET { $$ = new FRPSimpleExprNode(new JavascriptNode(*$3)); }
+                  | TOK_AT TOK_KEY                                    { $$ = new FRPSimpleExprNode(new FRPAtNode(*$2)); }
+                  | TOK_DOLLAR TOK_KEY                                { $$ = new FRPSimpleExprNode(new FRPDollarNode(*$2)); }
                   ;
 
 
