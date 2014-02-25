@@ -223,16 +223,32 @@ public:
 };
 
 
-class FRPStatementNode : public Node {
+class FRPExpressionNode : public Node {
 public:
-  FRPStatementNode(FRPSimpleExprNode *expr) : expr(expr) {}
-  FRPStatementNode() {}
+  FRPExpressionNode(std::vector<std::vector<FRPSimpleExprNode*>*> *signals) : signals(signals), expr(NULL) {}
+  FRPExpressionNode(FRPSimpleExprNode *expr) : signals(NULL), expr(expr) {}
   
+  std::vector<std::vector<FRPSimpleExprNode*>*>* signals;
   FRPSimpleExprNode *expr;
 
   std::string show() const {
     return "";
   }
+
 };
+
+class FRPStatementNode : public Node {
+public:
+  FRPStatementNode(FRPExpressionNode *expr) : varName(""), expr(expr) {}
+  FRPStatementNode(std::string &varName, FRPExpressionNode *expr) : varName(varName), expr(expr) {}
+  
+  FRPExpressionNode *expr;
+  std::string varName;
+
+  std::string show() const {
+    return "";
+  }
+};
+
 
 #endif

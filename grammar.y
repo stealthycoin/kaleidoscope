@@ -41,6 +41,7 @@ ObjectNode *root;
   FRPSimpleExprNode *snp;
   std::vector<FRPSimpleExprNode*> *simple_expr_vector;
   std::vector<std::vector<FRPSimpleExprNode*>*> *signet;
+  FRPExpressionNode *frp_expression;
 }
 
 %token <number> TOK_NUMBER;
@@ -64,6 +65,7 @@ ObjectNode *root;
 %type <frpsmt> frp_statement;
 %type <simple_expr_vector> frp_exprlist;
 %type <signet> frp_signet
+%type <frp_expression> frp_expr;
 
 %start start
 
@@ -143,12 +145,12 @@ set               : TOK_KEY TOK_ARROW TOK_KEY { $$ = new RelationSetNode(*$1, *$
  * BEGIN PARSING OF FRP EXPRESSIONS 
  */
 
-frp_statement     : frp_expr {}
-                  | TOK_KEY TOK_BACK_ARROW frp_expr {} 
+frp_statement     : frp_expr                        { $$ = new FRPStatementNode($1); }
+                  | TOK_KEY TOK_BACK_ARROW frp_expr { $$ = new FRPStatementNode(*$1, $3); } 
                   ;
 
-frp_expr          : frp_simple_expr {}
-                  | frp_signet {}
+frp_expr          : frp_simple_expr { $$ = new FRPExpressionNode($1); }
+                  | frp_signet      { $$ = new FRPExpressionNode($1); }
                   ;
 
 frp_signet        : TOK_LEFTPAREN frp_exprlist TOK_RIGHTPAREN TOK_ARROW frp_signet { $5->push_back($2); $$ = $5; }
