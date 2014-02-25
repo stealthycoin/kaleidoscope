@@ -40,6 +40,7 @@ ObjectNode *root;
   FRPStatementNode *frpsmt;
   FRPSimpleExprNode *snp;
   std::vector<FRPSimpleExprNode*> *simple_expr_vector;
+  std::vector<std::vector<FRPSimpleExprNode*>*> *signet;
 }
 
 %token <number> TOK_NUMBER;
@@ -62,6 +63,7 @@ ObjectNode *root;
 %type <snp> frp_simple_expr;
 %type <frpsmt> frp_statement;
 %type <simple_expr_vector> frp_exprlist;
+%type <signet> frp_signet
 
 %start start
 
@@ -149,8 +151,8 @@ frp_expr          : frp_simple_expr {}
                   | frp_signet {}
                   ;
 
-frp_signet        : TOK_LEFTPAREN frp_exprlist TOK_RIGHTPAREN TOK_ARROW frp_signet {}
-                  | TOK_LEFTPAREN frp_exprlist TOK_RIGHTPAREN {}
+frp_signet        : TOK_LEFTPAREN frp_exprlist TOK_RIGHTPAREN TOK_ARROW frp_signet { $5->push_back($2); $$ = $5; }
+                  | TOK_LEFTPAREN frp_exprlist TOK_RIGHTPAREN                      { $$ = new std::vector<std::vector<FRPSimpleExprNode*>*>(); $$->push_back($2); }
 
 frp_exprlist      : frp_simple_expr                        { $$ = new std::vector<FRPSimpleExprNode*>(); $$->push_back($1); }
                   | frp_simple_expr TOK_COMMA frp_exprlist { $3->push_back($1); $$ = $3; }
