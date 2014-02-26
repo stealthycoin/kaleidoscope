@@ -14,6 +14,9 @@ var inputTypes = {
     ,"input[type=text]" : function(z){
 	return wg.inputField(z.val()); 
     }
+    ,"input[type=number]" : function(z){
+	return wg.inputNumberField(z.val());
+    }
     ,"input[type=hidden]" : function(z){
 	return wg.hiddenField(z.val()); 
     }

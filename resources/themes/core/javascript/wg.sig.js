@@ -459,6 +459,12 @@ function wgSig(s){
 	return input;
     }
 
+    function inputNumberField(value){
+	var input = elem().constGen(
+	    "<input type='number' class='inlineEdit fieldInput formField' value='"+value+"' />")
+	return input;
+    }
+
     function hiddenField(value){
 	var input = elem().constGen(
 	    "<input type='hidden' value='"+value+"' />")
@@ -558,6 +564,7 @@ function wgSig(s){
 	buttonGroup : buttonGroup,
 	inlineField : inlineField,
 	inputField : inputField,
+	inputNumberField: inputNumberField,
 	textareaField : textareaField,
 	passwordField: passwordField,
 	hiddenField : hiddenField,
