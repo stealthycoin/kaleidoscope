@@ -169,4 +169,86 @@ public:
 };
 
 
+/*
+ * Begin FRP nodes
+ */
+
+class JavascriptNode : public Node {
+public:
+  JavascriptNode(std::string &str) : str(str) {}
+
+  std::string str;
+
+  std::string show() const {
+    return "";
+  }
+};
+
+class FRPAtNode : public Node {
+public:
+  FRPAtNode(std::string &str) : str(str) {}
+
+  std::string str;
+
+  std::string show() const {
+    return "";
+  }
+};
+
+class FRPDollarNode : public Node {
+public:
+  FRPDollarNode(std::string &str) : str(str) {}
+
+  std::string str;
+
+  std::string show() const {
+    return "";
+  }
+};
+
+
+class FRPSimpleExprNode : public Node {
+public:
+  FRPSimpleExprNode(JavascriptNode *js) : js(js), d(NULL), a(NULL) {}
+  FRPSimpleExprNode(FRPDollarNode *d) : d(d), js(NULL), a(NULL) {}
+  FRPSimpleExprNode(FRPAtNode *a) : a(a), d(NULL), js(NULL) {}
+
+  FRPDollarNode *d;
+  FRPAtNode *a;
+  JavascriptNode *js;
+
+  std::string show() const {
+    return "";
+  }
+};
+
+
+class FRPExpressionNode : public Node {
+public:
+  FRPExpressionNode(std::vector<std::vector<FRPSimpleExprNode*>*> *signals) : signals(signals), expr(NULL) {}
+  FRPExpressionNode(FRPSimpleExprNode *expr) : signals(NULL), expr(expr) {}
+  
+  std::vector<std::vector<FRPSimpleExprNode*>*>* signals;
+  FRPSimpleExprNode *expr;
+
+  std::string show() const {
+    return "";
+  }
+
+};
+
+class FRPStatementNode : public Node {
+public:
+  FRPStatementNode(FRPExpressionNode *expr) : varName(""), expr(expr) {}
+  FRPStatementNode(std::string &varName, FRPExpressionNode *expr) : varName(varName), expr(expr) {}
+  
+  FRPExpressionNode *expr;
+  std::string varName;
+
+  std::string show() const {
+    return "";
+  }
+};
+
+
 #endif

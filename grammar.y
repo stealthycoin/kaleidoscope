@@ -12,7 +12,7 @@ ObjectNode *root;
 
 %}
 
-%token TOK_RIGHTCURLY TOK_LEFTCURLY TOK_COMMA TOK_FILE
+%token TOK_RIGHTCURLY TOK_LEFTCURLY TOK_COMMA TOK_FILE TOK_AT TOK_DOLLAR
 %token TOK_RIGHTBRACKET TOK_LEFTBRACKET TOK_ARROW TOK_BACK_ARROW TOK_LEFTPAREN TOK_RIGHTPAREN
 
 %union {
@@ -33,6 +33,15 @@ ObjectNode *root;
 
   std::string *string;
   int token;
+
+
+
+  //frp
+  FRPStatementNode *frpsmt;
+  FRPSimpleExprNode *snp;
+  std::vector<FRPSimpleExprNode*> *simple_expr_vector;
+  std::vector<std::vector<FRPSimpleExprNode*>*> *signet;
+  FRPExpressionNode *frp_expression;
 }
 
 %token <number> TOK_NUMBER;
@@ -51,6 +60,13 @@ ObjectNode *root;
 %type <r_string> relation_rule;
 %type <str> restriction_op;
 
+//frp stuff
+%type <snp> frp_simple_expr;
+%type <frpsmt> frp_statement;
+%type <simple_expr_vector> frp_exprlist;
+%type <signet> frp_signet
+%type <frp_expression> frp_expr;
+
 %start start
 
 %%
@@ -65,6 +81,11 @@ object            : TOK_LEFTCURLY entries TOK_RIGHTCURLY         { $$ = new Obje
                                                                    std::string value("\"" + *$1 + "\"");
                                                                    $3->push_back(new EntryNode(type,new StringNode(value))); 
                                                                    $$ = new ObjectNode(*$3); }
+                  | TOK_KEY TOK_LEFTCURLY TOK_RIGHTCURLY         { std::string type("type");
+                                                                   std::string value("\"" + *$1 + "\"");
+                                                                   std::vector<EntryNode*> *entries = new std::vector<EntryNode*>();
+                                                                   entries->push_back(new EntryNode(type, new StringNode(value)));
+                                                                   $$ = new ObjectNode(*entries); }
                   | TOK_LEFTCURLY TOK_RIGHTCURLY                 { $$ = new ObjectNode(); }
                   | TOK_KEY                                      { std::string type("type");
                                                                    std::string value("\""+ *$1 + "\"");
@@ -85,6 +106,7 @@ value             : object              { $$ = $1; }
                   | TOK_NUMBER          { $$ = new NumberNode($1); } 
                   | TOK_FILE TOK_STRING { $$ = new FileNode(*$2); }  
                   | relation_expr       { $$ = $1; }
+                  | frp_statement       { $$ = $1; }
                   ; 
 
 
@@ -128,12 +150,23 @@ set               : TOK_KEY TOK_ARROW TOK_KEY { $$ = new RelationSetNode(*$1, *$
  * BEGIN PARSING OF FRP EXPRESSIONS 
  */
 
-frp_statement     : frp_exp {}
-                  | frp_var TOK_BACK_ARROW frp_expr {} 
+frp_statement     : frp_expr                        { $$ = new FRPStatementNode($1); }
+                  | TOK_KEY TOK_BACK_ARROW frp_expr { $$ = new FRPStatementNode(*$1, $3); } 
                   ;
 
-frp_expr          : frp_simple_expr {}
+frp_expr          : frp_simple_expr { $$ = new FRPExpressionNode($1); }
+                  | frp_signet      { $$ = new FRPExpressionNode($1); }
                   ;
 
-frp_simple_expr   : TOK_L TOK_LEFTBRACKET TOK_STRING TOK_RIGHTBRACKET {}
+frp_signet        : TOK_LEFTPAREN frp_exprlist TOK_RIGHTPAREN TOK_ARROW frp_signet { $5->push_back($2); $$ = $5; }
+                  | TOK_LEFTPAREN frp_exprlist TOK_RIGHTPAREN                      { $$ = new std::vector<std::vector<FRPSimpleExprNode*>*>(); $$->push_back($2); }
+
+frp_exprlist      : frp_simple_expr                        { $$ = new std::vector<FRPSimpleExprNode*>(); $$->push_back($1); }
+                  | frp_simple_expr TOK_COMMA frp_exprlist { $3->push_back($1); $$ = $3; }
+
+frp_simple_expr   : TOK_L TOK_LEFTBRACKET TOK_STRING TOK_RIGHTBRACKET { $$ = new FRPSimpleExprNode(new JavascriptNode(*$3)); }
+                  | TOK_AT TOK_KEY                                    { $$ = new FRPSimpleExprNode(new FRPAtNode(*$2)); }
+                  | TOK_DOLLAR TOK_KEY                                { $$ = new FRPSimpleExprNode(new FRPDollarNode(*$2)); }
                   ;
+
+

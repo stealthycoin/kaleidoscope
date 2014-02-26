@@ -32,7 +32,8 @@ pages: {
     home: { 
         title: "Penelopy Wonderhagan", 
         url: "", 
-        template: "<div class='box'><h2>Welcome to Penelopy Wonderhagan's wonderful blog!</h2><p>Check back here to keep up with Penelopy's most recent projects.</p></div>" 
+        template: "<div class='box'><h2>Welcome to Penelopy Wonderhagan's wonderful blog!</h2><p>Check back here to keep up with Penelopy's most recent projects.</p></div>",
+	frp: (@time) -> (L["50*$1"],L["100*$1"])
     },
     about: { 
         title: "About Penelopy Wonderhagan", 
