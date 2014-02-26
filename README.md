@@ -89,7 +89,8 @@ Usage
 ```
 kaleidoscope models.ks
 ```
--u is for update
+```-u``` Puts kaleidoscope into update mode where it only tries to make updates to the project rather than generate it from scratch.
+```-s``` Speficy a static file directory to be copied into the project. It should contain css/javascript/images subdirectories.
 
 Installation
 ---------------
