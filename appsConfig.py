@@ -238,6 +238,19 @@ def generateMiddletierForModel(app, model, properties):
     result += "        return HttpResponse('\\'Data Unclean\\'')\n\n"
     addURL('api/%s/%s/create/'%(app,model),'%s.middletier.create%s'%(app,model),'create_%s' % (model))
 
+
+    #search function
+    result += "def search%s(request):\n" % model
+    result += "    if request.method == 'POST':\n"
+    result += "        data = request.POST\n"
+    result += "        from django.db.models import Q\n"
+    result += "        q = Q(name__contains=data['searchTerm'])\n"
+    result += "        qs = %s.objects.filter(q)\n" % model
+    result += "        from views import get%s\n" % model
+    result += "        return HttpResponse(get%s(qs))\n" % model
+    result += "    return HttpResponse('Please send data as POST')\n\n"
+    addURL('api/%s/%s/search/'%(app,model),'%s.middletier.search%s'%(app,model),'search_%s'%model)
+
     #retrieve function
     result += "def retrieve%s(request):\n" % model
     result += "    if request.method == 'POST':\n"
