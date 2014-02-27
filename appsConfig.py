@@ -67,6 +67,16 @@ def generateModelField(key, properties):
                 field += "    from %s.models import %s\n" % (imports[0],imports[1])
             field += "    %s = models.ForeignKey(%s" % (key, target)
             first = False
+        #case 2 ManyToManyField
+        elif properties['type'] == 'ManyToManyField':
+            target = properties['link']
+            if '->' in target:
+                imports = target.split('->')
+                target = imports[1]
+                field += "    from %s.models import %s\n" %(imports[0],imports[1])
+            field +="    %s = models.ManyToManyField(%s" % (key,target)
+            first = False
+        #case 3 CharField
         elif properties['type'] == 'CharField':
             field += "    %s = models.CharField(max_length=%d" % (key, properties['length'])
         else:
@@ -220,8 +230,10 @@ def generateMiddletierForModel(app, model, properties):
     result += "        form = %sForm(data)\n" % model
     result += "        if form.is_valid():\n"
     result += "            data = form.cleaned_data\n"
-    result += "            newObject = %s(**data)\n" % model
-    result += "            newObject.save()\n"
+    result += "            new%s = form.save()\n" % model
+    result += "            new%s.save()\n" % model
+#    result += "            newObject = %s(**data)\n" % model
+#    result += "            newObject.save()\n"
     result += "            return HttpResponse('\\'Succesfully Created\\'')\n"
     result += "        return HttpResponse('\\'Data Unclean\\'')\n\n"
     addURL('api/%s/%s/create/'%(app,model),'%s.middletier.create%s'%(app,model),'create_%s' % (model))
