@@ -2,6 +2,6 @@
 <p>{{ description|safe }}</p>
 <form action="{{ action }}" method="POST">
   {% csrf_token %}
-  {{ formFields }}
+  {{ formFields|safe}}
   <input type="submit" />
 </form>
