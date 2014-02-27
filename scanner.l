@@ -21,6 +21,7 @@ TOK_STRINGCON     (\"([^\\"\n]|\\[\\'"0nt])*\")
 \n yylineno++;
 
 "f"                   return TOKEN(TOK_FILE);
+"SF"                  SAVE_TOKEN; return TOK_SF;
 "S"                   SAVE_TOKEN; return TOK_S;
 "F"                   SAVE_TOKEN; return TOK_F;
 "J"                   SAVE_TOKEN; return TOK_J;

@@ -45,7 +45,7 @@ ObjectNode *root;
 }
 
 %token <number> TOK_NUMBER;
-%token <str> TOK_STRING TOK_KEY TOK_J TOK_L TOK_F TOK_S TOK_EQUAL TOK_COLON;
+%token <str> TOK_STRING TOK_KEY TOK_J TOK_L TOK_F TOK_S TOK_SF TOK_EQUAL TOK_COLON;
 
 %type <object> start object;
 %type <entry> entry; 
@@ -131,11 +131,12 @@ restriction_op    : TOK_EQUAL           { $$ = $1; }
                   ;
 
 restriction_val   : TOK_STRING          { $$ = new StringNode(*$1); }
-                  | TOK_NUMBER          { $$ = new NumberNode($1); }
+                  | TOK_NUMBER          { $$ = new NumberNode($1);  }
                   ;
 
 relation_rule     : TOK_S               { $$ = new StringNode(*$1); }
                   | TOK_F               { $$ = new StringNode(*$1); }
+                  | TOK_SF              { $$ = new StringNode(*$1); }
                   ;
 
 /* OPERATION SETS */
