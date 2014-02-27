@@ -10,4 +10,4 @@ test:
 
 #destroys whole project. Probably don't want to use this unless starting over.
 nuke:
-	rm -rf dictionary.py dictionary.pyc %s req.pip makefile .git *~
+	rm -rf dictionary.py dictionary.pyc %s req.pip makefile *~
