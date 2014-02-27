@@ -20,10 +20,11 @@ class R_Type:
             result = "from %s.views import get%s\n" % (ts.app,ts.model)
             result += "from %s.models import %s\n" % (ts.app,ts.model)
             result += "qs = %s.objects.all()\n" % ts.model
-            return result
-            
+            return result            
         if self.type_symbol == 'F':
             return "from %s.forms import %sForm\n" % (ts.app,ts.model)
+        if self.type_symbol == 'SF':
+            return ""
 
     def show(self,key,ts,title,desc):
         result = "from django.template import RequestContext\n"
@@ -32,7 +33,8 @@ class R_Type:
             result += "get%s(qs)\n" % ts.model
         if self.type_symbol == 'F':
             result += "render_to_string('form.html', {'title':'%s', 'description': '%s', 'action':'/api/%s/%s/create/','formFields':%sForm().as_p()},context_instance=RequestContext(request))\n" % (title,desc,ts.app,ts.model,ts.model)
-
+        if self.type_symbol == 'SF':
+            result += "render_to_string('form.html', {'title':'%s', 'description': '%s', 'action':'/api/%s/%s/search/','formFields':'<input type=\\'text\\' id=\\'id_searchTerm\\' name=\\'searchTerm\\'/>'},context_instance=RequestContext(request))\n" % (title,desc,ts.app,ts.model) #TODO: clean this up its hidious
         return result
 
 class R_Restrictions:
