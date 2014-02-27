@@ -89,7 +89,7 @@ class ObjectNode : public Node {
     std::stringstream ss;
     bool first = true;
     ss << "{";
-    for (unsigned int i = 0 ; i < entries.size() ; i++) {
+    for (int i = entries.size() - 1 ; i >= 0 ; i--) {
       if (first) first = false;
       else ss << ",";
       ss << entries[i]->show();
@@ -142,7 +142,7 @@ public:
     std::stringstream ss;
     bool first = true;
     ss << "R_Restrictions([";
-    for (unsigned int i = 0 ; i < restrictions.size() ; i++) {
+    for (int i = restrictions.size() - 1; i >= 0; i--) {
       if (first) first = false;
       else ss << ",";
       ss << restrictions[i]->show();
