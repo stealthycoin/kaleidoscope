@@ -30,7 +30,7 @@ def generateMenu(properties):
 
 def generateFooter(properties):
     """Generate footer"""
-    print "Footer genreated"
+    print "Footer generated"
     try:
         owner = properties["website"]["author"]
     except KeyError:
