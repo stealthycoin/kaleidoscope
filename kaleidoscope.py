@@ -135,8 +135,13 @@ def main():
         setup(properties) #this fn is where the project is built
         consts.UPDATE = False
 
+    name = properties["website"]["name"]
+    consts.PYTHON = os.path.join(consts.ENV, 'bin', 'python')
+    consts.PROJECT = os.path.join(consts.ENV, name)
+    consts.MANAGE = os.path.join(consts.PROJECT, "manage.py")
+
     #configure apps
-    appsConfig.createApps(properties, theme)    
+    appsConfig.createApps(properties, theme)
 
     #configure the pages
     pagesConfig.createPages(properties)

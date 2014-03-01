@@ -355,12 +355,6 @@ def configureApp(path, app, properties):
 def createApps(properties, theme):
     """Generates all the apps required by the project"""
 
-    name = properties["website"]["name"]
-    consts.PYTHON = os.path.join(consts.ENV, 'bin', 'python')
-    consts.PROJECT = os.path.join(consts.ENV, name)
-    consts.MANAGE = os.path.join(consts.PROJECT, "manage.py")
-
-
     #create main app
     try:
         properties["apps"]
