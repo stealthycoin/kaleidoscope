@@ -6,7 +6,7 @@ class R_Expr:
     def show(self,key,title,desc):
         #always need this just to be able to retrieve things from database
         result = self.expression_type.showImports(self.target_set)
-        result += self.restrictions.show()
+        result += self.restrictions.show(self.r_type)
         result += self.expression_type.show(key,self.target_set,title,desc)
 
         return result
@@ -41,11 +41,11 @@ class R_Restrictions:
     def __init__(self,restrictions):
         self.restrictions = restrictions
 
-    def showEquality(self, r):
+    def showEquality(self, r, t):
         """TODO: Needs to eventually deal with types"""
         return "qs = qs.filter(%s=%s)\n" % (r[0],r[2].replace('%','u_'))
 
-    def showFilter(self, r):
+    def showFilter(self, r, t):
         """Given a key and a value do something with it"""
         #the key tells us what to do
         if r[0] == "limit":
@@ -56,14 +56,14 @@ class R_Restrictions:
             return "qs = qs.order_by('%s')\n" % r[2]
         return ""
 
-    def show(self):
+    def show(self, t):
         #restrictions are a tuple (field,op,value) different ops imply different logic
         result = ""
         for restriction in self.restrictions:
             if restriction[1] == '=':
-                result += self.showEquality(restriction)
+                result += self.showEquality(restriction,t)
             elif restriction[1] == ':':
-                result += self.showFilter(restriction)
+                result += self.showFilter(restriction,t)
 
         return result
 
