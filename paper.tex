@@ -19,40 +19,51 @@ We give a definition of \textit{Functional Reactive Programming} (FRP) for use i
 Functional Reactive Programming is the programming paradigm based on the key concepts of \textit{behaviors} and \textit{reactivity}. Behaviors are varying with respect to time and are typically modeled as a stream of values. These values can also be considered events depending on the granularity of the stream. Reactivity is defined as a reaction to an event, when a node recieves a new value it reacts by changing its value and. 
 
 \section{Our contributions}
-pretty much none other than an implementation
-
-and begin from awesome schoools
+Merging streams and wormholes and making an implementation of the whole thing practical. And making it based in theory so its not a giant mess like bacon.js. Monad streams woo!
 
 \section{Terminology}
 \begin{description}
 \item[element] Any value or computation that relys upon previous computations or values. An element is analogous to a node in a graph. The element is connected to various other elements by means of some function. All elements connected to element $e$ can be split into two sets $s_1$ all elements supplying input to $e$ and $s_2$ all elements recieving their input from $e$. $s_1$ is called the predecessor set of $e$ or $s_1 = pre(e)$ and $s_2$ is the successor set of $e$ or $s_2 = suc(e)$
 
+\item[network] Simply a set of elements that form a connected component. Multiple networks can be used to describe different unrelated components of a particular interface or problem space.
+
 \item[signal] It is useful to think of the values being sent from one element to another as a signal being broadcast continuously. The element recieving this signal, adjusts its own outgoing signal according to a predefined set of rules, or a function.
 
+\item[stream] An element may have need of signals from more than one timestep in the past. A stream is essentially a history of all previous values of a signal, with the most current signal value at the head of the list. Streams travel between elements, thus allowing an element to select what timestep it selects a value from. The downside of streams is that they allow for spacetime leaks, which are described below.
+
 \item[behavior] Using the previous definition of an element and a signal, an element can be thought of as a function that maps from one signal to another. More concretly\\
-  $type~element~a~b = Signal ~a \rightarrow Signal ~b$
+  $type~element~a~b = Signal ~a \rightarrow Signal ~b$\\
+  Behaviors are typically thought of in terms of continuous functions. What FRP is trying to do is model the change in behavior of some element in a network. This takes up a lot of processor power  and is not very effecient.
 
-
-\item[network] Simply a set of elements that form a connected component. Multiple networks can be used to describe different unrelated components of a particular interface or problem space.
+\item[event] An event is a discrete behavior. Since behaviors preform so poorly it is often nessisary to break a signal into a set of discrete values. The cutoff is not clear between high and low sampling rates. With a high sample rate something can be considered a behavior, with a low sample rate it can be considered an event.
 
 \item[layer] A layer is a set of elements in a network where the intersection of their mutual union of predecessor and sucessor sets is the empty set. More formally $\bigcup_{e_i \in L}{pre(e_i)} \cap \bigcup_{e_j \in L}{suc(e_j)} = \emptyset$ where $L$ is a layer. Breaking a network into layers is helpful because it helps identify dependencies in the network. It also helps introduce structure into the environment which can help organize a network which may have been difficult to think about. It is not always possible to adhere to the the definition of a layer, or is not practical to do so even if it could be done. For example a feedback loop would be by definition a loop on the network, some way of passing a result back to a predacessor. This technique is useful for maintaining state in a network amongst other uses.
 
 
-
 \item[space-time leak] In a functional reactive service any particular element can depend on values that are far in the past. Clearly the longer the program is executing, the longer the history of events, or the longer the stream is. A longer stream takes up more memory and can cause slowdown if the stream is not trimmed after a certain point. Typically a garbage collection service of some kind is used to clean up old events that no longer being depended on. This is analogous to a memory leak in imperative programming. The value is said to be a space-time leak if it is unnessisarly being used for computations when it will have no affect on any current elements.
 \end{description}
-
+\section{Related work}
+\subsection{High order streams}
+\cite{streams}
+\section{Future work}
+Probably some since we want to keep working on things. I bet it will have to do with extending the language definition and possibly defining streams better.
 \begin{thebibliography}{9}
   \bibitem{wormholes}
-    Daniel Winograd-Cort, Paul Hudak
+    Daniel Winograd-Cort, Paul Hudak.
     \emph{Wormholes: Introducing Effects to FRP}
     Yale University
     
   \bibitem{fran}
-    Conal Elliott and Paul Hudak.
-    \emph{Functional Reactive Animation},
-    http://conal.net/papers/icfp97\\
-    1997
+    Conal Elliott and Paul Hudak. 
+    Functional reactive animation.
+    \emph{In International Conference on Functional Programming},
+    June 1997, pages 263-273.
+
+\bibitem{streams}
+  Gergely Patai.
+  Ecient and Compositional Higher-Order Streams.
+  Budapest University of Technology and Economics, Budapest, Hungary
+
 
 
 \end{thebibliography}
