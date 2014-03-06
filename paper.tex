@@ -16,6 +16,7 @@
 \maketitle
 
 \section{Abstract}
+\cite{ElliottHudak97:Fran}
 We give a definition of \textit{Functional Reactive Programming} (FRP) for use in a javascript based environment that allows for the manipulation of DOM elements and remote servers through the use of sinks and sources in the network. There is also an implementation of the FRP network using a DSL to specify the varying layers of the network, this allows a programmer to easily design networks to accomplish tasks by simply specifying the layers and how the layers interact. Our implementation builds on previous ones by being more practical, the DSL arises naturally from our definition of FRP and the DSL is simple to use and requires no knowledge of the underlying FRP concepts. End sales pitch.
 
 \section{Introduction}
@@ -32,7 +33,7 @@ Merging streams and wormholes and making an implementation of the whole thing pr
 
 \item[signal] It is useful to think of the values being sent from one element to another as a signal being broadcast continuously. The element recieving this signal, adjusts its own outgoing signal according to a predefined set of rules, or a function.
 
-\item[stream] An element may have need of signals from more than one timestep in the past. A stream is essentially a history of all previous values of a signal, with the most current signal value at the head of the list. Streams travel between elements, thus allowing an element to select what timestep it selects a value from. The downside of streams is that they allow for spacetime leaks, which are described below.
+\item[stream] An element may have need of signals from more than one timestep in the past. A stream is essentially a history of all previous values of a signal, with the most current signal value at the head of the list. Streams travel between elements, thus allowing an element to select what timestep it selects a value from. The downside of streams is that they allow for spacetime leaks, which are described below. A stream of type $Stream~a$ will be denoted as $\langle v_0~v_1~v_2~...\rangle$ where $v_i$ is of type $a$.
 
 \item[behavior] Using the previous definition of an element and a signal, an element can be thought of as a function that maps from one signal to another. More concretly\\
   $type~element~a~b = Signal ~a \rightarrow Signal ~b$\\
@@ -47,10 +48,13 @@ Merging streams and wormholes and making an implementation of the whole thing pr
 \end{description}
 \section{Related work}
 \subsection{High order streams}
+\cite{HighOrderStreams}
+\subsection{Wormholes}
+\cite{WinogradCort2012HS}
 \section{Future work}
 Probably some since we want to keep working on things. I bet it will have to do with extending the language definition and possibly defining streams better.
 
 
-\bibliography{paper.bib}{}
+\bibliography{paper}
 \bibliographystyle{plain}
 \end{document}
