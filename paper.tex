@@ -17,10 +17,13 @@
 
 \section{Abstract}
 \cite{ElliottHudak97:Fran}
-We give a definition of \textit{Functional Reactive Programming} (FRP) for use in a javascript based environment that allows for the manipulation of DOM elements and remote servers through the use of sinks and sources in the network. There is also an implementation of the FRP network using a DSL to specify the varying layers of the network, this allows a programmer to easily design networks to accomplish tasks by simply specifying the layers and how the layers interact. Our implementation builds on previous ones by being more practical, the DSL arises naturally from our definition of FRP and the DSL is simple to use and requires no knowledge of the underlying FRP concepts. End sales pitch.
+We give a definition of \textit{Functional Reactive Programming} (FRP) for use in a javascript based environment that allows for the manipulation of DOM elements and remote servers through the use of sinks and sources in the network. There is also an implementation of the FRP network using a DSL to specify the varying layers of the network, this allows a programmer to easily design networks to accomplish tasks by simply specifying the layers and how the layers interact. Our implementation builds on previous ones by being more practical, the DSL arises naturally from our definition of FRP and the DSL is simple to use and requires no knowledge of the underlying FRP concepts.
 
 \section{Introduction}
-Functional Reactive Programming is the programming paradigm based on the key concepts of \textit{behaviors} and \textit{reactivity}. Behaviors are varying with respect to time and are typically modeled as a stream of values. These values can also be considered events depending on the granularity of the stream. Reactivity is defined as a reaction to an event, when a node recieves a new value it reacts by changing its value and. 
+Functional Reactive Programming is the programming paradigm based on the key concepts of \textit{behaviors} and \textit{reactivity}. Behaviors are varying with respect to time and are typically modeled as a stream of values. These values can also be considered events depending on the granularity of the stream. Reactivity is defined as a reaction to an event, when a node recieves a new value it reacts by changing its value and. A nessisary inclusion from an interface design standpoint is the ability to dynamically change the network. 
+
+\section{Example requiring dynamic network}
+In a simple interface with a drop down menu where the drop down elements can change in reaction to a some other form of input. 
 
 \section{Our contributions}
 Merging streams and wormholes and making an implementation of the whole thing practical. And making it based in theory so its not a giant mess like bacon.js. Monad streams woo!
@@ -33,22 +36,27 @@ Merging streams and wormholes and making an implementation of the whole thing pr
 
 \item[signal] It is useful to think of the values being sent from one element to another as a signal being broadcast continuously. The element recieving this signal, adjusts its own outgoing signal according to a predefined set of rules, or a function.
 
-\item[stream] An element may have need of signals from more than one timestep in the past. A stream is essentially a history of all previous values of a signal, with the most current signal value at the head of the list. Streams travel between elements, thus allowing an element to select what timestep it selects a value from. The downside of streams is that they allow for spacetime leaks, which are described below. A stream of type $Stream~a$ will be denoted as $\langle v_0~v_1~v_2~...\rangle$ where $v_i$ is of type $a$.
+\item[stream] An element may have need of signals from more than one timestep in the past. A stream is essentially a history of all previous values of a signal, with the most current signal value at the head of the list. Streams travel between elements, thus allowing an element to select what timestep it selects a value from. The downside of streams is that they allow for spacetime leaks, which are described below. A stream of type $Stream~a$ will be denoted as $\langle v_0~v_1~v_2~...\rangle$ where $v_i$ is of type $
+a$.
 
 \item[behavior] Using the previous definition of an element and a signal, an element can be thought of as a function that maps from one signal to another. More concretly\\
   $type~element~a~b = Signal ~a \rightarrow Signal ~b$\\
   Behaviors are typically thought of in terms of continuous functions. What FRP is trying to do is model the change in behavior of some element in a network. This takes up a lot of processor power  and is not very effecient.
 
-\item[event] An event is a discrete behavior. Since behaviors preform so poorly it is often nessisary to break a signal into a set of discrete values. The cutoff is not clear between high and low sampling rates. With a high sample rate something can be considered a behavior, with a low sample rate it can be considered an event.
+\item[event] An event is a discrete behavior. Since behaviors preform so poorly it is often nessisary to break a signal into a set of discrete values. The cutoff is not clear between high and low sampling rates. With a high sample rate something can be considered a behavior, with a low sample rate it can be considered an event. Our implementation of FRP is skewed toward events.
 
 \item[layer] A layer is a set of elements in a network where the intersection of their mutual union of predecessor and sucessor sets is the empty set. More formally $\bigcup_{e_i \in L}{pre(e_i)} \cap \bigcup_{e_j \in L}{suc(e_j)} = \emptyset$ where $L$ is a layer. Breaking a network into layers is helpful because it helps identify dependencies in the network. It also helps introduce structure into the environment which can help organize a network which may have been difficult to think about. It is not always possible to adhere to the the definition of a layer, or is not practical to do so even if it could be done. For example a feedback loop would be by definition a loop on the network, some way of passing a result back to a predacessor. This technique is useful for maintaining state in a network amongst other uses.
 
 
 \item[space-time leak] In a functional reactive service any particular element can depend on values that are far in the past. Clearly the longer the program is executing, the longer the history of events, or the longer the stream is. A longer stream takes up more memory and can cause slowdown if the stream is not trimmed after a certain point. Typically a garbage collection service of some kind is used to clean up old events that no longer being depended on. This is analogous to a memory leak in imperative programming. The value is said to be a space-time leak if it is unnessisarly being used for computations when it will have no affect on any current elements.
 \end{description}
+\section{Semantics}
+
+$\frac{}{\langle l<-(@a,...)->...,\sigma \rangle \Downarrow \sigma[l \mapsto Stream ~a]}$ Why is this so hard?
+
 \section{Related work}
 \subsection{High order streams}
-\cite{HighOrderStreams}
+Work has already been done on higher order streams \cite{HighOrderStreams}. Higher order streams are nessisary for having a dynamic network. Dynamic networks are required
 \subsection{Wormholes}
 \cite{WinogradCort2012HS}
 \section{Future work}
