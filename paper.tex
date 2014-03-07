@@ -6,7 +6,7 @@
 \usepackage[margin=1.0in]{geometry}
 \lstset{language=Haskell}
 
-\title{Usable Functional Reactive Programming with Slipstreams}
+\title{Maybe Slipstreams $|$-o-$|$}
 \author[*]{Morgan McDermott}
 \author[**]{John Carlyle}
 \affil[*]{University of flightless dragons}
@@ -16,7 +16,7 @@
 \maketitle
 
 \section{Abstract}
-We give a definition of \textit{Functional Reactive Programming} (FRP) that allows for dynamic signal networks and safe interaction with the real world. We allow signal networks to be dynamic by modeling them as higher order streams (as in Patai \cite{HighOrderStreams}), and use the concept of wormholes (from Winograd \cite{WinogradCort2012HS}) to make interaction with real world resources safe. All signal values are modeled as $Maybe$ values to allow for defined behavior in the face of disrupted signals, and to reference signal values before they have any reasonable value. We also specify a DSL that uses this FRP model, allowing a programmer to easily design signal networks to accomplish tasks by specifying layers and how the layers interact. Our implementation builds on previous work by being more practical. The DSL arises naturally from our definition of FRP, is simple to use and requires only limited knowledge of the underlying FRP concepts.
+We give a definition of \textit{Functional Reactive Programming} (FRP) that allows for dynamic signal networks and safe interaction with the real world. We allow signal networks to be dynamic by modeling them as higher-order streams (as in Patai \cite{HighOrderStreams}), and use the concept of wormholes (from Winograd \cite{WinogradCort2012HS}) to make interaction with real world resources safe. All signal values are modeled as $Maybe$ values to allow for defined behavior in the face of disrupted signals, and to reference signal values before they have any reasonable value. We also specify a DSL that uses this FRP model, allowing a programmer to easily design signal networks to accomplish tasks by specifying layers and how the layers interact. Our implementation builds on previous work by being more practical. The DSL arises naturally from our definition of FRP, is simple to use and requires only limited knowledge of the underlying FRP concepts.
 
 \section{Introduction}
 Functional Reactive Programming, introduced by Fran \cite{ElliottHudak97:Fran}, is the programming paradigm based on the key concepts of \textit{behaviors}, \textit{events}, and \textit{reactivity}. Behaviors vary with respect to time and are typically modeled as a stream of values. These values can also be considered events depending on the granularity of the stream. Reactivity is defined as a reaction to an event; when a node recieves a new value it reacts by changing its value. FRP is particularly well suited for transforming data and data structures since it is, by nature, a collection of pure functions. 
@@ -30,7 +30,7 @@ Adapting FRP for javascript development would be super fantastic since javascrip
 
 There are several problems that must be solved in stream-based FRP to allow this transaction to take place. First, how do we interact with the environment itself? Since we need to manipulate the DOM and perform asynchronous requests, we have to change state. 
 
-Secondly, how do we model the changing requirements for interfaces? If the user presses a button to submit a query to the server, the server could respond in a way indicating that they need to update the interface on the page. Perhaps we need to create more buttons that could perform different server queries. In order to solve this, we must define a flexible, dynamic FRP network that can modify itself. Elerea solves this by providing Higher Order Streams. 
+Secondly, how do we model the changing requirements for interfaces? If the user presses a button to submit a query to the server, the server could respond in a way indicating that they need to update the interface on the page. Perhaps we need to create more buttons that could perform different server queries. In order to solve this, we must define a flexible, dynamic FRP network that can modify itself. Elerea solves this by providing Higher-Order Streams. 
 
 We need to ensure that the time-based values from the server are treated in a well-defined way. Namely, what if we have never contacted the server? What should the value of its stream be, and how should that differ from the stream after it has responded and is in an idle state again? We solve this by encapsulating every stream value in a $Maybe$, as we will explain later. 
 
@@ -59,17 +59,55 @@ a$.
 \item[space-time leak] In a functional reactive service, any particular element can depend on values that are far in the past. Clearly, the longer the program is executing, the longer the history of events, or the longer the stream is. A longer stream takes up more memory and can cause slowdown if the stream is not trimmed after a certain point. Typically a garbage collection service of some kind is used to clean up old events upon which are no longer being depended.. This is analogous to a memory leak in imperative programming. The value is said to be a space-time leak if it is unnecessarily being used for computations when it will have no effect on any current elements.
 \end{description}
 
+
 \section{Our contributions}
+Our contributions are basically jsut reworking the bind in a stream monad to map between layer sets. Also each value is wrapped in a maybe, revolutionary. This allows safe access to resources that have not yet been created in a dynamic network setting. It also allows for safe handling of volatile resources such as HTTP requests or accessing other error prone procedures. Convenience elements have been added such as the aggregator, which allows for dynamic seeming networks without any modification to the underlying structure. This is possible due to the addition of the maybe value to every stream.
+\subsection{DSL Grammar}
+\footnotesize
+\begin{align*}
+  Statement ::=& ~V \leftarrow Expression &\text{Variable assignment}\\
+  |& ~Expression &\text{Single expression}\\
+  Expression ::=& ~SignalNet &\text{A signal network}\\
+  |& SimpleExpr &\text{An expression}\\
+  SignalNet ::=& ~( Exprs ) \rightarrow SignalNet &\text{Compose layers}\\
+   |& ~(Exprs ) &\text{Single layer} \\
+  Exprs ::=& ~SimpleExpr ~,~ Exprs &\text{List of expressions}\\
+  |& ~SimpleExpr &\text{Single expression}\\
+  SimpleExpr ::=& ~L[``Javascript code''] &\text{Lift}\\
+  |& ~ @V &\text{Get}\\
+  |& ~ *V(SimpleExpr) &\text{Put}\\ 
+  |& ~ V( Exprs ) &\text{Function call}\\
+  V ::=& ~Word~Characters &\text{Variable}
+\end{align*}
+\normalsize
+As you can see our grammar is exteremly simple and contributes basically 1 monad with bind. Thats it. PhD Please.
+
 \subsection{Maybe Streams}
 Merging streams and wormholes and making an implementation of the whole thing practical. Making it based in theory so its not a giant mess like bacon.js. Monad streams woo!
 
 \subsection{Higher-order streams}
+Streams composed with streams oh my. Gotta look out for those undefined values. The value of composed streams is the diagonal of the matrix formed by the stream values. Boop:
 
+\begin{align*}
+  \langle &\langle \mathbf{v_{00}} ~ v_{01} ~ v_{02} ~ v_{03} ~ ... ~ \rangle \\
+  &\langle \perp ~ \mathbf{v_{11}} ~ v_{12} ~ v_{13} ~... ~ \rangle \\
+  &\langle \perp ~ \perp ~ \mathbf{v_{22}} ~ v_{23} ~ ...  ~ \rangle \rangle
+\end{align*}
+
+
+Better idea to avoid wasted space and complex ge
+
+
+\begin{align*}
+  \langle &\langle \mathbf{v_{00}} ~ v_{01} ~ v_{02} ~ v_{03} ~ ... ~ \rangle \\
+  &\langle  \mathbf{v_{11}} ~ v_{12} ~ v_{13} ~ v_{14} ~ ... ~ \rangle \\
+  &\langle  \mathbf{v_{22}} ~ v_{23} ~ v_{24} ~ v_{25} ~ ...  ~ \rangle \rangle
+\end{align*}
 
 \section{Related work}
 
 \subsection{Higher-order streams}
-Work has already been done on higher order streams \cite{HighOrderStreams}. Higher order streams are nessisary for having a dynamic network. Dynamic networks are required
+Work has already been done on higher-order streams \cite{HighOrderStreams}. Higher-order streams are nessisary for having a dynamic network. Dynamic networks are required
 
 \subsection{Wormholes}
 \cite{WinogradCort2012HS}
