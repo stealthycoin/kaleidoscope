@@ -3,7 +3,7 @@ website : {
     name : "Example_1",
     prettyName: "My most wonderous web-diary",
     author: "Penelopy",
-    theme: "lardface"
+    theme: "dreamcloud"
 },
 
 apps: {
@@ -32,8 +32,7 @@ pages: {
     home: { 
         title: "Penelopy Wonderhagan", 
         url: "", 
-        template: "<div class='box'><h2>Welcome to Penelopy Wonderhagan's wonderful blog!</h2><p>Check back here to keep up with Penelopy's most recent projects.</p></div>",
-	frp: (@time) -> (L["50*$1"],L["100*$1"])
+        template: "<div class='box'><h2>Welcome to Penelopy Wonderhagan's wonderful blog!</h2><p>Check back here to keep up with Penelopy's most recent projects.</p></div>"
     },
     about: { 
         title: "About Penelopy Wonderhagan", 
