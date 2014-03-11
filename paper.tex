@@ -6,11 +6,11 @@
 \usepackage[margin=1.0in]{geometry}
 \lstset{language=Haskell}
 
-\title{Maybe Slipstreams $|$-o-$|$}
+\title{Maybe Slipstreams}
 \author[*]{Morgan McDermott}
-\author[**]{John Carlyle}
+\author[*]{John Carlyle}
 \affil[*]{University of flightless dragons}
-\affil[**]{University of angry bees}
+
 
 \begin{document}
 \maketitle
@@ -19,11 +19,18 @@
 We give a definition of \textit{Functional Reactive Programming} (FRP) that allows for dynamic signal networks and safe interaction with the real world. We allow signal networks to be dynamic by modeling them as higher-order streams (as in Patai \cite{HighOrderStreams}), and use the concept of wormholes (from Winograd \cite{WinogradCort2012HS}) to make interaction with real world resources safe. All signal values are modeled as $Maybe$ values to allow for defined behavior in the face of disrupted signals, and to reference signal values before they have any reasonable value. We also specify a DSL that uses this FRP model, allowing a programmer to easily design signal networks to accomplish tasks by specifying layers and how the layers interact. Our implementation builds on previous work by being more practical. The DSL arises naturally from our definition of FRP, is simple to use and requires only limited knowledge of the underlying FRP concepts.
 
 \section{Introduction}
-Functional Reactive Programming, introduced by Fran \cite{ElliottHudak97:Fran}, is the programming paradigm based on the key concepts of \textit{behaviors}, \textit{events}, and \textit{reactivity}. Behaviors vary with respect to time and are typically modeled as a stream of values. These values can also be considered events depending on the granularity of the stream. Reactivity is defined as a reaction to an event; when a node recieves a new value it reacts by changing its value. FRP is particularly well suited for transforming data and data structures since it is, by nature, a collection of pure functions. 
+\subsection{What is FRP}
+Functional Reactive Programming, introduced by Fran \cite{ElliottHudak97:Fran}, is a programming paradigm based on the key concepts of time varying values.   These values can also be considered events depending on the granularity of the stream. Reactivity is defined as a reaction to an event; when a node recieves a new value it reacts by changing its value. FRP is particularly well suited for transforming data and data structures since it is, by nature, a collection of pure functions. 
 
+\subsection{Why use FRP}
+FRP is a useful approach to user interface design because it is declaritive. Most interface design forces you to define exactly how to generate each value. With the time varying values supplied by an FRP network the programmer can choose \textit{what} an interface element is rather than how it is generated. By comosing these values together a higher-level description of what each 
+
+\subsection{Problems with FRP}
 We solve the problem of interacting with time-varying values can be solved using stream-based FRP, where each computation sends a stream instead of a signal value. A stream is essentially a complete history of the values of a particular computation. Any other computation that needs the current value, or a value from the past, can look at the stream and find the appropriate values. This leads to additional problems like memory usage growing out of control as new values are continually added to the stream and not removed. In some systems garbage collection finds and removes values from streams that are no longer dependencies for other computations. In Elerea \cite{HighOrderStreams}, this is solved by only allowing access to the most recent values in streams. 
 
-This paper primarily introduces a way for FRP to interact safely in an environment filled with questionable resources. (What the different sections are for) (Section 1) Section 2 Section 3 Section 4 Section 5 Section 6 Section 7.
+
+\subsection{Organization}
+This paper primarily introduces a way for FRP to interact safely in an environment filled with hazerdous resources which are difficult to model as a function of time. (What the different sections are for) (Section 1) Section 2 Section 3 Section 4 Section 5 Section 6 Section 7.
 
 \section{A Motivating Example}
 Adapting FRP for javascript development would be super fantastic since javascript GUI code deals with varying values all the time. In particular the asynchronous communication between a server and client through the use of AJAX can be thought of as a time-varying signal between two nodes. 
@@ -34,7 +41,7 @@ Secondly, how do we model the changing requirements for interfaces? If the user 
 
 We need to ensure that the time-based values from the server are treated in a well-defined way. Namely, what if we have never contacted the server? What should the value of its stream be, and how should that differ from the stream after it has responded and is in an idle state again? We solve this by encapsulating every stream value in a $Maybe$, as we will explain later. 
 
-Lastly, what happens when two computations wish to change the state of the interface at the same time? How can we allow safe interaction between external state and multiple FRP calculations that wish to modify the state? We solve this using Wormholes as defined by Winograd-Cort \cite{WinogradCort2012HS}
+Lastly, what happens when two computations wish to change the state of the interface at the same time? How can we allow safe interaction between external state and multiple FRP calculations that wish to modify the state? We solve this using Wormholes as defined by Winograd-Cort \cite{WinogradCort2012HS}.
 
 \section{Terminology}
 \begin{description}
