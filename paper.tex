@@ -6,6 +6,8 @@
 \usepackage[margin=1.0in]{geometry}
 \lstset{language=Haskell}
 
+\addtolength{\topmargin}{-0.5in}
+
 \title{Maybe Slipstreams}
 \date{}
 \author{
@@ -25,10 +27,10 @@ We give a definition of \textit{Functional Reactive Programming} (FRP) that allo
 
 \section{Introduction}
 \subsection{What is FRP}
-Functional Reactive Programming, introduced by Fran \cite{ElliottHudak97:Fran}, is a programming paradigm based on time varying values.
+Functional Reactive Programming, introduced by Fran \cite{ElliottHudak97:Fran}, is a programming paradigm based on time varying values. The fundamental idea behind it is to allow the programmer to express than ``what'' of a program, and the ``how'' of the program be infered. FRP operates by a series of \textit{behaviors}, which are time varying values that react with one another to form a program. 
 
 \subsection{Why use FRP}
-FRP is a useful approach to user interface design because it is declaritive. Most interface design forces you to define exactly how to generate each value. With the time varying values supplied by an FRP network the programmer can choose \textit{what} an interface element is rather than how it is generated. By comosing these values together a higher-level description of what each 
+FRP is a useful approach to user interface design because it is declarative. Most interface design forces you to define exactly how to generate each value and once the value is generated. The common approach leads to extremly messy interface code. With the time varying values supplied by an FRP network the programmer can choose \textit{what} an interface element is rather than how it is generated. By comosing these values together a higher-level description of what each interface element should be. From this declarative structure the relationship between pieces of the interface implicitly emerges, freeing the programmer from having to tediously define exactly how each relationship is enacted.
 
 \subsection{Problems with FRP}
 We solve the problem of interacting with time-varying values can be solved using stream-based FRP, where each computation sends a stream instead of a signal value. A stream is essentially a complete history of the values of a particular computation. Any other computation that needs the current value, or a value from the past, can look at the stream and find the appropriate values. This leads to additional problems like memory usage growing out of control as new values are continually added to the stream and not removed. In some systems garbage collection finds and removes values from streams that are no longer dependencies for other computations. In Elerea \cite{HighOrderStreams}, this is solved by only allowing access to the most recent values in streams. 
