@@ -31,7 +31,7 @@ We give a definition of \textit{Functional Reactive Programming} (FRP) that allo
 
 \section{Introduction}
   
-Functional Reactive Programming, introduced by Fran \cite{ElliottHudak97:Fran}, is a programming paradigm allowing for the manipulation of time-varying values with pure functions. Fran was declarative, allowing the programmer to express the ``what'' of a program with interconnected time-varying values, while inferring the ``how'' the program should be instantiated. 
+Functional Reactive Programming, introduced by Fran \cite{ElliottHudak97:Fran}, is a programming paradigm allowing for the manipulation of time-varying values with pure functions. Fran was declarative, allowing the programmer to express the ``what'' of a program with interconnected time-varying values, which implies ``how'' the program should be instantiated. 
 
 The original implementations of FRP like Fran divided time-varying values into two types: \textit{Events}, or a discrete stream of values modeled by $Event~a:: [a]$, and \textit{Behaviors}, or continuous functions of time modeled as $Behavior~a :: t \rightarrow a$. 
 
@@ -47,16 +47,16 @@ Consider the function $integral$, that takes a Behavior and integrates over all 
 \end{align*}
 If we have higher-order constructs, it would be possible to first calculate this integral at a time $t > 0$ - this would require, however, calculating the initial behavior at all sample times from $0 < t_{sample} < t$. 
 
-It is also challenging to determine when past values will never be used. Typically a garbage collection service of some kind is used to clean up old events upon which are no longer being used. This is analogous to a memory leak in imperative programming. Similarly, values are often unnecessarily preserved in memory despite not being used in any current computation. 
+It is also challenging to determine when past values will never be used. Typically a garbage collection service is used to clean up old events which are no longer dependencies. This is analogous to a memory leak in imperative programming. Similarly, values are often unnecessarily preserved in memory despite not being used in any current computation. 
 
 \subsection{Why use FRP}
  The complexity of modern GUI (Graphical User Interface) code motivates our development of this system. FRP is a useful approach to user interface design because it permits the user to declaratively describe the complex interaction between GUI elements. Using imperative programming, GUI design is often achieved with callbacks and notifications about interaction events. 
 
 The common approach leads to extremely messy user interface code, often dubbed ``callback hell'' in the context of javascript \cite{czaplicki2013asynchronous}.. 
-Using time varying values in an FRP network, the programmer can describe \textit{what} an interface element is rather than how it responds to and changes the environment. The user can compose these elements together to achieve a declarative description of the user interface. From this structure the relationship between pieces of the interface implicitly emerges, freeing the programmer from having to tediously define exactly how each relationship is enacted.
+Using time varying values in an FRP network, the programmer can describe \textit{what} an interface element is rather than how it responds to and changes the environment. The user can compose these elements together to achieve a declarative description of the user interface. From this structure, the relationship between pieces of the interface implicitly emerges, freeing the programmer from having to tediously define exactly how each relationship is enacted.
 
 \subsection{Problems with FRP}
-  Current FRP systems have several drawbacks, however. In order to avoid time and space leaks, Yampa \cite{hudak2003arrows} introduces arrowized FRP. The security is provided, essentially, by making not making FRP constructs first-class. Instead of Behaviors and Events, arrowized FRP uses $Signal$s, which take on the type of behaviors:
+  Current FRP systems have several drawbacks. In order to avoid time and space leaks, Yampa \cite{hudak2003arrows} introduces arrowized FRP. The security is provided by not making FRP constructs first-class. Instead of Behaviors and Events, arrowized FRP uses $Signal$s, which take on the type of behaviors:
 \begin{center}
   $Signal~a:: t \rightarrow a$
 \\$SF~a~b:: Signal~a \rightarrow Signal~b$
@@ -73,11 +73,11 @@ The problem with arrowized FRP is that it has a limited ability to express dynam
 This paper primarily introduces a way for FRP to interact safely in an environment filled with hazerdous resources which are difficult to model as a function of time. (What the different sections are for) (Section 1) Section 2 Section 3 Section 4 Section 5 Section 6 Section 7.
 
 \section{A Motivating Example}
-Our goal is to adapt FRP for javascript GUI development, avoiding the horrors of \textit{callback hell}. One particular problem that often results in mangled code is asynchronous communication between a server and client through via AJAX. In our model, we can think of both the discrete values being sent to the server, and the discrete values being received, as a time-varying value sampled at an appropriate interval. 
+Our goal is to adapt FRP for javascript GUI development, avoiding the horrors of \textit{callback hell}. One particular problem that often results in mangled code is asynchronous communication between a server and client through AJAX. In our model, we can think of both the discrete values being sent to the server, and the discrete values being received, as a time-varying value sampled at an appropriate interval. 
 
-There are several problems that must be solved in stream-based FRP to allow us to model this situation accurately. First, we need to interact with the environment in a safe way. We need to perform asynchronous requests, and in other examples manipulate the DOM, etc, so ultimately we have to somehow change state. 
+In order to model this situation we need to augment stream basd FRP. Streams need to interact with the environment in a safe way. For example streams also need to be able to model asynchronous requests.
 
-Secondly, how do we model the changing requirements for interfaces? If the user presses a button to submit a query to the server, the server could respond in a way indicating that interface on the page should be fundamentally changed. Perhaps we need to create more buttons that could perform different server queries, or remove some functionality from the GUI. In order to solve this, we need a dynamic FRP network that can modify itself. 
+We need to model the changing requirements for interfaces. If the user presses a button to submit a query to the server, the server could respond by indicating that interface on the page should be fundamentally changed. Perhaps we need to create more buttons that could perform different server queries, or remove some functionality from the GUI. In order to solve this, we need a dynamic FRP network that can modify itself. 
 
 Classical FRP and Elerea are capable of modeling this situation since they have first-order FRP constructs. In our case we would use Elerea's solution of higher-order streams to implement this use case. 
 
@@ -218,7 +218,7 @@ Because of this, our DSL does not directly permit the user to create effectful s
 
 \subsection{DSL Components}
 
-When implementing software with FRP, dependencies between values can be confusing. This is why in our DSL, we restrict dependencies by dividing Signal values into \textit{layers}. Layers are composed of \textit{elements}, representing time-varying values ($Signal$s) computed from previous values. To maintain the desired ease of understanding, elements can only depend on the values of elements from the previous 
+When implementing software with FRP, dependencies between values can be confusing. This is why in our DSL, we restrict dependencies by dividing Signal values into \textit{layers}. Layers are composed of \textit{elements}, representing time-varying values ($Signal$s) computed from previous values. To maintain the desired ease of understanding, elements can only depend on the values of elements from the previous layer. 
 
 \begin{figure}[h!]
   \includegraphics[scale=0.8]{layers.eps}
@@ -257,7 +257,7 @@ where $L$ is a layer. Breaking a network into layers is helpful because it helps
 
 \end{description}
 
-The DSL defined in this way cannot express many network topologies. For example, it cannot express feedback loops, and has no way of passing a result back to a predecessor. This technique is useful for maintaining state in a network, and there are many other practical uses for it. As we will show, our DSL provides builtin primitives to enable these behaviors. 
+The DSL defined in this way cannot express many network topologies. For example, it cannot express feedback loops, and has no way of passing a result back to a predecessor. This technique is useful for maintaining state in a network. As we will show, our DSL provides builtin primitives to enable these behaviors. 
 
 \subsection{DSL Examples}
 The goal of the DSL is to easily express \textit{networks} as we've defined them. To express the network from Figure~\ref{fig:layers}, we would write:
