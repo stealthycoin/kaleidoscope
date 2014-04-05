@@ -204,6 +204,8 @@ Where ... would be used to define what the model was. A model needs a list of da
 
 - `apps -> appName -> models -> modelName -> fields -> type` - This property defines what type of data the field can store
 - `apps -> appName -> models -> modelName -> fields -> argstring` - This property handles initializing the field
+- `apps -> appName -> models -> modelName -> fields -> `optional` - if set to "True" means that this field is not required
+
 
 Further, each model also needs the ability to draw itself in multiple situations including: admin panel (`admin` key), displayed on a web page (`display` key), and displayed as an element in a list (`listing` key). In any of the below properties the %-sigil can be used to reference a field of the model.
 
