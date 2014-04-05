@@ -78,20 +78,32 @@ def generateModelField(key, properties):
             first = False
         #case 3 CharField
         elif properties['type'] == 'CharField':
+            first = False
             field += "    %s = models.CharField(max_length=%d" % (key, properties['length'])
         else:
             field += "    %s = models.%s(" % (key, properties["type"])
     except KeyError:
         return  ""
 
+    
+
+    #find required arguments, usually these are blank unless optional=True is specified
+    required = ""
     try:
-        required = "blank=True,null=True"
+        if properties['optional'] == 'True':
+            if first == False:
+                field += ","
+            field += "blank=True,null=True"
+            first = False
+    except KeyError:
+        pass
+
+    try:
         argstring = properties["argstring"]
         if first:
             first = False
         else:
-            argstring += ","+required
-
+            field += ","
         field += "%s)" % argstring
 
     except KeyError:
